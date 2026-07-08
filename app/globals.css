@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Anakara — token design system (FOUNDATION.md §4.4)
+   Semua nilai sudah diverifikasi kontras WCAG (lihat FOUNDATION §4.1).
+   Komponen HANYA memakai token semantik via utility Tailwind
+   (bg-primary, text-fg, dst.) — jangan pakai hex mentah.
+   Pasangan on-* WAJIB dipakai bersama warnanya (bug kontras dark mode).
+   ============================================================ */
+
+:root {
+  --bg: #f2f9fe;
+  --surface: #ffffff;
+  --surface-2: #f4faff;
+  --fg: #21323d;
+  --muted: #5a6b75;
+  --border: #dce6ec;
+  --primary: #0a72b0;
+  --primary-hover: #085e92;
+  --primary-active: #084e7a;
+  --on-primary: #ffffff;
+  --accent: #ffd23f;
+  --accent-edge: #d9a91c; /* tepi 3D tombol accent (dekoratif) */
+  --on-accent: #21323d;
+  --success: #2f7a33;
+  --success-hover: #276b2b;
+  --on-success: #ffffff;
+  --danger: #c0392b;
+  --focus: #0b84c4;
+  --link: #085e92;
+  --sky: #1fa8e8; /* dekoratif saja — bukan pembawa teks */
+  --orange: #ff9f43;
+  --green-bright: #7dd35b;
+}
+
+:root[data-theme="dark"] {
+  --bg: #10202b;
+  --surface: #17303f;
+  --surface-2: #1e3a4c;
+  --fg: #eaf4fa;
+  --muted: #9db4c0;
+  --border: #2a4658;
+  --primary: #4db6e8;
+  --primary-hover: #6ec6f0;
+  --primary-active: #8ad3f4;
+  --on-primary: #10202b;
+  --accent: #fbd24e;
+  --accent-edge: #c79f22;
+  --on-accent: #10202b;
+  --success: #6fc06b;
+  --success-hover: #7dd35b;
+  --on-success: #10202b;
+  --danger: #ff8a80;
+  --focus: #6ec6f0;
+  --link: #6ec6f0;
+}
+
+/* Fallback tanpa JS: ikuti preferensi OS (script no-flash di layout
+   selalu menetapkan data-theme, jadi blok ini jarang aktif). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --bg: #10202b;
+    --surface: #17303f;
+    --surface-2: #1e3a4c;
+    --fg: #eaf4fa;
+    --muted: #9db4c0;
+    --border: #2a4658;
+    --primary: #4db6e8;
+    --primary-hover: #6ec6f0;
+    --primary-active: #8ad3f4;
+    --on-primary: #10202b;
+    --accent: #fbd24e;
+    --accent-edge: #c79f22;
+    --on-accent: #10202b;
+    --success: #6fc06b;
+    --success-hover: #7dd35b;
+    --on-success: #10202b;
+    --danger: #ff8a80;
+    --focus: #6ec6f0;
+    --link: #6ec6f0;
+  }
+}
+
+/* Pemetaan token → utility Tailwind v4 (bg-primary, text-on-accent, dst.) */
+@theme inline {
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-accent-edge: var(--accent-edge);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-success-hover: var(--success-hover);
+  --color-on-success: var(--on-success);
+  --color-danger: var(--danger);
+  --color-focus: var(--focus);
+  --color-link: var(--link);
+  --color-sky: var(--sky);
+  --color-orange: var(--orange);
+  --color-green-bright: var(--green-bright);
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  --font-display: var(--font-baloo), Fredoka, sans-serif;
+  --font-body: var(--font-nunito), system-ui, sans-serif;
+
+  /* Radius playful (FOUNDATION §4.3) */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* Skala tipe fluid, rasio ±1.25 (FOUNDATION §4.2) */
+  --text-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.95rem);
+  --text-sm--line-height: 1.5;
+  --text-base: clamp(1rem, 0.93rem + 0.35vw, 1.125rem);
+  --text-base--line-height: 1.6;
+  --text-lg: clamp(1.125rem, 1.03rem + 0.5vw, 1.375rem);
+  --text-lg--line-height: 1.5;
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem);
+  --text-xl--line-height: 1.3;
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2.2rem);
+  --text-2xl--line-height: 1.2;
+  --text-3xl: clamp(1.85rem, 1.5rem + 1.6vw, 2.75rem);
+  --text-3xl--line-height: 1.1;
+  --text-4xl: clamp(2.2rem, 1.8rem + 2.2vw, 3.4rem);
+  --text-4xl--line-height: 1.1;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+html {
+  background: var(--bg);
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-nunito), system-ui, sans-serif;
+  font-size: clamp(1rem, 0.93rem + 0.35vw, 1.125rem); /* badan ≥16px */
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-baloo), Fredoka, sans-serif;
+  font-weight: 800;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+a {
+  color: var(--link);
+}
+
+/* Focus ring seragam ≥2px, kontras ≥3:1 (checklist §4.6) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Skip-link: tersembunyi sampai difokus */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -64px;
+  z-index: 100;
+  padding: 12px 16px;
+  background: var(--surface);
+  color: var(--fg);
+  border: 2px solid var(--focus);
+  border-radius: 12px;
+  font-weight: 700;
+  transition: top 150ms ease-out;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+/* Hormati preferensi pengguna: matikan animasi/transisi */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Skeleton loading (region data status 1/3) */
+@keyframes anakara-shimmer {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.skeleton {
+  background: var(--surface-2);
+  border-radius: 12px;
+  animation: anakara-shimmer 900ms ease-in-out infinite alternate;
+}

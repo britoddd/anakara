@@ -1,0 +1,96 @@
+{
+  "keterangan": "Cerita Interaktif Bab 1 (Phase 7) — sesuai scene referensi 'MacBook Air - 2.png' (Tayo & kelinci piknik). D3: hanya sub-mode Petualangan yang dibangun dulu. Narasi suara = YA: field audio per halaman (placeholder, perlu rekaman/TTS).",
+  "id": "bab-1",
+  "judul": "Piknik di Hutan",
+  "deskripsi": "Tayo dan Momo si Kelinci piknik di hutan. Bantu mereka memilih bekal yang sehat!",
+  "cover": "/assets/stories/bab1/cover.png",
+  "syaratBuka": null,
+  "halaman": [
+    {
+      "no": 1,
+      "tipe": "narasi",
+      "teks": "Hari ini langit cerah sekali. Tayo si Macan Kecil mau piknik di hutan.",
+      "gambar": "/assets/stories/bab1/hal-01.png",
+      "audio": "/assets/audio/bab1/hal-01.mp3"
+    },
+    {
+      "no": 2,
+      "tipe": "narasi",
+      "teks": "Di jalan, Tayo bertemu Momo si Kelinci. \"Ayo piknik bersama!\" ajak Tayo.",
+      "gambar": "/assets/stories/bab1/hal-02.png",
+      "audio": "/assets/audio/bab1/hal-02.mp3"
+    },
+    {
+      "no": 3,
+      "tipe": "narasi",
+      "teks": "Tayo membuka keranjang. Wah, masih kosong! Mereka harus memilih bekal dulu.",
+      "gambar": "/assets/stories/bab1/hal-03.png",
+      "audio": "/assets/audio/bab1/hal-03.mp3"
+    },
+    {
+      "no": 4,
+      "tipe": "pertanyaan",
+      "pertanyaan": "Bekal apa yang membuat tubuh kuat dan sehat?",
+      "opsi": [
+        "Permen dan soda",
+        "Nasi, ayam, dan apel",
+        "Keripik saja",
+        "Es krim banyak"
+      ],
+      "opsiEmoji": ["🍭🥤", "🍚🍗🍎", "🍟", "🍦🍦"],
+      "kunciIndex": 1,
+      "feedbackBenar": "Yeay, pintar! Nasi memberi tenaga, ayam membuat kuat, apel penuh vitamin!",
+      "feedbackSalah": "Hmm, itu kurang bergizi. Yuk pilih lagi yang membuat tubuh kuat!",
+      "gambar": "/assets/stories/bab1/hal-04.png",
+      "audio": "/assets/audio/bab1/hal-04.mp3"
+    },
+    {
+      "no": 5,
+      "tipe": "narasi",
+      "teks": "Mereka membawa nasi, ayam, apel, dan air putih. Keranjang jadi penuh!",
+      "gambar": "/assets/stories/bab1/hal-05.png",
+      "audio": "/assets/audio/bab1/hal-05.mp3"
+    },
+    {
+      "no": 6,
+      "tipe": "narasi",
+      "teks": "Sampai di hutan, mereka makan bersama di bawah pohon. \"Nyam! Enak dan sehat,\" kata Momo.",
+      "gambar": "/assets/stories/bab1/hal-06.png",
+      "audio": "/assets/audio/bab1/hal-06.mp3"
+    },
+    {
+      "no": 7,
+      "tipe": "narasi",
+      "teks": "Setelah makan, mereka bermain lempar bola. Badan Tayo terasa kuat sekali!",
+      "gambar": "/assets/stories/bab1/hal-07.png",
+      "audio": "/assets/audio/bab1/hal-07.mp3"
+    },
+    {
+      "no": 8,
+      "tipe": "pertanyaan",
+      "pertanyaan": "Setelah bermain dan berkeringat, apa yang harus diminum?",
+      "opsi": ["Air putih", "Soda dingin", "Kopi", "Es sirup manis"],
+      "opsiEmoji": ["💧", "🥤", "☕", "🧋"],
+      "kunciIndex": 0,
+      "feedbackBenar": "Betul! Air putih paling segar dan sehat untuk tubuh.",
+      "feedbackSalah": "Wah, itu terlalu manis. Yuk pilih yang paling menyehatkan!",
+      "gambar": "/assets/stories/bab1/hal-08.png",
+      "audio": "/assets/audio/bab1/hal-08.mp3"
+    },
+    {
+      "no": 9,
+      "tipe": "narasi",
+      "teks": "Tayo minum air putih sampai segar. Matahari mulai turun, saatnya pulang.",
+      "gambar": "/assets/stories/bab1/hal-09.png",
+      "audio": "/assets/audio/bab1/hal-09.mp3"
+    },
+    {
+      "no": 10,
+      "tipe": "narasi",
+      "teks": "Piknik hari ini seru sekali! Tayo dan Momo pulang dengan hati senang. — TAMAT —",
+      "gambar": "/assets/stories/bab1/hal-10.png",
+      "audio": "/assets/audio/bab1/hal-10.mp3",
+      "hadiahSelesai": { "poin": 50 }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "prompt": "Logo aplikasi edukasi anak bernama 'Anakara' dengan subjudul kecil 'Fase A'. Karakter maskot anak macan tutul kuning bertotol cokelat gaya kawaii/chibi, mata besar bulat, pipi merah muda. Warna dominan biru muda pastel dengan aksen kuning ceria. Background transparan.",
+    "out": "public/assets/logo.png",
+    "refs": ["referensi/WhatsApp Image 2026-07-06 at 22.00.31.jpeg"],
+    "count": 1
+  },
+  {
+    "prompt": "Maskot Tayo, anak macan tutul kuning bertotol cokelat gaya kawaii/chibi, mata besar bulat, pipi merah muda, sedang melambaikan tangan dan tersenyum ramah. Full body, background transparan, cocok untuk sapaan halaman utama aplikasi anak.",
+    "out": "public/assets/mascot/tayo-hello.png",
+    "refs": ["referensi/WhatsApp Image 2026-07-06 at 22.00.31.jpeg"],
+    "count": 2
+  },
+  {
+    "prompt": "Ikon avatar anak-anak, kepala karakter kartun lucu di dalam lingkaran, gaya ceria warna-warni pastel, konsisten satu gaya, background sederhana. Untuk pilihan avatar aplikasi anak SD.",
+    "out": "public/assets/avatars/avatar.png",
+    "count": 4
+  },
+  {
+    "prompt": "Kumpulan ilustrasi makanan sehat gaya sticker kartun anak: nasi, ayam, ikan, telur, wortel, brokoli, apel, pisang. Warna cerah, outline lembut, background transparan. Untuk game gizi anak.",
+    "out": "public/assets/food/makanan-sehat.png",
+    "count": 1
+  }
+]

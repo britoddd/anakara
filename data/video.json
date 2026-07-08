@@ -1,0 +1,78 @@
+{
+  "keterangan": "Daftar video belajar (Phase 4, gaya Reels vertikal). SEMUA konten internal — tanpa embed YouTube publik. URL & thumbnail = placeholder: video perlu diproduksi tim (animasi/rekaman). Reaksi hanya like/bintang, tanpa komentar.",
+  "kategori": ["Makanan Sehat", "Kebiasaan Baik", "Olahraga"],
+  "video": [
+    {
+      "id": "vid-01",
+      "judul": "Kenapa Harus Sarapan?",
+      "kategori": "Makanan Sehat",
+      "durasiDetik": 60,
+      "thumbnail": "/assets/videos/thumb/vid-01.png",
+      "url": "/assets/videos/vid-01.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-02",
+      "judul": "Isi Piringku, Yuk!",
+      "kategori": "Makanan Sehat",
+      "durasiDetik": 75,
+      "thumbnail": "/assets/videos/thumb/vid-02.png",
+      "url": "/assets/videos/vid-02.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-03",
+      "judul": "Ayo Cuci Tangan!",
+      "kategori": "Kebiasaan Baik",
+      "durasiDetik": 45,
+      "thumbnail": "/assets/videos/thumb/vid-03.png",
+      "url": "/assets/videos/vid-03.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-04",
+      "judul": "Wortel, Sahabat Mata",
+      "kategori": "Makanan Sehat",
+      "durasiDetik": 60,
+      "thumbnail": "/assets/videos/thumb/vid-04.png",
+      "url": "/assets/videos/vid-04.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-05",
+      "judul": "Senam Pagi Bersama Tayo",
+      "kategori": "Olahraga",
+      "durasiDetik": 90,
+      "thumbnail": "/assets/videos/thumb/vid-05.png",
+      "url": "/assets/videos/vid-05.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-06",
+      "judul": "Air Putih vs Minuman Manis",
+      "kategori": "Kebiasaan Baik",
+      "durasiDetik": 60,
+      "thumbnail": "/assets/videos/thumb/vid-06.png",
+      "url": "/assets/videos/vid-06.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-07",
+      "judul": "Gosok Gigi Setelah Makan",
+      "kategori": "Kebiasaan Baik",
+      "durasiDetik": 45,
+      "thumbnail": "/assets/videos/thumb/vid-07.png",
+      "url": "/assets/videos/vid-07.mp4",
+      "status": "placeholder"
+    },
+    {
+      "id": "vid-08",
+      "judul": "Tidur Cukup, Badan Kuat",
+      "kategori": "Kebiasaan Baik",
+      "durasiDetik": 60,
+      "thumbnail": "/assets/videos/thumb/vid-08.png",
+      "url": "/assets/videos/vid-08.mp4",
+      "status": "placeholder"
+    }
+  ]
+}

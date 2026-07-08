@@ -1,0 +1,15 @@
+{
+  "name": "anakara-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tooling CLI Anakara — image generation asset via Gemini API",
+  "scripts": {
+    "gen": "node generate-image.mjs",
+    "gen:batch": "node generate-image.mjs --batch"
+  },
+  "dependencies": {
+    "@google/genai": "^1.9.0",
+    "dotenv": "^16.4.5"
+  }
+}

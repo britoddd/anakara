@@ -1,0 +1,36 @@
+rules_version = '2';
+
+// Aturan Phase 1+8+10 — salin ke Firebase Console → Firestore → Rules → Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Profil user: SEMUA user login boleh membaca (Leaderboard Phase 8 —
+    // profil hanya berisi nama depan + avatar kartun, privasi tetap aman);
+    // menulis hanya pemiliknya.
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Kode kelas: semua user login boleh membaca (validasi join siswa +
+    // lookup guruId untuk soal). Guru membuat/mengubah kelas MILIKNYA sendiri
+    // (Phase 10) — guruId di dokumen harus uid pembuat.
+    match /kelas/{kodeKelas} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.guruId == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.guruId == request.auth.uid;
+    }
+
+    // Soal buatan guru (Phase 10, skema §6 sumber:"guru"): siswa perlu
+    // membacanya untuk Kuis; guru hanya bisa menulis soal miliknya sendiri.
+    match /soalGuru/{soalId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.guruId == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.guruId == request.auth.uid;
+    }
+  }
+}

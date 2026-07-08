@@ -1,0 +1,46 @@
+{
+  "keterangan": "Data makanan untuk game Isi Piringku (Phase 3) & referensi soal. Field level = level minimum kemunculan (D1: berlevel). Emoji = placeholder sampai gambar final di-generate.",
+  "kelompok": {
+    "pokok": { "label": "Makanan Pokok", "fungsi": "Sumber Tenaga" },
+    "lauk": { "label": "Lauk-Pauk", "fungsi": "Sumber Protein" },
+    "sayur": { "label": "Sayuran", "fungsi": "Vitamin & Serat" },
+    "buah": { "label": "Buah-buahan", "fungsi": "Vitamin & Segar" }
+  },
+  "makanan": [
+    { "id": "nasi", "nama": "Nasi", "emoji": "🍚", "gambar": "/assets/food/nasi.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Nasi memberi tenaga untuk bermain dan belajar!", "level": 1 },
+    { "id": "jagung", "nama": "Jagung", "emoji": "🌽", "gambar": "/assets/food/jagung.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Jagung manis juga bisa jadi pengganti nasi, lho!", "level": 1 },
+    { "id": "kentang", "nama": "Kentang", "emoji": "🥔", "gambar": "/assets/food/kentang.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Kentang rebus membuat perut kenyang lebih lama.", "level": 2 },
+    { "id": "roti", "nama": "Roti", "emoji": "🍞", "gambar": "/assets/food/roti.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Roti gandum bagus untuk sarapan pagi.", "level": 2 },
+    { "id": "ubi", "nama": "Ubi", "emoji": "🍠", "gambar": "/assets/food/ubi.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Ubi manis alami dan penuh tenaga.", "level": 3 },
+    { "id": "singkong", "nama": "Singkong", "emoji": "🌿", "gambar": "/assets/food/singkong.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Singkong tumbuh di kebun-kebun Indonesia.", "level": 3 },
+    { "id": "mie", "nama": "Mie", "emoji": "🍜", "gambar": "/assets/food/mie.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Mie boleh dimakan, tapi jangan setiap hari ya!", "level": 3 },
+    { "id": "sagu", "nama": "Sagu", "emoji": "🌾", "gambar": "/assets/food/sagu.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Sagu adalah makanan pokok teman-teman di Indonesia timur.", "level": 3 },
+
+    { "id": "ayam", "nama": "Ayam", "emoji": "🍗", "gambar": "/assets/food/ayam.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Ayam membuat otot tubuhmu kuat!", "level": 1 },
+    { "id": "telur", "nama": "Telur", "emoji": "🥚", "gambar": "/assets/food/telur.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Satu telur setiap pagi membuat badan hebat.", "level": 1 },
+    { "id": "ikan", "nama": "Ikan", "emoji": "🐟", "gambar": "/assets/food/ikan.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Ikan membuat otak makin pintar!", "level": 2 },
+    { "id": "tempe", "nama": "Tempe", "emoji": "🫘", "gambar": "/assets/food/tempe.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Tempe dibuat dari kacang kedelai. Asli Indonesia!", "level": 2 },
+    { "id": "tahu", "nama": "Tahu", "emoji": "🍡", "gambar": "/assets/food/tahu.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Tahu lembut dan sehat, juga dari kedelai.", "level": 3 },
+    { "id": "daging", "nama": "Daging Sapi", "emoji": "🥩", "gambar": "/assets/food/daging.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Daging mengandung zat besi supaya tidak lemas.", "level": 3 },
+    { "id": "udang", "nama": "Udang", "emoji": "🍤", "gambar": "/assets/food/udang.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Udang datang dari laut Indonesia yang luas.", "level": 3 },
+    { "id": "kacang-merah", "nama": "Kacang Merah", "emoji": "🥜", "gambar": "/assets/food/kacang-merah.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Kacang merah enak dibuat sup!", "level": 3 },
+
+    { "id": "wortel", "nama": "Wortel", "emoji": "🥕", "gambar": "/assets/food/wortel.png", "kelompok": "sayur", "fungsiGizi": "Vitamin A & serat", "fakta": "Wortel membuat mata sehat dan terang!", "level": 1 },
+    { "id": "bayam", "nama": "Bayam", "emoji": "🥬", "gambar": "/assets/food/bayam.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & zat besi", "fakta": "Bayam membuat badan kuat seperti Tayo!", "level": 1 },
+    { "id": "brokoli", "nama": "Brokoli", "emoji": "🥦", "gambar": "/assets/food/brokoli.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & serat", "fakta": "Brokoli seperti pohon kecil yang penuh vitamin.", "level": 2 },
+    { "id": "tomat", "nama": "Tomat", "emoji": "🍅", "gambar": "/assets/food/tomat.png", "kelompok": "sayur", "fungsiGizi": "Vitamin C", "fakta": "Tomat merah segar membuat kulit sehat.", "level": 2 },
+    { "id": "kangkung", "nama": "Kangkung", "emoji": "🌿", "gambar": "/assets/food/kangkung.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & serat", "fakta": "Tumis kangkung favorit banyak keluarga Indonesia.", "level": 3 },
+    { "id": "buncis", "nama": "Buncis", "emoji": "🫛", "gambar": "/assets/food/buncis.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & serat", "fakta": "Buncis renyah dan membuat pencernaan lancar.", "level": 3 },
+    { "id": "terong", "nama": "Terong", "emoji": "🍆", "gambar": "/assets/food/terong.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & serat", "fakta": "Terong ungu bisa dibakar atau digoreng sebentar.", "level": 3 },
+    { "id": "labu", "nama": "Labu Kuning", "emoji": "🎃", "gambar": "/assets/food/labu.png", "kelompok": "sayur", "fungsiGizi": "Vitamin A", "fakta": "Labu kuning manis dan bagus untuk mata.", "level": 3 },
+
+    { "id": "pisang", "nama": "Pisang", "emoji": "🍌", "gambar": "/assets/food/pisang.png", "kelompok": "buah", "fungsiGizi": "Vitamin & tenaga cepat", "fakta": "Pisang camilan sehat sebelum olahraga!", "level": 1 },
+    { "id": "apel", "nama": "Apel", "emoji": "🍎", "gambar": "/assets/food/apel.png", "kelompok": "buah", "fungsiGizi": "Vitamin & serat", "fakta": "Apel renyah membuat gigi ikut sehat.", "level": 1 },
+    { "id": "jeruk", "nama": "Jeruk", "emoji": "🍊", "gambar": "/assets/food/jeruk.png", "kelompok": "buah", "fungsiGizi": "Vitamin C", "fakta": "Jeruk penuh vitamin C supaya tidak mudah sakit.", "level": 2 },
+    { "id": "semangka", "nama": "Semangka", "emoji": "🍉", "gambar": "/assets/food/semangka.png", "kelompok": "buah", "fungsiGizi": "Vitamin & air", "fakta": "Semangka banyak airnya, segar sekali!", "level": 2 },
+    { "id": "mangga", "nama": "Mangga", "emoji": "🥭", "gambar": "/assets/food/mangga.png", "kelompok": "buah", "fungsiGizi": "Vitamin A & C", "fakta": "Mangga manis kesukaan banyak anak Indonesia.", "level": 3 },
+    { "id": "pepaya", "nama": "Pepaya", "emoji": "🍈", "gambar": "/assets/food/pepaya.png", "kelompok": "buah", "fungsiGizi": "Vitamin & serat", "fakta": "Pepaya membuat perut lancar setiap pagi.", "level": 3 },
+    { "id": "anggur", "nama": "Anggur", "emoji": "🍇", "gambar": "/assets/food/anggur.png", "kelompok": "buah", "fungsiGizi": "Vitamin & antioksidan", "fakta": "Anggur kecil-kecil tapi penuh kebaikan.", "level": 3 },
+    { "id": "alpukat", "nama": "Alpukat", "emoji": "🥑", "gambar": "/assets/food/alpukat.png", "kelompok": "buah", "fungsiGizi": "Lemak baik", "fakta": "Alpukat punya lemak baik untuk otak.", "level": 3 }
+  ]
+}

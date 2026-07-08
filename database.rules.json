@@ -1,0 +1,24 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "battle": {
+      "tim": {
+        "$kodeTim": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      },
+      "antrean": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+      "ruang": {
+        "$ruangId": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    }
+  }
+}

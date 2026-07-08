@@ -1,0 +1,42 @@
+{
+  "keterangan": "Konfigurasi level game Isi Piringku (Phase 3, keputusan D1: berlevel). Pool makanan tiap level = semua item di makanan.json dengan field level ≤ level ini, diacak.",
+  "poin": {
+    "benarPerItem": 10,
+    "bonusRondeSempurna": 20,
+    "salah": 0,
+    "catatan": "Salah tidak mengurangi poin — ramah anak. Feedback salah: Tayo berkata 'Yuk coba lagi!'"
+  },
+  "levels": [
+    {
+      "level": 1,
+      "nama": "Piring Kecil",
+      "itemPerRonde": 6,
+      "jumlahRonde": 3,
+      "timerDetik": null,
+      "syaratBuka": null,
+      "syaratLulus": { "minBenarPersen": 70 },
+      "bintang": { "3": 100, "2": 85, "1": 70 }
+    },
+    {
+      "level": 2,
+      "nama": "Piring Sedang",
+      "itemPerRonde": 8,
+      "jumlahRonde": 3,
+      "timerDetik": null,
+      "syaratBuka": { "selesaiLevel": 1 },
+      "syaratLulus": { "minBenarPersen": 75 },
+      "bintang": { "3": 100, "2": 88, "1": 75 }
+    },
+    {
+      "level": 3,
+      "nama": "Piring Juara",
+      "itemPerRonde": 10,
+      "jumlahRonde": 3,
+      "timerDetik": 120,
+      "syaratBuka": { "selesaiLevel": 2 },
+      "syaratLulus": { "minBenarPersen": 80 },
+      "bintang": { "3": 100, "2": 90, "1": 80 },
+      "catatan": "Timer lembut: kalau habis, ronde tetap selesai dengan item yang sudah disortir — tidak ada layar 'kalah'."
+    }
+  ]
+}

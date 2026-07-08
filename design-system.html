@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design System Anakara — Fase A Learning Platform</title>
+<meta name="description" content="Fondasi visual Anakara: token warna, tipografi ramah anak, komponen, dan aturan desain untuk platform edukasi gizi anak SD kelas 1-2." />
+<meta name="theme-color" content="#1FA8E8" />
+<meta property="og:title" content="Design System Anakara — Fase A" />
+<meta property="og:description" content="Fondasi visual platform edukasi anak: warna pastel biru, maskot Tayo, komponen game." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐆</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+
+<script>
+  // No-flash theme: pakai pilihan tersimpan; kalau belum ada, ikuti sistem (via CSS).
+  (function () {
+    try {
+      var t = localStorage.getItem("anakara-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  /* ============================================================
+     TOKENS — semua warna sudah diverifikasi WCAG (AA/AAA).
+     Komponen HANYA memakai token semantik (--color-*), bukan hex.
+     ============================================================ */
+  :root {
+    /* Primitif — Biru (brand utama) */
+    --blue-50: #eaf6ff;  --blue-100: #cdebff; --blue-300: #6cc5f5;
+    --blue-bright: #1fa8e8;  /* sky ceria — DEKORATIF (ilustrasi/fill besar), bukan pembawa teks */
+    --blue-600: #0a72b0;  --blue-700: #085e92;  --blue-800: #084e7a;
+    /* Primitif — Kuning (aksen ceria) */
+    --yellow-300: #ffe27a; --yellow-400: #ffd23f; --yellow-600: #c98a00;
+    /* Primitif — Hijau (sukses) */
+    --green-bright: #7dd35b; --green-700: #2f7a33; --green-800: #276b2b;
+    /* Primitif — Oranye (hangat) */
+    --orange-400: #ff9f43; --orange-600: #b4560a;
+    /* Primitif — Merah lembut (error ramah anak) */
+    --red-500: #c0392b;
+    /* Maskot Tayo (khusus asset, bukan UI) */
+    --tayo-fur: #f3b94d; --tayo-fur-l: #f7d08a; --tayo-spot: #8a5a2b;
+    --tayo-cheek: #f7a8b8; --tayo-belly: #fbe7c6;
+    /* Netral */
+    --ink: #21323d; --ink-muted: #5a6b75;
+
+    /* --- Semantik (Light) --- */
+    --color-bg: #f2f9fe;
+    --color-surface: #ffffff;
+    --color-surface-2: #f4faff;
+    --color-fg: var(--ink);
+    --color-muted: var(--ink-muted);
+    --color-border: #dce6ec;
+    --color-primary: var(--blue-600);
+    --color-primary-hover: var(--blue-700);
+    --color-primary-active: var(--blue-800);
+    --color-on-primary: #ffffff;
+    --color-accent: var(--yellow-400);
+    --color-on-accent: var(--ink);
+    --color-success: var(--green-700);
+    --color-on-success: #ffffff;
+    --color-success-hover: var(--green-800);
+    --color-danger: var(--red-500);
+    --color-focus: #0b84c4;
+    --color-link: var(--blue-700);
+
+    /* Radius (playful = generous) */
+    --radius-sm: 10px; --radius-md: 16px; --radius-lg: 24px; --radius-xl: 32px; --radius-full: 9999px;
+
+    /* Type scale (rasio 1.25, base 16, fluid) */
+    --font-display: "Baloo 2", "Fredoka", system-ui, sans-serif;
+    --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);      /* 16 → 18 body */
+    --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);      /* 20 → 24 */
+    --step-2: clamp(1.5rem, 1.3rem + 1vw, 2rem);            /* 24 → 32 */
+    --step-3: clamp(2rem, 1.6rem + 2vw, 2.75rem);           /* 32 → 44 */
+    --step-4: clamp(2.5rem, 1.9rem + 3vw, 3.5rem);          /* 40 → 56 */
+
+    /* Elevasi (2 lapis, opacity rendah) */
+    --shadow-sm: 0 1px 2px rgba(20, 50, 70, 0.06), 0 2px 6px rgba(20, 50, 70, 0.06);
+    --shadow-md: 0 4px 10px rgba(20, 50, 70, 0.08), 0 10px 24px rgba(20, 50, 70, 0.08);
+    --shadow-pop: 0 6px 0 rgba(8, 78, 122, 0.35); /* efek "tombol tebal" ramah anak */
+  }
+
+  /* --- Semantik (Dark) — surface diterangi netral, aksen di-desaturasi --- */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --color-bg: #10202b;
+      --color-surface: #17303f;
+      --color-surface-2: #1e3a4c;
+      --color-fg: #eaf4fa;
+      --color-muted: #9db4c0;
+      --color-border: #2a4658;
+      --color-primary: #4db6e8;
+      --color-primary-hover: #6ec6f0;
+      --color-primary-active: #8ad3f4;
+      --color-on-primary: #10202b;
+      --color-accent: #fbd24e;
+      --color-on-accent: #10202b;
+      --color-success: #6fc06b;
+      --color-on-success: #10202b;
+      --color-success-hover: #7dd35b;
+      --color-danger: #ff8a80;
+      --color-focus: #6ec6f0;
+      --color-link: #6ec6f0;
+      --shadow-pop: 0 6px 0 rgba(0, 0, 0, 0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-bg: #10202b; --color-surface: #17303f; --color-surface-2: #1e3a4c;
+    --color-fg: #eaf4fa; --color-muted: #9db4c0; --color-border: #2a4658;
+    --color-primary: #4db6e8; --color-primary-hover: #6ec6f0; --color-primary-active: #8ad3f4;
+    --color-on-primary: #10202b; --color-accent: #fbd24e; --color-on-accent: #10202b;
+    --color-success: #6fc06b; --color-on-success: #10202b; --color-success-hover: #7dd35b;
+    --color-danger: #ff8a80; --color-focus: #6ec6f0; --color-link: #6ec6f0;
+    --shadow-pop: 0 6px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  /* ============================================================ Base */
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--color-bg); color: var(--color-fg);
+    font-family: var(--font-body); font-size: var(--step-0); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; margin: 0; }
+  h1 { font-size: var(--step-4); font-weight: 800; letter-spacing: -0.01em; }
+  h2 { font-size: var(--step-3); font-weight: 700; }
+  h3 { font-size: var(--step-1); font-weight: 700; }
+  p { margin: 0 0 1rem; max-width: 68ch; }
+  a { color: var(--color-link); font-weight: 700; }
+
+  .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: clamp(16px, 5vw, 48px); }
+  .section { padding-block: clamp(48px, 6vw, 96px); }
+  .section + .section { border-top: 1px solid var(--color-border); }
+  .eyebrow { font-family: var(--font-display); font-weight: 700; color: var(--color-primary);
+    text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem; margin: 0 0 8px; }
+  .lead { color: var(--color-muted); font-size: var(--step-1); }
+
+  /* Skip link */
+  .skip { position: absolute; left: -999px; top: 8px; background: var(--color-primary);
+    color: var(--color-on-primary); padding: 12px 24px; border-radius: var(--radius-md); z-index: 100; }
+  .skip:focus { left: 16px; }
+
+  /* Focus ring global (≥2px, ≥3:1) */
+  :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; border-radius: 4px; }
+
+  /* ============================================================ Header */
+  header.site {
+    position: sticky; top: 0; z-index: 50; background: var(--color-bg);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border);
+  }
+  .navbar { display: flex; align-items: center; gap: 16px; min-height: 64px; }
+  .brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-display);
+    font-weight: 800; font-size: 1.4rem; color: var(--color-fg); text-decoration: none; }
+  .brand .anakara { color: var(--color-primary); }
+  .brand .badge { font-size: 0.7rem; font-weight: 700; background: var(--color-accent);
+    color: var(--color-on-accent); padding: 4px 8px; border-radius: var(--radius-full); }
+  .navbar nav { margin-left: auto; display: none; gap: 8px; }
+  .navbar nav a { color: var(--color-muted); text-decoration: none; font-weight: 700; font-size: 0.95rem;
+    padding: 12px 16px; border-radius: var(--radius-full); }
+  .navbar nav a:hover { color: var(--color-fg); background: var(--color-surface-2); }
+  @media (min-width: 860px) { .navbar nav { display: flex; } }
+  .theme-toggle { margin-left: auto; min-height: 44px; min-width: 44px; padding: 8px 14px; gap: 8px;
+    display: inline-flex; align-items: center; border: 2px solid var(--color-border); background: var(--color-surface);
+    color: var(--color-fg); border-radius: var(--radius-full); font-family: var(--font-body); font-weight: 700;
+    cursor: pointer; }
+  @media (min-width: 860px) { .theme-toggle { margin-left: 12px; } }
+  .theme-toggle:hover { border-color: var(--color-primary); }
+  .theme-toggle:active { transform: translateY(1px); }
+
+  /* ============================================================ Hero */
+  .hero { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 820px) { .hero { grid-template-columns: 1.3fr 1fr; } }
+  .hero .mascot { justify-self: center; width: min(280px, 70vw); filter: drop-shadow(0 12px 20px rgba(20,50,70,.15)); }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .pill { font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; padding: 8px 16px;
+    border-radius: var(--radius-full); background: var(--color-surface-2); color: var(--color-fg);
+    border: 1px solid var(--color-border); }
+
+  /* ============================================================ Buttons */
+  .btn { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; border: none;
+    min-height: 48px; padding: 12px 32px; border-radius: var(--radius-full); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px; transition: transform 150ms ease-out, background 150ms, box-shadow 150ms; }
+  .btn:active { transform: translateY(3px); } /* efek "pop"/tekan */
+  .btn--primary { background: var(--color-primary); color: var(--color-on-primary); box-shadow: var(--shadow-pop); }
+  .btn--primary:hover { background: var(--color-primary-hover); }
+  .btn--primary:active { background: var(--color-primary-active); box-shadow: 0 3px 0 rgba(8,78,122,.35); }
+  .btn--accent { background: var(--color-accent); color: var(--color-on-accent); box-shadow: 0 6px 0 var(--yellow-600); }
+  .btn--accent:hover { background: var(--yellow-300); }
+  .btn--accent:active { box-shadow: 0 3px 0 var(--yellow-600); }
+  .btn--success { background: var(--color-success); color: var(--color-on-success); box-shadow: 0 6px 0 rgba(20,60,20,.3); }
+  .btn--success:hover { background: var(--color-success-hover); }
+  .btn--success:active { box-shadow: 0 3px 0 rgba(20,60,20,.3); }
+  .btn--ghost { background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); }
+  .btn--ghost:hover { background: var(--color-surface-2); background: color-mix(in srgb, var(--color-primary) 10%, transparent); }
+  .btn[disabled] { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+  .btn[disabled]:active { transform: none; }
+
+  /* ============================================================ Cards & grids */
+  .grid { display: grid; gap: clamp(16px, 2.5vw, 28px); }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+  .card { background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); }
+  .card h3 { margin-bottom: 8px; }
+  .card p { color: var(--color-muted); margin: 0; font-size: 0.95rem; }
+
+  /* Kartu menu game (thumbnail gaya art dramatis — aturan A2) */
+  .game-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; color: #fff;
+    min-height: 190px; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+    box-shadow: var(--shadow-md); border: 3px solid rgba(255,255,255,.15); }
+  .game-card.kuis { background: radial-gradient(120% 120% at 30% 10%, #3a2a6b, #1a1140 70%); }
+  .game-card.battle { background: linear-gradient(120deg, #103a8a 0%, #0c2a6b 45%, #8a1020 55%, #b21a2a 100%); }
+  .game-card.cerita { background: radial-gradient(120% 120% at 70% 20%, #1b3a6b, #0b1e42 70%); }
+  .game-card h3 { color: #fff; font-size: 1.5rem; }
+  .game-card small { color: rgba(255,255,255,.82); font-weight: 700; }
+  .game-card .play { position: absolute; top: 16px; right: 16px; width: 46px; height: 46px;
+    background: var(--yellow-400); border-radius: var(--radius-full); display: grid; place-items: center;
+    color: #1a1140; font-size: 1.2rem; box-shadow: 0 3px 0 var(--yellow-600); }
+
+  /* Profile chip */
+  .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--color-surface);
+    border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 8px 16px 8px 8px; box-shadow: var(--shadow-sm); }
+  .chip .avatar { width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--blue-100);
+    display: grid; place-items: center; font-size: 1.3rem; }
+  .chip .lv { font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; background: var(--color-accent);
+    color: var(--color-on-accent); padding: 4px 12px; border-radius: var(--radius-full); }
+  .score { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 800;
+    color: var(--color-fg); }
+  .score .star { color: var(--yellow-400); font-size: 1.3rem; }
+
+  /* Kuis option */
+  .quiz-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr)); gap: 12px; }
+  .opt { border: 3px solid var(--color-border); background: var(--color-surface); border-radius: var(--radius-md);
+    padding: 16px; text-align: center; font-family: var(--font-display); font-weight: 700; cursor: pointer;
+    min-height: 90px; display: grid; gap: 8px; place-content: center; transition: border-color 150ms, transform 120ms ease-out; }
+  .opt:hover { transform: translateY(-2px); }
+  .opt .ico { font-size: 1.8rem; }
+  .opt[aria-pressed="true"] { border-color: var(--color-primary); background: var(--color-surface-2);
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface)); }
+
+  /* Progress dots + timer */
+  .dots { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .dot { width: 30px; height: 30px; border-radius: var(--radius-full); display: grid; place-items: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; background: var(--color-border); color: var(--color-muted); }
+  .dot.done { background: var(--color-primary); color: var(--color-on-primary); }
+  .dot.now { background: var(--color-accent); color: var(--color-on-accent); outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .timer { height: 12px; background: var(--color-border); border-radius: var(--radius-full); overflow: hidden; }
+  .timer > span { display: block; height: 100%; width: 62%; background: linear-gradient(90deg, var(--green-bright), var(--color-primary)); border-radius: var(--radius-full); }
+
+  /* Isi Piringku plate */
+  .plate { aspect-ratio: 1; max-width: 260px; margin-inline: auto; border-radius: var(--radius-full);
+    border: 8px solid var(--color-border); background: var(--color-surface);
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; overflow: hidden; position: relative; }
+  .plate div { display: grid; place-items: center; text-align: center; font-family: var(--font-display); font-weight: 700;
+    font-size: 0.8rem; padding: 8px; }
+  .plate .q1 { background: color-mix(in srgb, var(--orange-400) 22%, var(--color-surface)); }
+  .plate .q2 { background: color-mix(in srgb, var(--red-500) 16%, var(--color-surface)); }
+  .plate .q3 { background: color-mix(in srgb, var(--green-bright) 26%, var(--color-surface)); }
+  .plate .q4 { background: color-mix(in srgb, var(--yellow-400) 30%, var(--color-surface)); }
+
+  /* Collection slot */
+  .album { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 12px; }
+  .slot { aspect-ratio: 3/4; border-radius: var(--radius-md); display: grid; place-items: center; font-size: 1.8rem;
+    border: 2px dashed var(--color-border); background: var(--color-surface-2); }
+  .slot.got { border-style: solid; border-color: var(--color-accent); background: var(--color-surface);
+    box-shadow: var(--shadow-sm); }
+  .slot.locked { color: var(--color-muted); filter: grayscale(1); opacity: 0.6; }
+
+  /* Feedback toast (Tayo) */
+  .toast { display: inline-flex; align-items: center; gap: 12px; background: var(--color-surface);
+    border: 2px solid var(--color-success); border-radius: var(--radius-lg); padding: 12px 16px; box-shadow: var(--shadow-md);
+    font-family: var(--font-display); font-weight: 700; }
+  .toast.retry { border-color: var(--color-accent); }
+  .toast svg { width: 40px; height: 40px; flex: none; }
+
+  /* Status data: memuat / kosong / error (aturan power-design #14 & #19) */
+  .skeleton { display: grid; gap: 12px; }
+  .skeleton span { display: block; background: var(--color-border); border-radius: var(--radius-sm);
+    animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+  .empty { text-align: center; padding: 24px 16px; border: 2px dashed var(--color-border);
+    border-radius: var(--radius-md); display: grid; gap: 12px; justify-items: center; }
+  .field { display: grid; gap: 8px; }
+  .field label { font-weight: 700; font-size: 0.95rem; }
+  .field input { font: inherit; min-height: 48px; padding: 12px 16px; border: 2px solid var(--color-border);
+    border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-fg); width: 100%; }
+  .field input::placeholder { color: var(--color-muted); }
+  .field input[aria-invalid="true"] { border-color: var(--color-danger); }
+  .field .error-text { color: var(--color-danger); font-weight: 700; font-size: 0.9rem;
+    display: flex; gap: 8px; align-items: center; }
+
+  /* Swatches */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+  .sw { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); }
+  .sw .chipcolor { height: 68px; }
+  .sw .meta { padding: 12px; font-size: 0.82rem; }
+  .sw .meta b { font-family: var(--font-display); display: block; font-size: 0.9rem; }
+  .sw .meta code { color: var(--color-muted); font-size: 0.78rem; }
+  .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-full);
+    background: var(--green-bright); color: #123a12; margin-top: 4px; }
+
+  /* Type specimen rows */
+  .type-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 1px dashed var(--color-border); }
+  .type-row span:first-child { color: var(--color-muted); font-size: 0.8rem; min-width: 120px; }
+
+  /* Token tables */
+  .tokens { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+  .token { text-align: center; }
+  .token .box { background: var(--color-primary); margin-inline: auto; }
+  .r-sm { width: 64px; height: 64px; border-radius: var(--radius-sm); }
+  .r-md { width: 64px; height: 64px; border-radius: var(--radius-md); }
+  .r-lg { width: 64px; height: 64px; border-radius: var(--radius-lg); }
+  .r-xl { width: 64px; height: 64px; border-radius: var(--radius-xl); }
+  .r-full { width: 64px; height: 64px; border-radius: var(--radius-full); }
+  .space-demo { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
+  .space-demo i { background: var(--color-accent); display: block; border-radius: 4px; }
+
+  footer.site { border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 0.9rem; }
+  .muted { color: var(--color-muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Maskot Tayo — SVG placeholder (self-contained) sampai asset final di-generate -->
+<svg style="display: none" aria-hidden="true">
+  <symbol id="tayo" viewBox="0 0 120 120">
+    <ellipse cx="34" cy="26" rx="13" ry="14" fill="var(--tayo-fur)" />
+    <ellipse cx="86" cy="26" rx="13" ry="14" fill="var(--tayo-fur)" />
+    <circle cx="34" cy="26" r="6" fill="var(--tayo-spot)" opacity=".55" />
+    <circle cx="86" cy="26" r="6" fill="var(--tayo-spot)" opacity=".55" />
+    <circle cx="60" cy="64" r="42" fill="var(--tayo-fur)" />
+    <ellipse cx="60" cy="74" rx="26" ry="22" fill="var(--tayo-fur-l)" />
+    <circle cx="40" cy="46" r="4" fill="var(--tayo-spot)" opacity=".5" />
+    <circle cx="82" cy="48" r="3.5" fill="var(--tayo-spot)" opacity=".5" />
+    <circle cx="30" cy="66" r="3.5" fill="var(--tayo-spot)" opacity=".45" />
+    <circle cx="90" cy="68" r="4" fill="var(--tayo-spot)" opacity=".45" />
+    <circle cx="47" cy="60" r="6.5" fill="#20303a" />
+    <circle cx="73" cy="60" r="6.5" fill="#20303a" />
+    <circle cx="49" cy="58" r="2.2" fill="#fff" />
+    <circle cx="75" cy="58" r="2.2" fill="#fff" />
+    <circle cx="42" cy="72" r="6" fill="var(--tayo-cheek)" opacity=".8" />
+    <circle cx="78" cy="72" r="6" fill="var(--tayo-cheek)" opacity=".8" />
+    <path d="M55 70 h10 l-5 5 z" fill="var(--tayo-spot)" />
+    <path d="M52 80 q8 7 16 0" fill="none" stroke="var(--tayo-spot)" stroke-width="2.5" stroke-linecap="round" />
+  </symbol>
+</svg>
+
+<a class="skip" href="#main">Lompat ke konten</a>
+
+<header class="site">
+  <div class="container navbar">
+    <a class="brand" href="#top">
+      <svg width="34" height="34" aria-hidden="true"><use href="#tayo" /></svg>
+      <span><span class="anakara">Anakara</span></span>
+      <span class="badge">Fase A</span>
+    </a>
+    <nav aria-label="Bagian design system">
+      <a href="#warna">Warna</a>
+      <a href="#teks">Tipografi</a>
+      <a href="#tombol">Tombol</a>
+      <a href="#komponen">Komponen</a>
+      <a href="#token">Token</a>
+    </nav>
+    <button class="theme-toggle" id="themeBtn" aria-label="Ganti tema terang/gelap">
+      <span id="themeIcon">🌙</span><span id="themeLabel">Gelap</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <span id="top"></span>
+  <!-- HERO -->
+  <section class="section container">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Design System · Fondasi Visual</p>
+        <h1>Satu bahasa desain untuk Anakara</h1>
+        <p class="lead">
+          Platform edukasi gizi &amp; hidup sehat untuk anak SD kelas 1–2. Halaman ini adalah
+          <strong>sumber kebenaran visual</strong>: warna, huruf, tombol, dan komponen yang dipakai
+          ulang di seluruh fitur — dibangun dari referensi Figma dan diverifikasi standar aksesibilitas.
+        </p>
+        <div class="pill-row">
+          <span class="pill">🦁→🐆 Maskot: Tayo</span>
+          <span class="pill">Biru pastel + aksen ceria</span>
+          <span class="pill">Huruf bulat ramah anak</span>
+          <span class="pill">WCAG AA/AAA ✓</span>
+          <span class="pill">Terang + Gelap</span>
+        </div>
+      </div>
+      <svg class="mascot" viewBox="0 0 120 120" role="img" aria-label="Tayo, maskot anak macan tutul Anakara"><use href="#tayo" /></svg>
+    </div>
+  </section>
+
+  <!-- PRINSIP -->
+  <section class="section container" id="prinsip">
+    <p class="eyebrow">Prinsip</p>
+    <h2>Lima aturan yang tak bisa ditawar</h2>
+    <div class="grid cols-3" style="margin-top: 24px">
+      <div class="card"><h3>👶 Untuk yang belum lancar membaca</h3><p>Ikon besar, ilustrasi, dan maskot memandu setiap layar. Teks pendek, Bahasa Indonesia sederhana kelas 1–2.</p></div>
+      <div class="card"><h3>👆 Mudah di-tap</h3><p>Semua target sentuh ≥ 44×44 px, jarak ≥ 8 px. Nyaman untuk jari kecil di tablet &amp; HP.</p></div>
+      <div class="card"><h3>🎨 Pastel di kerangka, dramatis di thumbnail</h3><p>UI, panel, dan tombol tetap biru pastel ceria; hanya <em>thumbnail kartu game</em> yang boleh bergaya art gelap.</p></div>
+      <div class="card"><h3>🌈 Warna tak pernah sendirian</h3><p>Benar/salah selalu diberi ikon + teks, bukan cuma warna. Aman untuk buta warna.</p></div>
+      <div class="card"><h3>🪶 Ringan &amp; lembut</h3><p>Sekolah bisa berkoneksi lambat. Animasi playful tapi hemat, dan bisa dimatikan (reduced-motion).</p></div>
+      <div class="card"><h3>🛡️ Aman untuk anak</h3><p>Tanpa kolom komentar, tanpa rekomendasi eksternal. Feedback salah selalu menyemangati, bukan menjatuhkan.</p></div>
+    </div>
+  </section>
+
+  <!-- WARNA -->
+  <section class="section container" id="warna">
+    <p class="eyebrow">Token Warna</p>
+    <h2>Palet — 60 / 30 / 10</h2>
+    <p class="muted">Netral (surface) mendominasi, biru &amp; teks sebagai sekunder, aksen dipakai hemat untuk “aksi di sini”. Semua pasangan teks/tombol sudah lolos kontras WCAG.</p>
+
+    <h3 style="margin: 32px 0 12px">Semantik (mode terang)</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chipcolor" style="background:#f2f9fe"></div><div class="meta"><b>Background</b><code>#F2F9FE</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#ffffff;border-bottom:1px solid #dce6ec"></div><div class="meta"><b>Surface / Kartu</b><code>#FFFFFF</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#21323d"></div><div class="meta"><b>Teks utama</b><code>#21323D</code><span class="tag">13.2:1 AAA</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#5a6b75"></div><div class="meta"><b>Teks muted</b><code>#5A6B75</code><span class="tag">5.5:1 AA</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#0a72b0"></div><div class="meta"><b>Primary (aksi)</b><code>#0A72B0</code><span class="tag">teks putih 5.2:1</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#dce6ec"></div><div class="meta"><b>Border</b><code>#DCE6EC</code></div></div>
+    </div>
+
+    <h3 style="margin: 32px 0 12px">Brand &amp; aksen ceria</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chipcolor" style="background:#1fa8e8"></div><div class="meta"><b>Sky (dekoratif)</b><code>#1FA8E8</code><span class="muted">fill besar / ilustrasi</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#ffd23f"></div><div class="meta"><b>Kuning aksen</b><code>#FFD23F</code><span class="tag">ink 9.2:1</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#ff9f43"></div><div class="meta"><b>Oranye hangat</b><code>#FF9F43</code><span class="tag">ink 6.5:1</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#7dd35b"></div><div class="meta"><b>Hijau ceria</b><code>#7DD35B</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#2f7a33"></div><div class="meta"><b>Hijau sukses</b><code>#2F7A33</code><span class="tag">teks putih 5.3:1</span></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#c0392b"></div><div class="meta"><b>Merah lembut</b><code>#C0392B</code><span class="muted">error ramah anak</span></div></div>
+    </div>
+
+    <h3 style="margin: 32px 0 12px">Maskot Tayo (khusus asset, bukan UI)</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chipcolor" style="background:#f3b94d"></div><div class="meta"><b>Bulu</b><code>#F3B94D</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#f7d08a"></div><div class="meta"><b>Bulu terang</b><code>#F7D08A</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#8a5a2b"></div><div class="meta"><b>Totol</b><code>#8A5A2B</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#f7a8b8"></div><div class="meta"><b>Pipi</b><code>#F7A8B8</code></div></div>
+      <div class="sw"><div class="chipcolor" style="background:#fbe7c6"></div><div class="meta"><b>Perut</b><code>#FBE7C6</code></div></div>
+    </div>
+  </section>
+
+  <!-- TIPOGRAFI -->
+  <section class="section container" id="teks">
+    <p class="eyebrow">Tipografi</p>
+    <h2>Baloo 2 + Nunito</h2>
+    <p class="muted"><strong>Baloo 2</strong> (bulat, tebal, ramah) untuk judul &amp; tombol. <strong>Nunito</strong> (sangat terbaca) untuk teks. Skala rasio 1.25, fluid dengan <code>clamp()</code>, badan minimal 16px.</p>
+    <div style="margin-top: 24px">
+      <div class="type-row"><span>H1 · step-4</span><span style="font-family:var(--font-display);font-weight:800;font-size:var(--step-4)">Ayo Belajar!</span></div>
+      <div class="type-row"><span>H2 · step-3</span><span style="font-family:var(--font-display);font-weight:700;font-size:var(--step-3)">Isi Piringku</span></div>
+      <div class="type-row"><span>H3 · step-1</span><span style="font-family:var(--font-display);font-weight:700;font-size:var(--step-1)">Kuis Makanan Sehat</span></div>
+      <div class="type-row"><span>Body · step-0</span><span style="font-size:var(--step-0)">Yuk, bantu Tayo memilih makanan yang tepat supaya tubuh kuat dan sehat!</span></div>
+      <div class="type-row"><span>Caption · 14px</span><span style="font-size:14px;color:var(--color-muted)">Sumber tenaga · Sumber protein</span></div>
+    </div>
+  </section>
+
+  <!-- TOMBOL -->
+  <section class="section container" id="tombol">
+    <p class="eyebrow">Komponen</p>
+    <h2>Tombol — 5 status, efek “pop”</h2>
+    <p class="muted">Tiap tombol punya status default / hover / focus-visible / active / disabled. Efek tekan turun 3px (playful), bayangan tebal ala tombol mainan. Semua ≥ 48px tinggi.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:20px">
+      <button class="btn btn--primary">Lanjut →</button>
+      <button class="btn btn--accent">◀ Sebelumnya</button>
+      <button class="btn btn--success">Klaim Hadiah ⭐</button>
+      <button class="btn btn--ghost">Dengarkan Narasi 🔊</button>
+      <button class="btn btn--primary" disabled>Terkunci 🔒</button>
+    </div>
+    <p class="muted" style="margin-top:16px;font-size:0.9rem">Coba <kbd>Tab</kbd> lewat keyboard untuk melihat focus ring biru (≥3:1).</p>
+  </section>
+
+  <!-- KOMPONEN -->
+  <section class="section container" id="komponen">
+    <p class="eyebrow">Pola Antarmuka</p>
+    <h2>Komponen produk</h2>
+
+    <h3 style="margin:32px 0 16px">Kartu menu game <span class="muted" style="font-size:.8rem;font-weight:400">(thumbnail art dramatis, bingkai pastel)</span></h3>
+    <div class="grid cols-3">
+      <article class="game-card kuis"><span class="play">▶</span><h3>Kuis Asik</h3><small>Jawab pertanyaan &amp; dapatkan hadiah menarik</small></article>
+      <article class="game-card battle"><span class="play">▶</span><h3>2 vs 2</h3><small>Team up dengan temanmu untuk menjawab kuis</small></article>
+      <article class="game-card cerita"><span class="play">▶</span><h3>Cerita Interaktif</h3><small>Belajar sambil membaca kisah seru</small></article>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:32px;align-items:start">
+      <div class="card">
+        <h3>Chip profil &amp; skor</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:12px">
+          <span class="chip"><span class="avatar">🦊</span><span><b style="font-family:var(--font-display)">Kenzo</b></span><span class="lv">Lv 4</span></span>
+          <span class="score"><span class="star">⭐</span> 120</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Feedback Tayo</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <span class="toast"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#tayo"/></svg> Yeay, benar! 🎉</span>
+          <span class="toast retry"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#tayo"/></svg> Yuk coba lagi! 💪</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:32px;align-items:start">
+      <div class="card">
+        <h3>Alur kuis (10 soal)</h3>
+        <div class="dots" style="margin-top:16px" aria-hidden="true">
+          <span class="dot done">1</span><span class="dot done">2</span><span class="dot now">3</span>
+          <span class="dot">4</span><span class="dot">5</span><span class="dot">6</span><span class="dot">7</span>
+          <span class="dot">8</span><span class="dot">9</span><span class="dot">10</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--color-muted);margin-bottom:6px"><span>Sisa waktu</span><span>15 dtk</span></div>
+        <div class="timer"><span></span></div>
+        <div class="quiz-opts" style="margin-top:16px">
+          <button class="opt"><span class="ico">🍟</span>Keripik</button>
+          <button class="opt"><span class="ico">🍜</span>Mie instan</button>
+          <button class="opt"><span class="ico">🍭</span>Permen</button>
+          <button class="opt" aria-pressed="true"><span class="ico">🍌</span>Pisang</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Isi Piringku (4 kelompok)</h3>
+        <div class="plate" role="img" aria-label="Piring dibagi empat: makanan pokok, lauk-pauk, sayuran, buah-buahan" style="margin-top:16px">
+          <div class="q1">🍚<br />Makanan<br />Pokok</div>
+          <div class="q2">🍗<br />Lauk-Pauk</div>
+          <div class="q3">🥦<br />Sayuran</div>
+          <div class="q4">🍎<br />Buah</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:32px">
+      <h3>Koleksi kartu (rarity: Biasa · Langka · Legenda) — terkunci vs terbuka</h3>
+      <p class="muted" style="margin:8px 0 16px">Yang belum didapat tampil silhouette agar anak penasaran mengumpulkan.</p>
+      <div class="album">
+        <div class="slot got">🦸</div>
+        <div class="slot got">🍎</div>
+        <div class="slot locked">❔</div>
+        <div class="slot locked">❔</div>
+        <div class="slot got">⚽</div>
+        <div class="slot locked">❔</div>
+        <div class="slot locked">❔</div>
+      </div>
+    </div>
+
+    <h3 style="margin:32px 0 16px">Status data <span class="muted" style="font-size:.8rem;font-weight:400">(setiap region data wajib punya 3 status ini)</span></h3>
+    <div class="grid cols-3" style="align-items:start">
+      <div class="card">
+        <h3>Memuat — skeleton</h3>
+        <p class="muted" style="margin:8px 0 16px">Tunggu berbentuk konten, bukan spinner; ukuran sama dengan hasil akhir (anti-CLS).</p>
+        <div class="skeleton" aria-hidden="true">
+          <span style="width:48px;height:48px;border-radius:var(--radius-full)"></span>
+          <span style="width:72%;height:14px"></span>
+          <span style="width:90%;height:14px"></span>
+          <span style="width:55%;height:14px"></span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Kosong — ajak beraksi</h3>
+        <p class="muted" style="margin:8px 0 16px">Bukan halaman buntu: jelaskan + beri satu aksi utama.</p>
+        <div class="empty">
+          <svg width="56" height="56" viewBox="0 0 120 120" aria-hidden="true"><use href="#tayo" /></svg>
+          <b style="font-family:var(--font-display)">Belum ada kartu</b>
+          <span class="muted" style="font-size:.9rem">Menangkan battle untuk membuka kotak misteri!</span>
+          <button class="btn btn--primary" style="min-height:44px;padding:8px 24px">Main Sekarang</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Form &amp; error</h3>
+        <p class="muted" style="margin:8px 0 16px">Label selalu terlihat (placeholder ≠ label); error di sebelah field + ikon + solusi.</p>
+        <form onsubmit="return false">
+          <div class="field">
+            <label for="demo-nama">Nama panggilan</label>
+            <input id="demo-nama" type="text" autocomplete="name" placeholder="contoh: Kenzo"
+              aria-invalid="true" aria-describedby="demo-nama-err" />
+            <span class="error-text" id="demo-nama-err">⚠️ Nama belum diisi — yuk tulis namamu.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKEN -->
+  <section class="section container" id="token">
+    <p class="eyebrow">Fondasi</p>
+    <h2>Radius &amp; spasi</h2>
+    <h3 style="margin:24px 0 12px">Radius (banyak sudut membulat)</h3>
+    <div class="tokens">
+      <div class="token"><div class="box r-sm"></div><small>sm · 10</small></div>
+      <div class="token"><div class="box r-md"></div><small>md · 16</small></div>
+      <div class="token"><div class="box r-lg"></div><small>lg · 24</small></div>
+      <div class="token"><div class="box r-xl"></div><small>xl · 32</small></div>
+      <div class="token"><div class="box r-full"></div><small>full</small></div>
+    </div>
+    <h3 style="margin:32px 0 12px">Spasi 8-pt</h3>
+    <div class="space-demo">
+      <i style="width:4px;height:4px"></i><i style="width:8px;height:8px"></i><i style="width:12px;height:12px"></i>
+      <i style="width:16px;height:16px"></i><i style="width:24px;height:24px"></i><i style="width:32px;height:32px"></i>
+      <i style="width:48px;height:48px"></i><i style="width:64px;height:64px"></i>
+    </div>
+    <p class="muted" style="margin-top:12px;font-size:.9rem">4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 — tidak ada nilai di luar skala.</p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="container section" style="padding-block:32px">
+    <p style="margin:0"><strong style="font-family:var(--font-display)">Anakara</strong> · Fase A Learning Platform · Design System v1.
+    Selengkapnya di <code>FOUNDATION.md</code>. Maskot &amp; komponen = placeholder sampai asset final di-generate (Gemini).</p>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle — persist ke localStorage, sinkron dengan ikon.
+  (function () {
+    var btn = document.getElementById("themeBtn");
+    var icon = document.getElementById("themeIcon");
+    var label = document.getElementById("themeLabel");
+    function current() {
+      var attr = document.documentElement.getAttribute("data-theme");
+      if (attr) return attr;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function paint() {
+      var dark = current() === "dark";
+      icon.textContent = dark ? "☀️" : "🌙";
+      label.textContent = dark ? "Terang" : "Gelap";
+    }
+    btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("anakara-theme", next); } catch (e) {}
+      paint();
+    });
+    paint();
+  })();
+</script>
+</body>
+</html>

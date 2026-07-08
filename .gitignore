@@ -1,0 +1,24 @@
+# Secrets
+.env
+.env.local
+*.local
+
+# Dependencies
+node_modules/
+scripts/node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Generated assets (opsional — hapus baris ini kalau mau commit hasil generate)
+# public/assets/generated/

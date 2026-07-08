@@ -1,0 +1,369 @@
+{
+  "keterangan": "Soal Kuis Asik (Phase 5). Skema identik dengan soal buatan guru (Phase 10) — bedanya field sumber. D4: siswa TIDAK bisa kembali ke soal sebelumnya; jawaban terkunci saat dipilih/waktu habis. opsiEmoji opsional (ikon besar untuk anak yang belum lancar membaca).",
+  "soal": [
+    {
+      "id": "q1-01",
+      "level": 1,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Manakah menu makan siang yang paling bergizi?",
+      "opsi": ["Keripik kentang", "Mie instan", "Permen", "Pisang"],
+      "opsiEmoji": ["🍟", "🍜", "🍭", "🍌"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-02",
+      "level": 1,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Minuman apa yang paling sehat untuk tubuh?",
+      "opsi": ["Soda", "Air putih", "Es sirup", "Kopi"],
+      "opsiEmoji": ["🥤", "💧", "🧋", "☕"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-03",
+      "level": 1,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Apa guna sarapan pagi sebelum sekolah?",
+      "opsi": ["Badan lemas", "Semangat belajar", "Cepat marah", "Mengantuk"],
+      "opsiEmoji": ["😪", "💪", "😠", "😴"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-04",
+      "level": 1,
+      "kategori": "gizi",
+      "pertanyaan": "Sayur oranye apa yang bagus untuk mata?",
+      "opsi": ["Bayam", "Wortel", "Brokoli", "Kangkung"],
+      "opsiEmoji": ["🥬", "🥕", "🥦", "🌿"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-05",
+      "level": 1,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sebelum makan, kita harus…",
+      "opsi": ["Tidur dulu", "Cuci tangan", "Lari-lari", "Nonton TV"],
+      "opsiEmoji": ["🛏️", "🧼", "🏃", "📺"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-06",
+      "level": 1,
+      "kategori": "gizi",
+      "pertanyaan": "Minum susu membuat tulang kita…",
+      "opsi": ["Lemah", "Kuat", "Kecil", "Panas"],
+      "opsiEmoji": ["😥", "💪", "🤏", "🔥"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-07",
+      "level": 1,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Apa makanan pokok kebanyakan orang Indonesia?",
+      "opsi": ["Permen", "Nasi", "Es krim", "Cokelat"],
+      "opsiEmoji": ["🍭", "🍚", "🍦", "🍫"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-08",
+      "level": 1,
+      "kategori": "gizi",
+      "pertanyaan": "Telur banyak mengandung apa?",
+      "opsi": ["Protein", "Gula", "Garam", "Air saja"],
+      "opsiEmoji": ["💪", "🍬", "🧂", "💧"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-09",
+      "level": 1,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Terlalu banyak makan permen membuat gigi…",
+      "opsi": ["Kuat", "Putih", "Berlubang", "Besar"],
+      "opsiEmoji": ["😁", "✨", "🦷", "😮"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q1-10",
+      "level": 1,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Manakah yang termasuk buah?",
+      "opsi": ["Bayam", "Pisang", "Tempe", "Nasi"],
+      "opsiEmoji": ["🥬", "🍌", "🫘", "🍚"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+
+    {
+      "id": "q2-01",
+      "level": 2,
+      "kategori": "gizi",
+      "pertanyaan": "Sayuran hijau seperti bayam banyak mengandung…",
+      "opsi": ["Vitamin dan serat", "Gula", "Minyak", "Garam"],
+      "opsiEmoji": ["🌟", "🍬", "🛢️", "🧂"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-02",
+      "level": 2,
+      "kategori": "gizi",
+      "pertanyaan": "Makanan apa yang memberi tenaga untuk bermain?",
+      "opsi": ["Nasi", "Permen", "Es batu", "Kerupuk"],
+      "opsiEmoji": ["🍚", "🍭", "🧊", "🍘"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-03",
+      "level": 2,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Lauk apa yang dibuat dari kacang kedelai?",
+      "opsi": ["Tempe", "Ayam", "Ikan", "Telur"],
+      "opsiEmoji": ["🫘", "🍗", "🐟", "🥚"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-04",
+      "level": 2,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Berapa banyak air putih yang baik diminum setiap hari?",
+      "opsi": ["1 gelas", "2 gelas", "6-8 gelas", "Tidak perlu"],
+      "opsiEmoji": ["🥛", "🥛", "💧", "🚫"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-05",
+      "level": 2,
+      "kategori": "olahraga",
+      "pertanyaan": "Olahraga sebaiknya dilakukan…",
+      "opsi": [
+        "Rutin setiap hari",
+        "Setahun sekali",
+        "Tidak perlu",
+        "Saat sakit saja"
+      ],
+      "opsiEmoji": ["📅", "🗓️", "🚫", "🤒"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-06",
+      "level": 2,
+      "kategori": "gizi",
+      "pertanyaan": "Makan sayur setiap hari membuat…",
+      "opsi": [
+        "Pencernaan lancar",
+        "Gigi berlubang",
+        "Mata merah",
+        "Cepat mengantuk"
+      ],
+      "opsiEmoji": ["😊", "🦷", "👁️", "😴"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-07",
+      "level": 2,
+      "kategori": "gizi",
+      "pertanyaan": "Makan ikan bagus untuk…",
+      "opsi": [
+        "Otak makin pintar",
+        "Rambut panjang",
+        "Kuku warna-warni",
+        "Suara besar"
+      ],
+      "opsiEmoji": ["🧠", "💇", "💅", "📢"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-08",
+      "level": 2,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sebelum dimakan, buah harus…",
+      "opsi": ["Dicuci bersih", "Dijemur", "Dibekukan", "Diwarnai"],
+      "opsiEmoji": ["🚿", "☀️", "🧊", "🖍️"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-09",
+      "level": 2,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Jajan sembarangan di pinggir jalan bisa membuat…",
+      "opsi": ["Badan sehat", "Sakit perut", "Makin tinggi", "Makin pintar"],
+      "opsiEmoji": ["💪", "🤢", "📏", "🧠"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q2-10",
+      "level": 2,
+      "kategori": "gizi",
+      "pertanyaan": "Menurut Isi Piringku, setengah piring kita diisi…",
+      "opsi": ["Nasi semua", "Sayur dan buah", "Lauk semua", "Kerupuk"],
+      "opsiEmoji": ["🍚", "🥗", "🍗", "🍘"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+
+    {
+      "id": "q3-01",
+      "level": 3,
+      "kategori": "gizi",
+      "pertanyaan": "Vitamin C paling banyak ada di…",
+      "opsi": ["Jeruk", "Nasi", "Tahu", "Mie"],
+      "opsiEmoji": ["🍊", "🍚", "🍡", "🍜"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-02",
+      "level": 3,
+      "kategori": "gizi",
+      "pertanyaan": "Zat apa yang membangun otot tubuh kita?",
+      "opsi": ["Protein", "Gula", "Pewarna", "Pengawet"],
+      "opsiEmoji": ["💪", "🍬", "🎨", "🧪"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-03",
+      "level": 3,
+      "kategori": "gizi",
+      "pertanyaan": "Kalsium di dalam susu berguna untuk…",
+      "opsi": ["Tulang dan gigi", "Telinga", "Hidung", "Lidah"],
+      "opsiEmoji": ["🦴", "👂", "👃", "👅"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-04",
+      "level": 3,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Contoh sarapan yang sehat adalah…",
+      "opsi": ["Bubur ayam", "Permen", "Es sirup", "Kerupuk saja"],
+      "opsiEmoji": ["🥣", "🍭", "🧋", "🍘"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-05",
+      "level": 3,
+      "kategori": "gizi",
+      "pertanyaan": "Wortel mengandung vitamin apa untuk mata?",
+      "opsi": ["Vitamin A", "Vitamin Z", "Vitamin X", "Tidak ada"],
+      "opsiEmoji": ["👀", "❓", "❓", "🚫"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-06",
+      "level": 3,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Kurang minum air putih membuat badan…",
+      "opsi": ["Haus dan lemas", "Kenyang", "Makin kuat", "Makin tinggi"],
+      "opsiEmoji": ["🥵", "😋", "💪", "📏"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-07",
+      "level": 3,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Terlalu sering makan gorengan itu…",
+      "opsi": [
+        "Kurang sehat",
+        "Membuat kuat",
+        "Membuat pintar",
+        "Menyehatkan mata"
+      ],
+      "opsiEmoji": ["⚠️", "💪", "🧠", "👀"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-08",
+      "level": 3,
+      "kategori": "gizi",
+      "pertanyaan": "Pedoman makan sehat kita bernama…",
+      "opsi": ["Isi Piringku", "Isi Tasku", "Isi Kolamku", "Isi Bukuku"],
+      "opsiEmoji": ["🍽️", "🎒", "🏊", "📚"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-09",
+      "level": 3,
+      "kategori": "olahraga",
+      "pertanyaan": "Setelah olahraga dan berkeringat, sebaiknya minum…",
+      "opsi": ["Air putih", "Soda dingin", "Kopi", "Teh manis banyak"],
+      "opsiEmoji": ["💧", "🥤", "☕", "🧋"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q3-10",
+      "level": 3,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Anak-anak sebaiknya tidur berapa lama setiap malam?",
+      "opsi": ["9-11 jam", "2-3 jam", "Selalu begadang", "Tidak perlu tidur"],
+      "opsiEmoji": ["😴", "🥱", "🌙", "🚫"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    }
+  ],
+  "aturanLevel": {
+    "level1": { "syaratBuka": null, "syaratLulus": { "minBenar": 6 } },
+    "level2": {
+      "syaratBuka": { "lulusLevel": 1 },
+      "syaratLulus": { "minBenar": 7 }
+    },
+    "level3": {
+      "syaratBuka": { "lulusLevel": 2 },
+      "syaratLulus": { "minBenar": 7 }
+    },
+    "catatan": "D4: tidak ada tombol kembali di dalam kuis — jawaban terkunci begitu dipilih atau waktu habis, lalu otomatis lanjut soal berikutnya."
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "keterangan": "24 kartu koleksi (Phase 6 kotak misteri & Phase 8 album). Keputusan D2: koleksi = KARTU saja, dengan rarity. Tema: Pahlawan Gizi & Sahabat Sehat. Emoji = placeholder sampai gambar kartu di-generate.",
+  "rarity": {
+    "biasa": { "label": "Biasa", "peluang": 0.7, "warnaBingkai": "#8FB6C9" },
+    "langka": { "label": "Langka", "peluang": 0.25, "warnaBingkai": "#0A72B0" },
+    "legenda": {
+      "label": "Legenda",
+      "peluang": 0.05,
+      "warnaBingkai": "#FFD23F"
+    }
+  },
+  "aturanGacha": {
+    "sumber": "Menang Team Battle 2v2 → 1 kotak misteri → 1 kartu acak sesuai peluang rarity.",
+    "duplikat": "Kartu duplikat otomatis jadi poin (+25 ⭐) supaya anak tidak kecewa.",
+    "tanpaUang": "Murni hadiah gamifikasi — tidak ada pembelian."
+  },
+  "kartu": [
+    {
+      "id": "kartu-01",
+      "nama": "Kapten Nasi",
+      "emoji": "🍚",
+      "rarity": "biasa",
+      "deskripsi": "Pemberi tenaga nomor satu di meja makan!",
+      "gambar": "/assets/cards/kartu-01.png"
+    },
+    {
+      "id": "kartu-02",
+      "nama": "Jagung Ceria",
+      "emoji": "🌽",
+      "rarity": "biasa",
+      "deskripsi": "Manis, kuning, dan selalu tersenyum.",
+      "gambar": "/assets/cards/kartu-02.png"
+    },
+    {
+      "id": "kartu-03",
+      "nama": "Kentang Tangguh",
+      "emoji": "🥔",
+      "rarity": "biasa",
+      "deskripsi": "Kenyangnya tahan lama untuk petualangan.",
+      "gambar": "/assets/cards/kartu-03.png"
+    },
+    {
+      "id": "kartu-04",
+      "nama": "Roti Hangat",
+      "emoji": "🍞",
+      "rarity": "biasa",
+      "deskripsi": "Sarapan lembut pembuka hari.",
+      "gambar": "/assets/cards/kartu-04.png"
+    },
+    {
+      "id": "kartu-05",
+      "nama": "Ayam Juara",
+      "emoji": "🍗",
+      "rarity": "biasa",
+      "deskripsi": "Protein hebat untuk otot kuat.",
+      "gambar": "/assets/cards/kartu-05.png"
+    },
+    {
+      "id": "kartu-06",
+      "nama": "Ikan Gesit",
+      "emoji": "🐟",
+      "rarity": "biasa",
+      "deskripsi": "Berenang cepat, membuat otak cerdas.",
+      "gambar": "/assets/cards/kartu-06.png"
+    },
+    {
+      "id": "kartu-07",
+      "nama": "Telur Hebat",
+      "emoji": "🥚",
+      "rarity": "biasa",
+      "deskripsi": "Kecil bentuknya, besar manfaatnya.",
+      "gambar": "/assets/cards/kartu-07.png"
+    },
+    {
+      "id": "kartu-08",
+      "nama": "Tempe Perkasa",
+      "emoji": "🫘",
+      "rarity": "biasa",
+      "deskripsi": "Jagoan asli Indonesia dari kedelai.",
+      "gambar": "/assets/cards/kartu-08.png"
+    },
+    {
+      "id": "kartu-09",
+      "nama": "Bayam Super",
+      "emoji": "🥬",
+      "rarity": "biasa",
+      "deskripsi": "Hijau segar sumber kekuatan.",
+      "gambar": "/assets/cards/kartu-09.png"
+    },
+    {
+      "id": "kartu-10",
+      "nama": "Wortel Cerah",
+      "emoji": "🥕",
+      "rarity": "biasa",
+      "deskripsi": "Penjaga mata paling setia.",
+      "gambar": "/assets/cards/kartu-10.png"
+    },
+    {
+      "id": "kartu-11",
+      "nama": "Pisang Lincah",
+      "emoji": "🍌",
+      "rarity": "biasa",
+      "deskripsi": "Tenaga cepat sebelum bermain.",
+      "gambar": "/assets/cards/kartu-11.png"
+    },
+    {
+      "id": "kartu-12",
+      "nama": "Apel Segar",
+      "emoji": "🍎",
+      "rarity": "biasa",
+      "deskripsi": "Renyah manis, gigi ikut senang.",
+      "gambar": "/assets/cards/kartu-12.png"
+    },
+    {
+      "id": "kartu-13",
+      "nama": "Jeruk Manis",
+      "emoji": "🍊",
+      "rarity": "biasa",
+      "deskripsi": "Bola vitamin C yang ceria.",
+      "gambar": "/assets/cards/kartu-13.png"
+    },
+    {
+      "id": "kartu-14",
+      "nama": "Air Putih Jernih",
+      "emoji": "💧",
+      "rarity": "biasa",
+      "deskripsi": "Teman terbaik tubuhmu setiap hari.",
+      "gambar": "/assets/cards/kartu-14.png"
+    },
+    {
+      "id": "kartu-15",
+      "nama": "Brokoli Baja",
+      "emoji": "🥦",
+      "rarity": "langka",
+      "deskripsi": "Pohon mini dengan perisai vitamin.",
+      "gambar": "/assets/cards/kartu-15.png"
+    },
+    {
+      "id": "kartu-16",
+      "nama": "Tahu Tangguh",
+      "emoji": "🍡",
+      "rarity": "langka",
+      "deskripsi": "Lembut di luar, kuat manfaatnya.",
+      "gambar": "/assets/cards/kartu-16.png"
+    },
+    {
+      "id": "kartu-17",
+      "nama": "Udang Kilat",
+      "emoji": "🍤",
+      "rarity": "langka",
+      "deskripsi": "Pelompat tercepat dari laut Indonesia.",
+      "gambar": "/assets/cards/kartu-17.png"
+    },
+    {
+      "id": "kartu-18",
+      "nama": "Alpukat Emas",
+      "emoji": "🥑",
+      "rarity": "langka",
+      "deskripsi": "Lemak baik untuk otak juara.",
+      "gambar": "/assets/cards/kartu-18.png"
+    },
+    {
+      "id": "kartu-19",
+      "nama": "Semangka Raksasa",
+      "emoji": "🍉",
+      "rarity": "langka",
+      "deskripsi": "Segarnya bisa untuk satu keluarga!",
+      "gambar": "/assets/cards/kartu-19.png"
+    },
+    {
+      "id": "kartu-20",
+      "nama": "Susu Pelangi",
+      "emoji": "🥛",
+      "rarity": "langka",
+      "deskripsi": "Kalsium ajaib penguat tulang.",
+      "gambar": "/assets/cards/kartu-20.png"
+    },
+    {
+      "id": "kartu-21",
+      "nama": "Bola Semangat",
+      "emoji": "⚽",
+      "rarity": "langka",
+      "deskripsi": "Ayo bergerak! Olahraga itu seru.",
+      "gambar": "/assets/cards/kartu-21.png"
+    },
+    {
+      "id": "kartu-22",
+      "nama": "Tayo Sang Penjelajah",
+      "emoji": "🐆",
+      "rarity": "legenda",
+      "deskripsi": "Tayo menjelajah hutan mencari makanan sehat!",
+      "gambar": "/assets/cards/kartu-22.png"
+    },
+    {
+      "id": "kartu-23",
+      "nama": "Tayo Koki Hebat",
+      "emoji": "👨‍🍳",
+      "rarity": "legenda",
+      "deskripsi": "Chef Tayo memasak menu Isi Piringku spesial.",
+      "gambar": "/assets/cards/kartu-23.png"
+    },
+    {
+      "id": "kartu-24",
+      "nama": "Piring Emas Nusantara",
+      "emoji": "🏆",
+      "rarity": "legenda",
+      "deskripsi": "Piring legendaris berisi gizi seimbang sempurna.",
+      "gambar": "/assets/cards/kartu-24.png"
+    }
+  ]
+}
