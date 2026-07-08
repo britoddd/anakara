@@ -4,7 +4,7 @@
  * =====================================
  * Generate asset gambar (maskot Tayo, avatar, ilustrasi makanan, thumbnail, dll)
  * lewat Google Gemini API, dengan dukungan gambar referensi untuk menjaga
- * konsistensi karakter (lihat prompt-clarifications.md bagian E).
+ * konsistensi karakter (lihat arsip/prompt-clarifications.md bagian E).
  *
  * Contoh pakai (jalankan dari ROOT project, bukan dari folder scripts/):
  *

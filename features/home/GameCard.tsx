@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { MenuGame } from "./menu";
 
-/* Kartu menu game (mockup MacBook Air - 5/9): thumbnail art dramatis 3:4,
-   tombol play kuning, judul putih + subjudul di atas gradasi gelap.
+/* Kartu menu game (mockup MacBook Air - 5/9 + design-system.html .game-card):
+   thumbnail art dramatis 3:4, radius-lg, tombol play kuning pojok kanan atas,
+   judul putih + subjudul di atas gradasi gelap. (Mask arch dari restyle D12
+   dibatalkan atas permintaan user — bentuk mengikuti design system.)
    Pengecualian sadar aturan A2: bagian DALAM kartu boleh gelap/cinematic;
    teks putih di atas overlay hitam ≥60% tetap kontras AA. */
 
@@ -60,10 +62,10 @@ export default function GameCard({ game }: { game: MenuGame }) {
         </span>
       )}
 
-      {/* tombol play kuning bulat, pojok kanan atas */}
+      {/* tombol play kuning bulat (token accent), pojok kanan atas */}
       <span
         aria-hidden="true"
-        className="absolute top-3 right-3 w-11 h-11 rounded-full bg-[#FFE23F] border-4 border-black/70 flex items-center justify-center text-black text-lg font-black"
+        className="absolute top-3 right-3 w-11 h-11 rounded-full bg-accent border-4 border-accent-edge flex items-center justify-center text-on-accent text-lg font-black"
       >
         ▶
       </span>

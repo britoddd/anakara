@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import TombolKembali from "@/components/ui/TombolKembali";
 import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -322,13 +322,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   return (
     <main id="konten-utama" className="max-w-2xl mx-auto px-6 py-10">
       <div className="flex items-center gap-4 mb-2">
-        <Link
-          href="/home"
-          aria-label="Kembali ke Home"
-          className="shrink-0 w-11 h-11 rounded-full bg-fg text-bg flex items-center justify-center no-underline font-bold"
-        >
-          ←
-        </Link>
+        <TombolKembali href="/home" label="Kembali ke Home" />
         <h1 className="text-3xl">Team Battle 2 vs 2 ⚔️</h1>
       </div>
       <p className="text-muted font-bold mb-8 text-lg">

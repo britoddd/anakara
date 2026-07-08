@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import AwanPikiran from "@/components/deko/AwanPikiran";
 import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
+import TombolKembali from "@/components/ui/TombolKembali";
 import type { UserProfile } from "@/features/auth/types";
 import { SEMUA_KARTU } from "@/features/games/battle/config";
 import { BAB_LIST, SUB_MODE } from "./config";
@@ -27,13 +29,7 @@ export default function CeritaHub({ profil, onBaca }: CeritaHubProps) {
       {/* ---------- sidebar sub-mode ---------- */}
       <aside aria-label="Sub-mode cerita" className="mb-6 lg:mb-0">
         <div className="flex items-center gap-3 mb-4">
-          <Link
-            href="/home"
-            aria-label="Kembali ke Home"
-            className="shrink-0 w-11 h-11 rounded-full bg-fg text-bg flex items-center justify-center no-underline font-bold"
-          >
-            ←
-          </Link>
+          <TombolKembali href="/home" label="Kembali ke Home" />
           <h1 className="text-xl lg:text-2xl">Mode Cerita</h1>
         </div>
 
@@ -102,8 +98,9 @@ export default function CeritaHub({ profil, onBaca }: CeritaHubProps) {
                   ].join(" ")}
                 >
                   <div
-                    className={`relative aspect-[16/9] bg-gradient-to-b from-[#9fd898] to-[#ead9a8] flex items-center justify-center ${terkunci ? "grayscale" : ""}`}
+                    className={`relative aspect-[16/9] bg-band-green flex items-center justify-center ${terkunci ? "grayscale" : ""}`}
                   >
+                    <AwanPikiran className="absolute top-2 right-3 w-12 text-white/80" />
                     <GambarEmoji
                       src={bab.cover}
                       emoji="🐆🧺🐰"

@@ -1,13 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import AwanPikiran from "@/components/deko/AwanPikiran";
+import BlobMata from "@/components/deko/BlobMata";
+import GarisMarker from "@/components/deko/GarisMarker";
+import LatarDoodle from "@/components/deko/LatarDoodle";
+import Squiggle from "@/components/deko/Squiggle";
+import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import Chip from "@/components/ui/Chip";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ProgressBar from "@/components/ui/ProgressBar";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import TombolKembali from "@/components/ui/TombolKembali";
 import GameCard from "@/features/home/GameCard";
 import { MENU_GAME } from "@/features/home/menu";
 
@@ -20,9 +27,7 @@ export default function KomponenPage() {
   return (
     <>
       <header className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto w-full">
-        <Link href="/" className="font-bold no-underline">
-          ← Kembali
-        </Link>
+        <TombolKembali href="/" label="Kembali ke halaman awal" />
         <ThemeToggle />
       </header>
 
@@ -125,7 +130,7 @@ export default function KomponenPage() {
           <h2 id="h-gamecard" className="text-xl">
             GameCard — band menu Home (thumbnail asli / placeholder gradien)
           </h2>
-          <div className="rounded-xl bg-gradient-to-b from-sky/80 to-primary p-4 sm:p-6">
+          <div className="rounded-xl bg-band-green p-4 sm:p-6">
             <ul
               className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-2 list-none"
               aria-label="Contoh kartu game"
@@ -136,6 +141,42 @@ export default function KomponenPage() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        <section aria-labelledby="h-deko" className="flex flex-col gap-4">
+          <h2 id="h-deko" className="text-xl">
+            Dekorasi restyle THYNK — <GarisMarker>GarisMarker</GarisMarker>, blob,
+            squiggle, awan, chip
+          </h2>
+          <Card className="flex flex-wrap items-end gap-6">
+            <BlobMata bentuk="cipratan" className="w-24 text-primary" />
+            <BlobMata bentuk="bunga" className="w-24 text-accent" />
+            <BlobMata bentuk="gumpal" className="w-24 text-green-bright" />
+            <Squiggle className="w-28 text-primary" />
+            <span className="bg-band-blue rounded-xl p-3 inline-flex">
+              <AwanPikiran className="w-20 text-white" />
+            </span>
+          </Card>
+          <div className="flex flex-wrap gap-3">
+            <Chip emoji="💗" warna="pink">Emosi</Chip>
+            <Chip emoji="🥦" warna="hijau">Makanan Sehat</Chip>
+            <Chip emoji="💧" warna="biru">Minum Air</Chip>
+            <Chip emoji="⭐" warna="kuning">120 poin</Chip>
+            <Chip emoji="🏫">Kelasku</Chip>
+          </div>
+          <div>
+            <div className="rounded-t-xl bg-band-pink p-6 text-center font-bold">
+              band-pink … lalu TepiGelombang di bawahnya
+            </div>
+            <TepiGelombang arah="bawah" className="text-band-pink" />
+          </div>
+          <div className="relative isolate h-72 rounded-xl border-2 border-border overflow-hidden">
+            <LatarDoodle tetap={false} />
+            <p className="relative p-6 font-bold text-muted">
+              LatarDoodle — lapisan doodle samar di belakang konten (dipakai di
+              latar Home; bentuk polos tanpa wajah, warna band-*).
+            </p>
           </div>
         </section>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import TombolKembali from "@/components/ui/TombolKembali";
 import type { UserProfile } from "@/features/auth/types";
 import { setLikeVideo } from "./api";
 import dataVideo from "@/data/video.json";
@@ -103,12 +103,7 @@ export default function VideoFeed({ profil }: { profil: UserProfile }) {
 
       {/* bar atas mengambang */}
       <div className="absolute top-0 inset-x-0 flex items-center justify-between p-4 bg-gradient-to-b from-black/70 to-transparent pointer-events-none">
-        <Link
-          href="/home"
-          className="pointer-events-auto no-underline font-display font-bold text-white bg-black/40 border-2 border-white/40 rounded-full px-4 py-2"
-        >
-          ← Keluar
-        </Link>
+        <TombolKembali href="/home" label="Keluar dari video" overlay />
         <span className="text-white font-display font-bold [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
           Video Belajar 📺 {indexAktif + 1}/{DAFTAR_VIDEO.length}
         </span>
@@ -198,7 +193,7 @@ function VideoSlide({
             "w-14 h-14 rounded-full flex items-center justify-center text-3xl",
             "border-2 transition-transform duration-150 active:scale-90",
             suka
-              ? "bg-[#FFD23F] border-[#D9A91C] motion-safe:animate-[like-pop_300ms_ease-out]"
+              ? "bg-accent border-accent-edge motion-safe:animate-[like-pop_300ms_ease-out]"
               : "bg-black/40 border-white/40",
           ].join(" ")}
         >

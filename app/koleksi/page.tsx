@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import AwanPikiran from "@/components/deko/AwanPikiran";
+import Chip from "@/components/ui/Chip";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import TombolKembali from "@/components/ui/TombolKembali";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { rutePofil } from "@/features/auth/api";
 import { SEMUA_KARTU } from "@/features/games/battle/config";
@@ -25,23 +27,21 @@ export default function KoleksiPage() {
 
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
-      <div className="flex items-center gap-3 mb-2">
-        <Link
-          href="/home"
-          aria-label="Kembali ke Home"
-          className="shrink-0 w-11 h-11 rounded-full bg-fg text-bg flex items-center justify-center no-underline font-bold"
-        >
-          ←
-        </Link>
-        <h1 className="text-2xl sm:text-3xl flex-1">Koleksi Kartu 🃏</h1>
-        <span className="font-display font-extrabold text-lg bg-surface border-2 border-border rounded-full px-4 py-1.5">
-          {profil.koleksi.length}/{SEMUA_KARTU.length}
-        </span>
+      {/* header band biru pastel (restyle THYNK §C) */}
+      <div className="relative rounded-xl bg-band-blue p-4 sm:p-5 mb-6 overflow-hidden">
+        <AwanPikiran className="absolute -right-1 -top-2 w-16 text-white/70" />
+        <div className="flex items-center gap-3 mb-2">
+          <TombolKembali href="/home" label="Kembali ke Home" />
+          <h1 className="text-2xl sm:text-3xl flex-1">Koleksi Kartu 🃏</h1>
+          <Chip warna="kuning" className="font-display text-base px-4 py-1.5">
+            {profil.koleksi.length}/{SEMUA_KARTU.length}
+          </Chip>
+        </div>
+        <p className="font-bold">
+          Menangkan Team Battle 2 vs 2 untuk membuka kotak misteri dan melengkapi
+          albummu! ⚔️🎁
+        </p>
       </div>
-      <p className="text-muted font-bold mb-6">
-        Menangkan Team Battle 2 vs 2 untuk membuka kotak misteri dan melengkapi
-        albummu! ⚔️🎁
-      </p>
 
       <AlbumKartu koleksi={profil.koleksi} />
     </main>

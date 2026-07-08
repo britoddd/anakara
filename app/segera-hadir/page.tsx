@@ -32,8 +32,9 @@ function IsiSegeraHadir() {
           "Fitur ini sedang disiapkan Tayo. Tunggu ya, pasti seru!"
         )}
       </p>
+      {/* CTA tanpa "←" — panah hanya milik TombolKembali (konsistensi header) */}
       <Button size="lg" onClick={() => router.push("/home")}>
-        ← Kembali ke Home
+        Kembali ke Home
       </Button>
     </main>
   );

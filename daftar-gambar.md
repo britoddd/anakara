@@ -36,39 +36,77 @@
 
 ## Gaya Dasar (copy lalu ganti [SUBJEK])
 
-**GAYA-TAYO** — semua pose Tayo & Momo (lampirkan `SHEET`):
+> **Art direction (restyle THYNK D12, 2026-07-08):** palet aplikasi = hijau rumput
+> `#7DD14D` + pink permen karet `#D6336C` + amber `#FFC93C` di atas krem `#F5F8E7`,
+> teks hijau tua `#163A2C`, gaya flat playful. Arah ini **sudah dibakukan** ke dalam
+> setiap blok prompt di bawah — tinggal copy, tak perlu menambah kata kunci lagi.
+> 16 file lama berlatar putih tetap dipakai.
+
+### Anatomi prompt (urutan yang dipahami model dengan baik)
+
 ```
-[SUBJEK]. Tayo the cheetah cub mascot, kawaii chibi style exactly matching the attached reference sticker sheet: yellow fur with brown spots, big round black eyes with white sparkle, pink blush cheeks, cream belly, small round ears, soft thin outline. Full body, plain white background, clean sticker style for a children's education app. Square 1:1.
+[SUBJEK] → [gaya seni] → [detail karakter/material] → [palet warna]
+→ [garis & shading] → [komposisi & framing] → [latar] → [mood/cahaya]
+→ [rasio] → [kalimat larangan "No …"]
+```
+
+**Tips per model:**
+- **Gemini "Nano Banana" / model dengan gambar referensi (OpenArt kling, dll.):** lampirkan
+  referensi (kolom **Ref**) dan biarkan frasa *"exactly matching the attached reference"*
+  di prompt. Iterasi secara percakapan: *"same character, same style, now [pose baru]"*.
+- **Imagen 4 / model teks-murni (tanpa referensi):** blok di bawah sudah memuat deskripsi
+  karakter lengkap (warna bulu, mata, pipi) — jangan dipangkas, itulah pengganti referensi.
+- **Model dengan kolom Negative Prompt terpisah:** pindahkan kalimat "No …" di akhir blok
+  ke kolom negative, sebagai daftar: `text, watermark, logo, frame, border, 3D render,
+  photorealistic, gradient background, extra limbs, extra characters, scary, angry, blurry,
+  low quality, jpeg artifacts, cropped, out of frame`.
+- **Konsistensi antar-gambar sejenis:** generate beberapa item sekaligus dalam SATU gambar
+  (sheet 2×2 / 2×5) lalu potong lokal — terbukti berhasil untuk 10 avatar & 4 pose Tayo.
+  Kalau model menyediakan seed, kunci seed-nya untuk seri yang sama.
+- **Ukuran:** minta resolusi tertinggi, baru kompres ke <150 KB (tinypng) setelah dipotong.
+
+### Blok prompt siap-copy
+
+**GAYA-TAYO** — semua pose Tayo & Momo (lampirkan `SHEET`; identitas maskot TIDAK ikut restyle):
+```
+[SUBJEK]. Tayo the cheetah cub mascot — kawaii chibi toddler proportions (big head about 40% of total height, small round body, stubby paws), exactly matching the attached reference sticker sheet: soft golden-yellow fur with rounded dark-brown spots, cream muzzle and belly, big round black eyes with one white sparkle highlight each, tiny brown triangle nose, rosy pink blush cheeks, small round ears with cream inner ear, short tail with brown tip. Clean 2D flat sticker style: smooth soft thin outline slightly darker than each fill color, simple flat cel shading with at most one soft shadow tone per area, no gradients, no texture noise. Full body visible, centered, generous even margin around the character. Plain solid white background (#FFFFFF) for easy background removal. Bright, cheerful, friendly children's-education-app look. High resolution, crisp edges. Square 1:1.
+No text, no watermark, no logo, no frame, no extra characters, no props unless specified, no realistic fur texture, no 3D render, no cast shadow on the background, no scary or angry expression, correct anatomy: exactly four paws and one tail.
 ```
 
 **GAYA-MAKANAN** — 32 item makanan:
 ```
-[SUBJEK]. Cute kawaii food sticker for a kids nutrition game, simple rounded shapes, soft thin outline, bright cheerful colors, a tiny happy smiling face on the food, flat pastel shading, plain white background. Square 1:1.
+[SUBJEK]. Cute kawaii food sticker for a children's nutrition game: chubby rounded simplified shapes, a tiny happy face on the food (two small oval black eyes, simple curved smile, soft pink blush cheeks), soft thin outline in a darker tone of each fill color, bright appetizing flat colors with exactly one highlight tone and one shadow tone per color (flat cel shading, no gradients, no airbrush). Colors harmonize with a fresh green #7DD14D / bubblegum pink #D6336C / warm amber #FFC93C app palette where natural. One single food item only, centered, filling about 70% of the canvas with even margins on all sides. Plain solid white background (#FFFFFF) for easy background removal. High resolution, crisp clean edges. Square 1:1.
+No text, no watermark, no plate or bowl unless specified in the subject, no extra food items, no photorealistic texture, no 3D render, no cast shadow on the background, no sad or scared face.
 ```
 
 **GAYA-AVATAR** — 10 avatar hewan:
 ```
-[SUBJEK] head avatar inside a circle, cute kawaii cartoon style for a kids app, big friendly eyes, soft pastel colors, simple flat shading, plain white background. Square 1:1.
+[SUBJEK], head-and-shoulders avatar inside one perfect circle badge. Cute kawaii cartoon style for a kids app: oversized friendly round eyes with white sparkle highlights, small gentle smile, soft pink blush cheeks, simplified rounded shapes, soft thin outline, flat cel shading with at most one shadow tone (no gradients). Soft pastel fur/feather colors that harmonize with a fresh green #7DD14D, bubblegum pink #D6336C and warm amber #FFC93C app palette; the circle badge itself has one soft solid pastel fill. Character centered and filling most of the circle, looking at the viewer. Plain solid white background outside the circle (#FFFFFF). High resolution, crisp edges. Square 1:1.
+No text, no watermark, no body below the shoulders, no hands, no realistic fur texture, no 3D render, no scary or sad expression, both eyes the same size.
 ```
 
-**GAYA-KARTU** — 24 kartu koleksi (bingkai rarity dirender aplikasi, jangan digambar):
+**GAYA-KARTU** — 24 kartu koleksi (bingkai rarity dirender aplikasi, JANGAN digambar):
 ```
-[SUBJEK], heroic cute pose, collectible card character illustration for a kids nutrition game, kawaii chibi style, sparkling magical background, vibrant colors, no frame, no border, no text. Portrait 3:4.
-```
-
-**GAYA-THUMB** — 5 thumbnail kartu game Home (gaya art dramatis, aturan A2):
-```
-[SUBJEK], dramatic cinematic mobile-game menu card art, rich saturated colors, glowing highlights, epic but kid-friendly (no scary faces), no text, no logo. Portrait 3:4.
+[SUBJEK], collectible trading-card hero illustration for a kids nutrition game. Kawaii chibi character with toddler proportions: big expressive eyes with sparkle highlights, pink blush cheeks, confident heroic-but-cute pose with a clear readable silhouette. Clean 2D flat style, soft thin outlines, simple cel shading (max two tones per color, no airbrush gradients). Vibrant saturated character colors that pop against a magical background: soft radial glow behind the character, floating star sparkles and tiny confetti dots in pastel pink #FBDCE8, pastel green #DDF1C6 and pastel blue #CDE9F6. Character centered, full body with feet visible, filling about 75% of the frame height. Portrait 3:4, high resolution.
+No frame, no border, no card template, no text, no watermark, no rarity gems or badges, no weapons, no dark horror mood, no 3D render, correct anatomy, single character only.
 ```
 
-**GAYA-CERITA** — halaman cerita Bab 1 (lampirkan `SHEET` + `SCENE`):
+**GAYA-THUMB** — 5 thumbnail kartu game Home (art dramatis; deviasi sadar aturan A2 — satu-satunya gaya yang BOLEH gelap/pekat):
 ```
-Children storybook illustration, landscape 16:10: [SUBJEK]. Characters in kawaii chibi style matching the attached references: Tayo (yellow spotted cheetah cub) and Momo (soft white-grey bunny). Lush friendly forest, warm daylight, soft rounded shapes, gentle colors like the attached scene reference. No text.
+[SUBJEK], dramatic cinematic mobile-game menu key art. Rich saturated colors with strong value contrast, glowing magical highlights and soft rim light, clean stylized painterly look with smooth shapes (no gritty texture, no photorealism). Epic sense of wonder that stays kid-friendly: no scary faces, no monsters, no weapons aimed at the viewer. One strong focal point placed in the upper two-thirds of the frame. IMPORTANT: keep the bottom 25% of the image simple, uncluttered and slightly darker — the app renders a dark gradient with white title text there. Add depth with soft foreground glow particles and gently blurred background. Portrait 3:4, high resolution.
+No text, no logo, no watermark, no UI elements or buttons, no human children, no photorealistic rendering, no frame.
 ```
 
-**GAYA-IKON** — ikon UI pastel:
+**GAYA-CERITA** — halaman cerita Bab 1 & thumbnail video (lampirkan `SHEET` + `SCENE`):
 ```
-[SUBJEK] icon, rounded kawaii style, pastel blue (#1FA8E8) and warm yellow (#FFD23F) palette, thick soft outline, simple flat shading, plain white background. Square 1:1.
+Children storybook illustration, landscape 16:10: [SUBJEK]. Characters in kawaii chibi style exactly matching the attached references — Tayo (golden-yellow cheetah cub with rounded brown spots, big round black eyes with sparkle, pink blush cheeks, cream belly) and Momo (soft white-grey bunny with long upright ears, gentle sweet smile). Setting: lush friendly forest with rounded bushy trees, soft grass, simple rounded flowers and bushes, warm gentle daylight with soft shadows. Gentle pastel palette harmonizing with fresh green #7DD14D, cream #F5F8E7, pastel sky blue #CDE9F6, small accents of pastel pink #FBDCE8 and warm amber #FFC93C. Flat picture-book style: soft shapes, minimal thin outlines, simple two-tone cel shading, only the sky may have one soft blend. Characters large and readable in the middle ground, uncluttered staging, warm storybook charm. High resolution.
+No text, no speech bubbles unless specified, no panel borders, no watermark, no photorealism, no darkness or scary mood, keep both character designs identical to the references on every page.
+```
+
+**GAYA-IKON** — ikon UI & pola (palet restyle):
+```
+[SUBJEK] icon, rounded kawaii flat-vector style for a kids app UI. Chunky rounded silhouette, thick soft outline in a darker tone of the fill color, flat shading with exactly one highlight and one shadow tone, no gradients. Palette: fresh green #7DD14D, bubblegum pink #D6336C, warm amber #FFC93C, pastel sky blue #CDE9F6 accents. Single icon, centered, filling about 70% of the canvas. Plain solid cream background #F5F8E7 (use plain white #FFFFFF instead if the icon will be background-removed). Crisp edges, high resolution. Square 1:1.
+No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extra objects around the icon.
 ```
 
 ---

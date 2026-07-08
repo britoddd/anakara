@@ -1,6 +1,6 @@
 # `data/` — Konten Aplikasi Anakara (siap-impor)
 
-Semua konten edukasi dalam JSON murni, terpisah dari kode game (sesuai instruksi `prompt.md`:
+Semua konten edukasi dalam JSON murni, terpisah dari kode game (sesuai instruksi `arsip/prompt.md`:
 "struktur yang mudah ditambah tanpa ubah kode"). Bahasa Indonesia sederhana untuk kelas 1–2 SD.
 Fakta gizi mengikuti pedoman **"Isi Piringku"** (Kemenkes).
 

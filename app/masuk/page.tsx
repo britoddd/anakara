@@ -2,9 +2,11 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
+import AwanPikiran from "@/components/deko/AwanPikiran";
+import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
+import TombolKembali from "@/components/ui/TombolKembali";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { hasFirebaseConfig } from "@/lib/firebase";
@@ -142,15 +144,16 @@ export default function MasukPage() {
       {/* Banner dekoratif playful (mockup 4) — pembawa teks tetap di bawah */}
       <div
         aria-hidden="true"
-        className="bg-sky/20 border-b-2 border-border py-10 text-center text-6xl"
+        className="relative bg-band-blue py-10 text-center text-6xl"
       >
+        <AwanPikiran className="absolute left-6 top-4 w-16 text-white/90" />
+        <AwanPikiran className="absolute right-8 bottom-3 w-12 text-white/70" />
         🐆🍎🥕🍌
       </div>
+      <TepiGelombang arah="bawah" className="text-band-blue" />
 
       <header className="px-6 py-4 max-w-4xl mx-auto w-full">
-        <Link href="/" className="font-bold no-underline">
-          ← Kembali
-        </Link>
+        <TombolKembali href="/" label="Kembali ke halaman awal" />
       </header>
 
       <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-8 text-center">

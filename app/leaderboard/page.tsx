@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import AwanPikiran from "@/components/deko/AwanPikiran";
 import Button from "@/components/ui/Button";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import TombolKembali from "@/components/ui/TombolKembali";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { rutePofil } from "@/features/auth/api";
 import {
@@ -48,15 +49,13 @@ export default function LeaderboardPage() {
 
   return (
     <main id="konten-utama" className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
-      <div className="flex items-center gap-3 mb-5">
-        <Link
-          href="/home"
-          aria-label="Kembali ke Home"
-          className="shrink-0 w-11 h-11 rounded-full bg-fg text-bg flex items-center justify-center no-underline font-bold"
-        >
-          ←
-        </Link>
-        <h1 className="text-2xl sm:text-3xl">Leaderboard 🏆</h1>
+      {/* header band biru pastel (restyle THYNK §C) */}
+      <div className="relative rounded-xl bg-band-blue p-4 sm:p-5 mb-5 overflow-hidden">
+        <AwanPikiran className="absolute -right-1 -top-2 w-16 text-white/70" />
+        <div className="flex items-center gap-3">
+          <TombolKembali href="/home" label="Kembali ke Home" />
+          <h1 className="text-2xl sm:text-3xl">Leaderboard 🏆</h1>
+        </div>
       </div>
 
       {/* filter cakupan */}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
+import TombolKembali from "@/components/ui/TombolKembali";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import { useAuth } from "@/features/auth/AuthProvider";
@@ -141,9 +142,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
     const levelTerbuka = profil.progress.kuis.levelTerbuka;
     return (
       <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-12">
-        <Link href="/home" className="font-bold no-underline">
-          ← Home
-        </Link>
+        <TombolKembali href="/home" label="Kembali ke Home" />
         <h1 className="text-3xl text-center mb-2 mt-4">Kuis Asik! ❓</h1>
         <p className="text-lg text-muted text-center mb-10 max-w-[55ch] mx-auto">
           Jawab {JUMLAH_SOAL} soal, tiap soal punya waktu 15 detik. Jawabanmu
@@ -196,15 +195,17 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       lulus && level === profil.progress.kuis.levelTerbuka && level < 3;
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
-        <span
-          className="mx-auto mb-4 w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center motion-safe:animate-bounce"
-          aria-hidden="true"
-        >
-          <GambarEmoji
-            src={lulus ? "/assets/mascot/tayo-happy.png" : "/assets/mascot/tayo-cheer.png"}
-            emoji={lulus ? "🐆🎉" : "🐆💛"}
-            className="w-full h-full object-cover"
-          />
+        <span className="relative inline-block mb-4" aria-hidden="true">
+          {/* blob "teman-teman" ikut merayakan (restyle THYNK §B) */}
+          <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
+          <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
+          <span className="w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center motion-safe:animate-bounce">
+            <GambarEmoji
+              src={lulus ? "/assets/mascot/tayo-happy.png" : "/assets/mascot/tayo-cheer.png"}
+              emoji={lulus ? "🐆🎉" : "🐆💛"}
+              className="w-full h-full object-cover"
+            />
+          </span>
         </span>
         <h1 className="text-3xl mb-2">{lulus ? "Kamu hebat!" : "Sudah bagus!"}</h1>
         <p className="text-lg text-muted mb-6">
@@ -264,13 +265,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       <div className="flex items-center gap-4 mb-4">
-        <Link
-          href="/home"
-          aria-label="Keluar dari kuis"
-          className="shrink-0 w-11 h-11 rounded-full bg-fg text-bg flex items-center justify-center no-underline font-bold"
-        >
-          ←
-        </Link>
+        <TombolKembali href="/home" label="Keluar dari kuis" />
         <h1 className="text-xl sm:text-2xl">Kuis Asik — Level {level}</h1>
       </div>
 

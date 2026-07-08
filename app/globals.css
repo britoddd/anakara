@@ -2,82 +2,98 @@
 
 /* ============================================================
    Anakara — token design system (FOUNDATION.md §4.4)
-   Semua nilai sudah diverifikasi kontras WCAG (lihat FOUNDATION §4.1).
+   Palet restyle gaya THYNK (catatan-restyle-thynk.md §A) — semua nilai
+   diverifikasi kontras WCAG via `node scripts/cek-kontras.mjs`.
    Komponen HANYA memakai token semantik via utility Tailwind
    (bg-primary, text-fg, dst.) — jangan pakai hex mentah.
    Pasangan on-* WAJIB dipakai bersama warnanya (bug kontras dark mode).
+   ATURAN: --primary (pink) BUKAN pembawa teks di atas bg/surface
+   (kontras 4.28 < 4.5) — teks/tautan pink berdiri sendiri pakai --link.
    ============================================================ */
 
 :root {
-  --bg: #f2f9fe;
+  --bg: #f5f8e7;
   --surface: #ffffff;
-  --surface-2: #f4faff;
-  --fg: #21323d;
-  --muted: #5a6b75;
-  --border: #dce6ec;
-  --primary: #0a72b0;
-  --primary-hover: #085e92;
-  --primary-active: #084e7a;
+  --surface-2: #eff5de;
+  --fg: #163a2c;
+  --muted: #52685b;
+  --border: #dce5cb;
+  --primary: #d6336c;
+  --primary-hover: #c22b60;
+  --primary-active: #ad2456;
   --on-primary: #ffffff;
-  --accent: #ffd23f;
+  --accent: #ffc93c;
   --accent-edge: #d9a91c; /* tepi 3D tombol accent (dekoratif) */
-  --on-accent: #21323d;
-  --success: #2f7a33;
+  --on-accent: #163a2c;
+  --success: #2f7d33;
   --success-hover: #276b2b;
   --on-success: #ffffff;
   --danger: #c0392b;
-  --focus: #0b84c4;
-  --link: #085e92;
-  --sky: #1fa8e8; /* dekoratif saja — bukan pembawa teks */
+  --focus: #b02861;
+  --link: #b02861;
+  --sky: #8ec9e8; /* dekoratif saja — bukan pembawa teks */
   --orange: #ff9f43;
-  --green-bright: #7dd35b;
+  --green-bright: #7dd14d;
+  /* band seksi pastel (§C) — fg tetap kontras ≥4.5 di atasnya */
+  --band-pink: #fbdce8;
+  --band-green: #ddf1c6;
+  --band-blue: #cde9f6;
+  /* identitas tim battle (dekoratif; tidak ikut tema) */
+  --tim-biru: #4da3e0;
+  --tim-merah: #e2574c;
 }
 
 :root[data-theme="dark"] {
-  --bg: #10202b;
-  --surface: #17303f;
-  --surface-2: #1e3a4c;
-  --fg: #eaf4fa;
-  --muted: #9db4c0;
-  --border: #2a4658;
-  --primary: #4db6e8;
-  --primary-hover: #6ec6f0;
-  --primary-active: #8ad3f4;
-  --on-primary: #10202b;
+  --bg: #12271b;
+  --surface: #1a3526;
+  --surface-2: #22412e;
+  --fg: #eaf6e8;
+  --muted: #a7bfac;
+  --border: #2f4a38;
+  --primary: #f06a9b;
+  --primary-hover: #f585ac;
+  --primary-active: #f899b9;
+  --on-primary: #12271b;
   --accent: #fbd24e;
   --accent-edge: #c79f22;
-  --on-accent: #10202b;
-  --success: #6fc06b;
-  --success-hover: #7dd35b;
-  --on-success: #10202b;
+  --on-accent: #12271b;
+  --success: #7dd35b;
+  --success-hover: #8adf69;
+  --on-success: #12271b;
   --danger: #ff8a80;
-  --focus: #6ec6f0;
-  --link: #6ec6f0;
+  --focus: #f06a9b;
+  --link: #f48fb1;
+  --band-pink: #43222e;
+  --band-green: #22421a;
+  --band-blue: #173648;
 }
 
 /* Fallback tanpa JS: ikuti preferensi OS (script no-flash di layout
    selalu menetapkan data-theme, jadi blok ini jarang aktif). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not([data-theme="dark"]) {
-    --bg: #10202b;
-    --surface: #17303f;
-    --surface-2: #1e3a4c;
-    --fg: #eaf4fa;
-    --muted: #9db4c0;
-    --border: #2a4658;
-    --primary: #4db6e8;
-    --primary-hover: #6ec6f0;
-    --primary-active: #8ad3f4;
-    --on-primary: #10202b;
+    --bg: #12271b;
+    --surface: #1a3526;
+    --surface-2: #22412e;
+    --fg: #eaf6e8;
+    --muted: #a7bfac;
+    --border: #2f4a38;
+    --primary: #f06a9b;
+    --primary-hover: #f585ac;
+    --primary-active: #f899b9;
+    --on-primary: #12271b;
     --accent: #fbd24e;
     --accent-edge: #c79f22;
-    --on-accent: #10202b;
-    --success: #6fc06b;
-    --success-hover: #7dd35b;
-    --on-success: #10202b;
+    --on-accent: #12271b;
+    --success: #7dd35b;
+    --success-hover: #8adf69;
+    --on-success: #12271b;
     --danger: #ff8a80;
-    --focus: #6ec6f0;
-    --link: #6ec6f0;
+    --focus: #f06a9b;
+    --link: #f48fb1;
+    --band-pink: #43222e;
+    --band-green: #22421a;
+    --band-blue: #173648;
   }
 }
 
@@ -106,6 +122,11 @@
   --color-sky: var(--sky);
   --color-orange: var(--orange);
   --color-green-bright: var(--green-bright);
+  --color-band-pink: var(--band-pink);
+  --color-band-green: var(--band-green);
+  --color-band-blue: var(--band-blue);
+  --color-tim-biru: var(--tim-biru);
+  --color-tim-merah: var(--tim-merah);
   --color-white: #ffffff;
   --color-black: #000000;
   --color-transparent: transparent;
@@ -155,6 +176,9 @@ body {
   font-size: clamp(1rem, 0.93rem + 0.35vw, 1.125rem); /* badan ≥16px */
   line-height: 1.6;
   min-height: 100dvh;
+  /* stacking context: lapisan -z-10 (LatarDoodle) melukis DI ATAS
+     background body, tapi tetap di belakang semua konten */
+  isolation: isolate;
 }
 
 h1,
@@ -167,8 +191,13 @@ h4 {
   text-wrap: balance;
 }
 
-a {
-  color: var(--link);
+/* Warna tautan default. WAJIB di @layer base: CSS tanpa layer selalu
+   menang atas @layer utilities Tailwind, sehingga kelas text-* pada <Link>
+   (mis. TombolKembali "text-bg") tidak akan bisa menimpanya. */
+@layer base {
+  a {
+    color: var(--link);
+  }
 }
 
 /* Focus ring seragam ≥2px, kontras ≥3:1 (checklist §4.6) */

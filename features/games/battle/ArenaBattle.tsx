@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
@@ -186,15 +187,17 @@ export default function ArenaBattle({
           />
         ) : (
           <div>
-            <span
-              className="mx-auto mb-3 w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center"
-              aria-hidden="true"
-            >
-              <GambarEmoji
-                src="/assets/mascot/tayo-cheer.png"
-                emoji="🐆💛"
-                className="w-full h-full object-cover"
-              />
+            <span className="relative inline-block mb-3" aria-hidden="true">
+              {/* blob "teman-teman" tetap menyemangati (restyle THYNK §B) */}
+              <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
+              <BlobMata bentuk="gumpal" className="absolute -right-14 bottom-2 w-12 text-green-bright rotate-6" />
+              <span className="w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center">
+                <GambarEmoji
+                  src="/assets/mascot/tayo-cheer.png"
+                  emoji="🐆💛"
+                  className="w-full h-full object-cover"
+                />
+              </span>
             </span>
             <p className="font-bold text-lg">
               Tim lawan menang kali ini — kamu tetap keren! Yuk coba lagi! 💪
@@ -392,7 +395,9 @@ function KartuTim({
 }) {
   const skor = hitungSkorTim(ruang, warna);
   const persen = skor.totalSoal > 0 ? (skor.terjawab / skor.totalSoal) * 100 : 0;
-  const warnaBar = warna === "biru" ? "bg-primary" : "bg-[#e2574c]";
+  // identitas tim 🔵🔴 pakai token dekoratif sendiri — tidak terseret
+  // --primary yang kini pink (restyle THYNK, catatan-restyle-thynk.md §E)
+  const warnaBar = warna === "biru" ? "bg-tim-biru" : "bg-tim-merah";
   return (
     <div
       className={[

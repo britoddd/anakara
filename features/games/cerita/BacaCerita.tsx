@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AwanPikiran from "@/components/deko/AwanPikiran";
+import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
+import TombolKembali from "@/components/ui/TombolKembali";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
@@ -118,15 +121,17 @@ export default function BacaCerita({
   if (selesai) {
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
-        <span
-          className="mx-auto mb-4 w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center motion-safe:animate-bounce"
-          aria-hidden="true"
-        >
-          <GambarEmoji
-            src="/assets/mascot/tayo-happy.png"
-            emoji="🐆🎉"
-            className="w-full h-full object-cover"
-          />
+        <span className="relative inline-block mb-4" aria-hidden="true">
+          {/* blob "teman-teman" ikut merayakan (restyle THYNK §B) */}
+          <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
+          <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
+          <span className="w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center motion-safe:animate-bounce">
+            <GambarEmoji
+              src="/assets/mascot/tayo-happy.png"
+              emoji="🐆🎉"
+              className="w-full h-full object-cover"
+            />
+          </span>
         </span>
         <h1 className="text-3xl mb-2">Cerita selesai! 📖✨</h1>
         <p className="text-lg text-muted font-bold mb-4">
@@ -159,16 +164,13 @@ export default function BacaCerita({
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       {/* header: kembali + judul + toggle audio */}
       <div className="flex items-center gap-3 mb-4">
-        <button
+        <TombolKembali
           onClick={() => {
             hentikanNarasi();
             onKembali();
           }}
-          aria-label="Kembali ke daftar cerita"
-          className="shrink-0 w-11 h-11 rounded-full bg-fg text-bg flex items-center justify-center font-bold cursor-pointer"
-        >
-          ←
-        </button>
+          label="Kembali ke daftar cerita"
+        />
         <h1 className="text-lg sm:text-2xl flex-1 truncate">
           Bab {nomorBab}: {bab.judul}
         </h1>
@@ -220,9 +222,11 @@ export default function BacaCerita({
               : "motion-safe:animate-[balikMundur_0.5s_ease-out] origin-right",
           ].join(" ")}
         >
-          {/* ilustrasi (fallback: gradien hutan + emoji scene sampai asset P2 ada) */}
-          {/* area ilustrasi: gradien hutan pastel (karya seni, sama di dua tema) */}
-          <div className="relative aspect-[16/9] sm:aspect-[16/8] bg-gradient-to-b from-[#9fd898] via-[#c9e8b8] to-[#ead9a8] flex items-center justify-center">
+          {/* ilustrasi (fallback: band hijau flat + awan + emoji scene sampai
+             asset P2 ada — restyle THYNK §E; awan tertutup otomatis oleh img) */}
+          <div className="relative aspect-[16/9] sm:aspect-[16/8] bg-band-green flex items-center justify-center">
+            <AwanPikiran className="absolute top-3 right-5 w-16 text-white/90" />
+            <AwanPikiran className="absolute top-6 left-6 w-10 text-white/70" />
             <GambarEmoji
               src={halaman.gambar}
               emoji={EMOJI_SCENE_BAB1[halaman.no] ?? "🐆"}

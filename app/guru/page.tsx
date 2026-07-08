@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import TepiGelombang from "@/components/deko/TepiGelombang";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/features/auth/AuthProvider";
@@ -24,25 +25,29 @@ export default function GuruPage() {
 
   return (
     <>
-      <header className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 max-w-5xl mx-auto w-full">
-        <span className="font-display font-extrabold text-lg">
-          🐆 Anakara · Dashboard Guru
-        </span>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <button
-            onClick={async () => {
-              await logout();
-              router.replace("/");
-            }}
-            aria-label="Keluar dari akun"
-            title="Keluar"
-            className="w-11 h-11 rounded-full flex items-center justify-center text-xl bg-surface-2 border-2 border-border hover:border-danger active:translate-y-[2px] transition-colors duration-150"
-          >
-            🚪
-          </button>
-        </div>
-      </header>
+      {/* header band biru pastel (restyle THYNK §C) */}
+      <div className="bg-band-blue">
+        <header className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 max-w-5xl mx-auto w-full">
+          <span className="font-display font-extrabold text-lg">
+            🐆 Anakara · Dashboard Guru
+          </span>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={async () => {
+                await logout();
+                router.replace("/");
+              }}
+              aria-label="Keluar dari akun"
+              title="Keluar"
+              className="w-11 h-11 rounded-full flex items-center justify-center text-xl bg-surface-2 border-2 border-border hover:border-danger active:translate-y-[2px] transition-colors duration-150"
+            >
+              🚪
+            </button>
+          </div>
+        </header>
+      </div>
+      <TepiGelombang arah="bawah" className="text-band-blue" />
 
       <DashboardGuru profil={profil} />
     </>

@@ -2,16 +2,16 @@
 
 > **Dokumen ini adalah satu-satunya sumber kebenaran (single source of truth)** untuk membangun
 > website Anakara. Ia menggabungkan tiga input:
-> 1. `prompt.md` — rencana besar per-phase (rencana fitur).
-> 2. `prompt-clarifications.md` — koreksi & keputusan setelah membaca referensi Figma.
+> 1. `arsip/prompt.md` — rencana besar per-phase (rencana fitur; diarsipkan setelah 11 phase selesai).
+> 2. `arsip/prompt-clarifications.md` — koreksi & keputusan setelah membaca referensi Figma (diarsipkan).
 > 3. Tooling image-generation Gemini (`scripts/`) — cara memproduksi asset.
 >
 > Plus **design system** yang dikodifikasi memakai prinsip Power-Design (20 aturan web) dan
 > diverifikasi kontras WCAG. Tampilan hidup dari design system ada di **`design-system.html`**
 > (buka di browser).
 >
-> **Urutan prioritas kalau ada konflik:** `FOUNDATION.md` → `prompt-clarifications.md` → gambar
-> `referensi/` (untuk visual) / `prompt.md` (untuk fitur). Dokumen ini diperbarui, bukan digantikan.
+> **Urutan prioritas kalau ada konflik:** `FOUNDATION.md` → `arsip/prompt-clarifications.md` → gambar
+> `referensi/` (untuk visual) / `arsip/prompt.md` (untuk fitur). Dokumen ini diperbarui, bukan digantikan.
 >
 > Status: disusun 2026-07-06. Keputusan kunci sudah dikonfirmasi pemilik project.
 
@@ -51,7 +51,7 @@ untuk anak kelas 1–2", **pilih yang sederhana** dan tanyakan.
 ## 3. Maskot — "Tayo" 🐆
 
 - **Tayo adalah anak macan tutul (cheetah/leopard cub)** kuning bertotol cokelat, gaya **kawaii/chibi**,
-  mata besar bulat, pipi merah muda. **BUKAN singa** — semua penyebutan "singa" di `prompt.md` dibaca
+  mata besar bulat, pipi merah muda. **BUKAN singa** — semua penyebutan "singa" di `arsip/prompt.md` dibaca
   sebagai Tayo. (Dikonfirmasi 2026-07-06.)
 - Nama dalam produk: **"Tayo si Macan Kecil"**.
 - **Sumber kebenaran karakter** = 2 sticker sheet di `referensi/` (`WhatsApp ...22.00.31.jpeg` &
@@ -106,32 +106,42 @@ fg `#EAF4FA`, muted `#9DB4C0`, border `#2A4658`, primary `#4DB6E8`, accent `#FBD
 - **Motion:** 150–300ms ease-out; animasikan `transform`/`opacity` saja; efek "pop" tombol (turun 3px
   + bayangan tebal); confetti hanya untuk kemenangan; hormati `prefers-reduced-motion`.
 
-### 4.4 Token siap-pakai (copy ke setup CSS/Tailwind di Phase 0)
+### 4.4 Token siap-pakai (nilai aktual di `app/globals.css`)
+Palet **restyle THYNK (D12, 2026-07-08)** — krem + hijau tua + pink + amber; verifikasi
+kontras: `node scripts/cek-kontras.mjs` (28 pasangan). Rencana asal: `catatan-restyle-thynk.md`.
 ```css
 :root {
-  --color-bg:#F2F9FE; --color-surface:#FFFFFF; --color-surface-2:#F4FAFF;
-  --color-fg:#21323D; --color-muted:#5A6B75; --color-border:#DCE6EC;
-  --color-primary:#0A72B0; --color-primary-hover:#085E92; --color-primary-active:#084E7A;
-  --color-on-primary:#FFFFFF; --color-accent:#FFD23F; --color-on-accent:#21323D;
-  --color-success:#2F7A33; --color-on-success:#FFFFFF; --color-success-hover:#276B2B;
-  --color-danger:#C0392B; --color-focus:#0B84C4; --color-link:#085E92;
-  --sky:#1FA8E8; --orange:#FF9F43; --green-bright:#7DD35B;
+  --bg:#F5F8E7; --surface:#FFFFFF; --surface-2:#EFF5DE;
+  --fg:#163A2C; --muted:#52685B; --border:#DCE5CB;
+  --primary:#D6336C; --primary-hover:#C22B60; --primary-active:#AD2456;
+  --on-primary:#FFFFFF; --accent:#FFC93C; --accent-edge:#D9A91C; --on-accent:#163A2C;
+  --success:#2F7D33; --on-success:#FFFFFF; --success-hover:#276B2B;
+  --danger:#C0392B; --focus:#B02861; --link:#B02861;
+  --sky:#8EC9E8; --orange:#FF9F43; --green-bright:#7DD14D; /* dekoratif */
+  --band-pink:#FBDCE8; --band-green:#DDF1C6; --band-blue:#CDE9F6; /* band seksi §C restyle */
+  --tim-biru:#4DA3E0; --tim-merah:#E2574C; /* identitas tim battle, tak ikut tema */
   --radius-sm:10px; --radius-md:16px; --radius-lg:24px; --radius-xl:32px; --radius-full:9999px;
   --font-display:"Baloo 2",Fredoka,sans-serif; --font-body:"Nunito",system-ui,sans-serif;
 }
 /* dark — nama token sama, nilai di-remap (komponen tidak berubah) */
-:root[data-theme="dark"]{ --color-bg:#10202B; --color-surface:#17303F; --color-surface-2:#1E3A4C;
-  --color-fg:#EAF4FA; --color-muted:#9DB4C0; --color-border:#2A4658;
-  --color-primary:#4DB6E8; --color-primary-hover:#6EC6F0; --color-primary-active:#8AD3F4;
-  --color-on-primary:#10202B; --color-accent:#FBD24E; --color-on-accent:#10202B;
-  --color-success:#6FC06B; --color-on-success:#10202B; --color-success-hover:#7DD35B;
-  --color-danger:#FF8A80; --color-focus:#6EC6F0; --color-link:#6EC6F0; }
+:root[data-theme="dark"]{ --bg:#12271B; --surface:#1A3526; --surface-2:#22412E;
+  --fg:#EAF6E8; --muted:#A7BFAC; --border:#2F4A38;
+  --primary:#F06A9B; --primary-hover:#F585AC; --primary-active:#F899B9;
+  --on-primary:#12271B; --accent:#FBD24E; --accent-edge:#C79F22; --on-accent:#12271B;
+  --success:#7DD35B; --on-success:#12271B; --success-hover:#8ADF69;
+  --danger:#FF8A80; --focus:#F06A9B; --link:#F48FB1;
+  --band-pink:#43222E; --band-green:#22421A; --band-blue:#173648; }
 ```
 > ⚠️ Pasangan `on-*` wajib dipakai bersama warnanya (mis. `success` + `on-success`) — jangan
 > hardcode `#fff` di atas token yang nilainya berubah antar-tema (itu sumber bug kontras dark mode).
+> ⚠️ `--primary` (pink) **bukan pembawa teks** di atas `bg`/`surface` (4.28 < 4.5) —
+> teks/tautan pink berdiri sendiri SELALU pakai `--link`.
 
 ### 4.5 Konvensi UI terkunci
 - Tombol maju **"Lanjut"**, mundur **"Sebelumnya"**.
+- **Kembali/keluar di header halaman = `components/ui/TombolKembali`** (lingkaran ← 44px,
+  `bg-fg/text-bg`, aria-label deskriptif; varian `overlay` di atas video). Jangan bikin
+  tautan "← Kembali" manual. CTA layar hasil ("Kembali ke Home") tetap `Button` TANPA "←".
 - Skor = **⭐ + angka**. Level pemain = badge **"Lv N"** pada chip profil (avatar + nama), pojok kiri-atas.
 - Konten terkunci = gembok + redup/grayscale + syarat jelas ("Selesaikan Level 2 untuk buka ini!").
 
@@ -166,7 +176,7 @@ sebelum lolos checklist ini:**
 
 ## 5. Arsitektur Fitur (11 phase — kerjakan berurutan, 1 phase / 1 kerja)
 
-Ringkasan; detail tugas tetap di `prompt.md`, koreksi di `prompt-clarifications.md`.
+Ringkasan; detail tugas tetap di `arsip/prompt.md`, koreksi di `arsip/prompt-clarifications.md`.
 
 | Phase | Fitur | Catatan penting / koreksi | Referensi |
 |---|---|---|---|
@@ -308,6 +318,7 @@ public/assets/{mascot, avatars, food, icons, cards, backgrounds, stories, audio,
 | **D9** | Unlock **independen per fitur** (tidak lintas fitur) | Kuis/Isi Piringku/Cerita punya jalur level masing-masing; tidak ada rantai antar fitur |
 | **D10** | Level siswa = **1 + ⌊poin/150⌋** (naik tiap 150 ⭐) | `hitungLevel()` di `features/auth/types.ts`; tampilan SELALU dari poin; field `level` ditulis ulang tiap simpan; perayaan "🎉 naik Lv" di layar hasil |
 | **D11** | Soal buatan guru berlaku untuk **Kuis saja** dulu | Koleksi `soalGuru` (skema §6, `sumber:"guru"`); siswa: `ambilSoalGuruKelas()` → digabung via `soalUntukLevel(level, tambahan)`; Cerita/Battle menyusul kalau dibutuhkan |
+| **D12** | **Restyle art style ala THYNK** (referensi Behance) | Palet krem+hijau tua+pink+amber (§4.4), komponen `components/deko/` + `Chip`, band pastel `band-*`, mask pill ilustrasi cerita; aturan `--primary` bukan pembawa teks; tim battle → token `--tim-biru/--tim-merah`; detail `catatan-restyle-thynk.md`. Mask arch GameCard sempat dicoba lalu **dibatalkan** — bentuk kartu game kembali ke spek `.game-card` design system (radius-lg, play kanan-atas) |
 
 ---
 
@@ -321,10 +332,11 @@ public/assets/{mascot, avatars, food, icons, cards, backgrounds, stories, audio,
 |---|---|
 | **`FOUNDATION.md`** (ini) | Sumber kebenaran gabungan. Baca ini dulu. |
 | `design-system.html` | Design system hidup (buka di browser). |
-| `prompt.md` | Rencana fitur asli per-phase. |
-| `prompt-clarifications.md` | Koreksi & keputusan atas referensi. |
+| `arsip/prompt.md` | Rencana fitur asli per-phase — **diarsipkan** (11 phase selesai). |
+| `arsip/prompt-clarifications.md` | Koreksi & keputusan atas referensi — **diarsipkan**. |
 | `referensi/` | Mockup Figma + sticker Tayo (sumber visual). |
 | **`daftar-gambar.md`** | **Manifest ±105 gambar** untuk digenerate manual oleh user (prioritas P0/P1/P2, prompt siap-copy). |
+| **`catatan-restyle-thynk.md`** | Rencana restyle art style D12 (referensi THYNK di Behance) — ✅ dieksekusi 2026-07-08. |
 | **`data/`** | **Konten aplikasi siap-impor** (makanan, soal, kartu, cerita, video) + `data/README.md`. |
 | `scripts/` | CLI generate asset (Gemini) + diagnostik `list-models.mjs` + `.env` (API key). |
 | `public/assets/` | Output asset (dibuat saat Phase 0+). |
@@ -412,8 +424,29 @@ public/assets/{mascot, avatars, food, icons, cards, backgrounds, stories, audio,
   pemilik; koleksi `soalGuru` baru) → **wajib publish ulang di console**. Halaman uji tanpa
   login: `/dev/guru`. Modul `features/guru/` (`api.ts`, `DashboardGuru.tsx`, `FormSoal.tsx`).
 - 🏁 **Semua phase 0–10 selesai.** Backlog non-blokir: asset gambar P0 sisa/P1/P2
-  (`daftar-gambar.md`), rekaman audio narasi cerita, file video `.mp4`, commit git pertama
-  (repo belum punya commit).
+  (`daftar-gambar.md`), rekaman audio narasi cerita, file video `.mp4`.
+- ✅ **Restyle THYNK SELESAI (2026-07-08, D12)** — keempat elemen dieksekusi sesuai
+  `catatan-restyle-thynk.md`: (1) palet token baru terang+gelap di `globals.css` +
+  themeColor `layout.tsx` (§4.4 diperbarui; validator `node scripts/cek-kontras.mjs`);
+  (2) komponen dekorasi `components/deko/` (BlobMata/Squiggle/GarisMarker/AwanPikiran/
+  TepiGelombang) + `components/ui/Chip.tsx`, dipasang di landing, home, masuk, header
+  leaderboard/koleksi/guru, dan blob perayaan di 4 layar hasil game; (3) band pastel
+  `band-pink/green/blue` (landing, home, masuk, header halaman); (4) ilustrasi cerita flat
+  `band-green`+awan; mask arch GameCard sempat dicoba lalu dibatalkan atas permintaan user
+  (2026-07-08) — kembali ke spek `.game-card` design system.
+  Sapuan hardcode §E tuntas (badge play & tombol suka → token accent; bar tim battle →
+  `--tim-biru/--tim-merah`; logo Google & overlay keterbacaan sengaja dibiarkan; gradien
+  placeholder GameCard dibiarkan dramatis). `daftar-gambar.md` diberi art direction baru.
+  Utilitas uji baru: `/dev/tema?set=light|dark&ke=<path>` (paksa tema untuk screenshot).
+  Verifikasi: tsc bersih + screenshot dua tema (landing, masuk, /dev/komponen, /dev/cerita).
+- ✅ **Penyempurnaan pasca-restyle (2026-07-08):** (a) semua navigasi kembali diseragamkan
+  ke `components/ui/TombolKembali` (konvensi §4.5) — 12 titik, termasuk varian `overlay`
+  untuk video; (b) fix CSS: aturan `a{color}` dipindah ke `@layer base` (CSS tanpa layer
+  menang atas utility Tailwind — panah `text-bg` tertimpa warna link) + `isolation: isolate`
+  di `body` (lapisan `-z-10` tadinya tertelan background body); (c) **`LatarDoodle`** —
+  doodle samar (bentuk polos `wajah={false}`, warna `band-*`) di latar `/home`, pratinjau
+  di `/dev/komponen`; (d) `prompt.md` & `prompt-clarifications.md` **diarsipkan ke
+  `arsip/`** (11 phase selesai; semua rujukan diperbarui).
 
 Untuk asset gambar: user generate manual mengikuti `daftar-gambar.md` (atau aktifkan billing
 Gemini, lihat §8) — bisa berjalan paralel, tidak memblokir.

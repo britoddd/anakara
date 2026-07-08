@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import {
   DndContext,
   DragOverlay,
@@ -13,8 +12,10 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
+import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import TombolKembali from "@/components/ui/TombolKembali";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { useAuth } from "@/features/auth/AuthProvider";
@@ -239,15 +240,17 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
   if (fase === "hasil" && hasil && cfg) {
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
-        <span
-          className="mx-auto mb-4 w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center"
-          aria-hidden="true"
-        >
-          <GambarEmoji
-            src={hasil.lulus ? "/assets/mascot/tayo-happy.png" : "/assets/mascot/tayo-cheer.png"}
-            emoji={hasil.lulus ? "🐆🎉" : "🐆💛"}
-            className="w-full h-full object-cover"
-          />
+        <span className="relative inline-block mb-4" aria-hidden="true">
+          {/* blob "teman-teman" ikut merayakan (restyle THYNK §B) */}
+          <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
+          <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
+          <span className="w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center">
+            <GambarEmoji
+              src={hasil.lulus ? "/assets/mascot/tayo-happy.png" : "/assets/mascot/tayo-cheer.png"}
+              emoji={hasil.lulus ? "🐆🎉" : "🐆💛"}
+              className="w-full h-full object-cover"
+            />
+          </span>
         </span>
         <h1 className="text-3xl mb-2">
           {hasil.lulus ? "Hebat sekali!" : "Sudah bagus!"}
@@ -310,9 +313,7 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
       <main id="konten-utama" className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         {/* bar status permainan */}
         <div className="flex flex-wrap items-center justify-between gap-3 py-4">
-          <Link href="/home" className="font-bold no-underline">
-            ← Keluar
-          </Link>
+          <TombolKembali href="/home" label="Keluar dari permainan" />
           <h1 className="text-2xl text-center">Isi Piringku!</h1>
           <div className="flex items-center gap-2">
             <span className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-1.5">
@@ -435,9 +436,7 @@ function PilihLevel({
   return (
     <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between mb-8">
-        <Link href="/home" className="font-bold no-underline">
-          ← Home
-        </Link>
+        <TombolKembali href="/home" label="Kembali ke Home" />
       </div>
       <h1 className="text-3xl text-center mb-2">Isi Piringku! 🍽️</h1>
       <p className="text-lg text-muted text-center mb-10 max-w-[55ch] mx-auto">

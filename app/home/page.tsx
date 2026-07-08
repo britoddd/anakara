@@ -3,6 +3,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import GarisMarker from "@/components/deko/GarisMarker";
+import LatarDoodle from "@/components/deko/LatarDoodle";
+import Squiggle from "@/components/deko/Squiggle";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -33,6 +36,8 @@ export default function HomePage() {
 
   return (
     <>
+      {/* doodle samar di latar utama (restyle D12) */}
+      <LatarDoodle />
       <header className="flex items-center justify-between gap-4 px-4 sm:px-6 py-4 max-w-6xl mx-auto w-full">
         {/* chip profil: avatar + nama + badge level (konvensi §4.5) */}
         <div className="flex items-center gap-2 sm:gap-3 bg-surface border-2 border-border rounded-full pl-1.5 pr-4 py-1.5">
@@ -90,20 +95,23 @@ export default function HomePage() {
             />
           </span>
           <div>
-            <h1 className="text-2xl">Halo, {profil.nama}!</h1>
+            <h1 className="text-2xl">
+              Halo, <GarisMarker>{profil.nama}</GarisMarker>!
+            </h1>
             <p className="text-muted font-bold">
               Yuk main hari ini~ Kumpulkan ⭐ {poinMenujuLevelBerikut(profil.poin)}{" "}
               lagi untuk naik ke Lv {hitungLevel(profil.poin) + 1}!
             </p>
           </div>
+          <Squiggle className="hidden md:inline-block w-28 ml-auto mr-4 text-primary rotate-6" />
         </div>
 
-        {/* band kartu game — fill biru besar (dekoratif, aturan §4.1 sky) */}
+        {/* band kartu game — band hijau pastel (restyle THYNK §C) */}
         <section aria-labelledby="judul-game">
           <h2 id="judul-game" className="sr-only">
             Menu permainan
           </h2>
-          <div className="rounded-xl bg-gradient-to-b from-sky/80 to-primary p-4 sm:p-6">
+          <div className="rounded-xl bg-band-green p-4 sm:p-6">
             <ul
               className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-2 list-none"
               aria-label="Daftar permainan"
@@ -117,12 +125,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* tautan sekunder: Leaderboard & Koleksi (Phase 8) — kartu pastel */}
+        {/* tautan sekunder: Leaderboard & Koleksi (Phase 8) — band pink pastel */}
         <section aria-labelledby="judul-lain" className="mt-8">
           <h2 id="judul-lain" className="sr-only">
             Menu lainnya
           </h2>
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-xl">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-xl rounded-xl bg-band-pink p-4 sm:p-6">
             {MENU_LAIN.map((item) => (
               <Link
                 key={item.id}
