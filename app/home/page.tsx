@@ -39,8 +39,13 @@ export default function HomePage() {
       {/* doodle samar di latar utama (restyle D12) */}
       <LatarDoodle />
       <header className="flex items-center justify-between gap-4 px-4 sm:px-6 py-4 max-w-6xl mx-auto w-full">
-        {/* chip profil: avatar + nama + badge level (konvensi §4.5) */}
-        <div className="flex items-center gap-2 sm:gap-3 bg-surface border-2 border-border rounded-full pl-1.5 pr-4 py-1.5">
+        {/* chip profil: avatar + nama + badge level (konvensi §4.5) —
+            tautan ke /profil untuk ubah nama panggilan & avatar */}
+        <Link
+          href="/profil"
+          aria-label="Buka profilku"
+          className="flex items-center gap-2 sm:gap-3 bg-surface border-2 border-border rounded-full pl-1.5 pr-4 py-1.5 no-underline text-fg hover:border-primary hover:-translate-y-0.5 transition-[transform,border-color] duration-150"
+        >
           <span
             className="w-10 h-10 rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center text-xl"
             aria-hidden="true"
@@ -60,7 +65,7 @@ export default function HomePage() {
           <span className="bg-accent text-on-accent text-sm font-extrabold rounded-full px-2.5 py-0.5">
             Lv {hitungLevel(profil.poin)}
           </span>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-2">
           <span className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-2">
@@ -141,8 +146,20 @@ export default function HomePage() {
                 }
                 className="flex items-center gap-3 bg-surface border-2 border-border rounded-lg px-5 py-4 no-underline font-display font-bold text-fg hover:border-primary hover:-translate-y-0.5 transition-[transform,border-color] duration-150"
               >
-                <span className="text-3xl" aria-hidden="true">
-                  {item.emoji}
+                <span
+                  className="w-9 h-9 shrink-0 flex items-center justify-center text-3xl"
+                  aria-hidden="true"
+                >
+                  {item.gambar ? (
+                    <GambarEmoji
+                      src={item.gambar}
+                      emoji={item.emoji}
+                      className="w-full h-full object-contain"
+                      emojiClassName="text-3xl"
+                    />
+                  ) : (
+                    item.emoji
+                  )}
                 </span>
                 {item.judul}
                 {item.status === "segera" && (

@@ -38,11 +38,17 @@ export async function ambilAtauBuatProfil(
   return profil;
 }
 
-export async function simpanAvatar(
+/** Perbarui sebagian profil (nama tampilan &/atau avatar). Dipakai saat
+    onboarding (pilih nama + avatar) dan di halaman /profil. Field bernilai
+    `undefined` tidak dikirim (Firestore menolak undefined). */
+export async function perbaruiProfil(
   userId: string,
-  avatarId: string
+  data: { nama?: string; avatar?: string }
 ): Promise<void> {
-  await updateDoc(doc(getDb(), "users", userId), { avatar: avatarId });
+  const bersih: Record<string, string> = {};
+  if (data.nama !== undefined) bersih.nama = data.nama;
+  if (data.avatar !== undefined) bersih.avatar = data.avatar;
+  await updateDoc(doc(getDb(), "users", userId), bersih);
 }
 
 /** Validasi kode kelas (dokumen kelas/{KODE}) lalu simpan ke profil.

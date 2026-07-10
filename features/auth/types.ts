@@ -6,7 +6,9 @@ export type Role = "siswa" | "guru";
 export interface UserProfile {
   userId: string;
   role: Role;
-  /** Nama depan dari akun Google — hanya untuk sapaan, bukan identitas publik */
+  /** Nama tampilan (username) pilihan siswa. Default: nama depan akun Google
+      saat onboarding; bisa diubah di /onboarding/avatar & /profil. Bukan nama
+      lengkap Google — inilah yang tampil di Home & Leaderboard. */
   nama: string;
   /** id avatar kartun pilihan siswa (privasi: bukan foto Google); null = belum pilih */
   avatar: string | null;
@@ -38,6 +40,25 @@ export function hitungLevel(poin: number): number {
 /** ⭐ yang masih perlu dikumpulkan menuju level berikutnya */
 export function poinMenujuLevelBerikut(poin: number): number {
   return POIN_PER_LEVEL - (Math.max(0, poin) % POIN_PER_LEVEL);
+}
+
+/* Nama tampilan (username) — dipilih siswa saat onboarding, bisa diubah di
+   /profil. Ramah anak SD kelas 1-2: pendek, huruf/angka/spasi saja. */
+export const NAMA_MIN = 2;
+export const NAMA_MAKS = 16;
+
+/** Rapikan input nama: satukan spasi rangkap + buang spasi tepi. */
+export function rapikanNama(nama: string): string {
+  return nama.replace(/\s+/g, " ").trim();
+}
+
+/** Validasi nama tampilan; null = valid, selain itu pesan galat ramah-anak. */
+export function galatNama(nama: string): string | null {
+  const rapi = rapikanNama(nama);
+  if (rapi.length < NAMA_MIN) return `Nama minimal ${NAMA_MIN} huruf, ya!`;
+  if (rapi.length > NAMA_MAKS) return `Nama maksimal ${NAMA_MAKS} huruf, ya!`;
+  if (!/^[\p{L}\p{N} ]+$/u.test(rapi)) return "Pakai huruf dan angka saja, ya!";
+  return null;
 }
 
 export function buatProfilBaru(

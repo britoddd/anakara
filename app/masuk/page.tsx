@@ -41,8 +41,25 @@ function IsiMasuk() {
     } catch (e) {
       setStatus("idle");
       const kode = (e as { code?: string }).code ?? "";
-      if (kode === "auth/popup-closed-by-user") {
+      if (kode === "auth/popup-closed-by-user" || kode === "auth/cancelled-popup-request") {
         setGalat("Jendela login tertutup. Yuk coba lagi!");
+      } else if (kode === "auth/popup-blocked") {
+        setGalat("Browser memblokir jendela login. Izinkan pop-up untuk situs ini, lalu coba lagi.");
+      } else if (kode === "auth/unauthorized-domain") {
+        // domain/IP tempat app diakses belum terdaftar di Firebase
+        const domain = typeof window !== "undefined" ? window.location.hostname : "";
+        setGalat(
+          `Domain ini${domain ? ` (${domain})` : ""} belum diizinkan untuk login Google. ` +
+            "Untuk developer: tambahkan domain ini di Firebase Console → Authentication → " +
+            "Settings → Authorized domains, lalu muat ulang halaman."
+        );
+      } else if (kode === "auth/operation-not-allowed") {
+        setGalat(
+          "Login Google belum diaktifkan. Untuk developer: aktifkan di Firebase Console → " +
+            "Authentication → Sign-in method → Google."
+        );
+      } else if (kode === "auth/network-request-failed") {
+        setGalat("Koneksi internet bermasalah. Cek jaringanmu, lalu coba lagi.");
       } else if (kode === "permission-denied") {
         // login Google sukses tapi Firestore menolak → rules belum di-publish
         setGalat(
@@ -50,7 +67,8 @@ function IsiMasuk() {
             "Untuk developer: publish isi firestore.rules di Firebase Console → Firestore → Rules."
         );
       } else {
-        setGalat("Login belum berhasil. Coba lagi, ya!");
+        // tampilkan kode mentah supaya error tak dikenal tetap bisa didiagnosis
+        setGalat(`Login belum berhasil. Coba lagi, ya!${kode ? ` (${kode})` : ""}`);
       }
     }
   }

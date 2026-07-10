@@ -1,23 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
-import GambarEmoji from "@/components/ui/GambarEmoji";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/features/auth/AuthProvider";
-import { simpanAvatar } from "@/features/auth/api";
+import { perbaruiProfil } from "@/features/auth/api";
+import PilihanAvatar from "@/features/auth/PilihanAvatar";
 import { AVATARS } from "@/features/auth/avatars";
+import { NAMA_MAKS, galatNama, rapikanNama } from "@/features/auth/types";
 
-/* Pemilihan avatar (Phase 1) — mockup MacBook Air - 8: grid 2×5 + Lanjut.
-   Privasi: avatar kartun, bukan foto Google anak. */
+/* Buat profil siswa (Phase 1) — nama panggilan + avatar dalam satu langkah
+   (mockup MacBook Air - 8). Privasi: nama pilihan sendiri + avatar kartun,
+   bukan nama lengkap/foto Google. Keduanya bisa diubah lagi di /profil. */
 
-export default function PilihAvatarPage() {
+export default function BuatProfilPage() {
   const router = useRouter();
   const { user, profil, loading, refreshProfil } = useAuth();
+  const [nama, setNama] = useState("");
   const [pilihan, setPilihan] = useState<string | null>(null);
   const [menyimpan, setMenyimpan] = useState(false);
   const [galat, setGalat] = useState<string | null>(null);
+  const terisi = useRef(false);
 
   useEffect(() => {
     if (loading) return;
@@ -25,14 +29,25 @@ export default function PilihAvatarPage() {
     else if (profil.role !== "siswa") router.replace("/guru");
   }, [loading, user, profil, router]);
 
+  // isi nilai awal sekali: nama depan Google sebagai saran, avatar lama kalau balik
+  useEffect(() => {
+    if (profil && !terisi.current) {
+      setNama(profil.nama);
+      setPilihan(profil.avatar);
+      terisi.current = true;
+    }
+  }, [profil]);
+
   if (loading || !profil) return <LoadingSpinner />;
 
+  const galatInput = galatNama(nama);
+
   async function lanjut() {
-    if (!pilihan || !user) return;
+    if (!pilihan || !user || galatInput) return;
     setGalat(null);
     setMenyimpan(true);
     try {
-      await simpanAvatar(user.uid, pilihan);
+      await perbaruiProfil(user.uid, { nama: rapikanNama(nama), avatar: pilihan });
       await refreshProfil();
       router.push("/onboarding/kelas");
     } catch {
@@ -43,50 +58,60 @@ export default function PilihAvatarPage() {
 
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-6 py-12 text-center">
-      <h1 className="text-3xl mb-2">Pilih avatarmu!</h1>
-      <p className="text-lg text-muted mb-10">
-        Mana yang paling kamu suka, {profil.nama}?
+      <h1 className="text-3xl mb-2">Buat profilmu!</h1>
+      <p className="text-lg text-muted mb-8">
+        Pilih nama panggilan dan avatar kerenmu, ya!
       </p>
 
-      <div
-        role="radiogroup"
-        aria-label="Pilih avatar"
-        className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-6 justify-items-center max-w-xl mx-auto mb-10"
-      >
-        {AVATARS.map((a) => {
-          const aktif = pilihan === a.id;
-          return (
-            <button
-              key={a.id}
-              role="radio"
-              aria-checked={aktif}
-              aria-label={a.nama}
-              onClick={() => setPilihan(a.id)}
-              className={[
-                "w-20 h-20 sm:w-24 sm:h-24 rounded-full text-4xl sm:text-5xl",
-                "flex items-center justify-center bg-white cursor-pointer overflow-hidden",
-                "transition-[transform,border-color] duration-150 ease-out hover:scale-105",
-                aktif
-                  ? "border-4 border-primary scale-105"
-                  : "border-4 border-border",
-              ].join(" ")}
-            >
-              <GambarEmoji
-                src={a.gambar}
-                emoji={a.emoji}
-                className="w-full h-full object-cover rounded-full"
-              />
-            </button>
-          );
-        })}
+      {/* Nama panggilan (username) — bisa diubah lagi nanti di /profil */}
+      <div className="max-w-sm mx-auto mb-10 text-left">
+        <label htmlFor="nama-panggilan" className="block font-bold mb-2 text-center">
+          Nama panggilanku
+        </label>
+        <input
+          id="nama-panggilan"
+          name="nama-panggilan"
+          type="text"
+          autoComplete="off"
+          maxLength={NAMA_MAKS}
+          value={nama}
+          onChange={(e) => setNama(e.target.value)}
+          aria-invalid={nama.length > 0 && !!galatInput}
+          aria-describedby="nama-bantuan"
+          className={[
+            "w-full min-h-[56px] px-5 rounded-md bg-surface text-fg",
+            "text-xl font-display font-bold text-center",
+            "border-2",
+            nama.length > 0 && galatInput ? "border-danger" : "border-border",
+          ].join(" ")}
+        />
+        <p
+          id="nama-bantuan"
+          className={`mt-2 text-sm font-bold text-center min-h-[1.25em] ${
+            nama.length > 0 && galatInput ? "text-danger" : "text-muted"
+          }`}
+        >
+          {nama.length > 0 && galatInput
+            ? `⚠️ ${galatInput}`
+            : `${rapikanNama(nama).length}/${NAMA_MAKS} huruf`}
+        </p>
+      </div>
+
+      <p className="font-bold mb-4">Pilih avatarmu</p>
+      <div className="mb-4">
+        <PilihanAvatar nilai={pilihan} onPilih={setPilihan} />
       </div>
 
       {/* nama avatar terpilih — afordans selain warna border */}
       <p className="text-muted font-bold mb-6 min-h-[1.5em]">
-        {pilihan ? `✓ ${AVATARS.find((a) => a.id === pilihan)?.nama}` : " "}
+        {pilihan ? `✓ ${AVATARS.find((a) => a.id === pilihan)?.nama}` : " "}
       </p>
 
-      <Button size="lg" disabled={!pilihan || menyimpan} onClick={lanjut}>
+      <Button
+        size="lg"
+        disabled={!pilihan || !!galatInput || menyimpan}
+        onClick={lanjut}
+      >
         {menyimpan ? "Menyimpan…" : "Lanjut"}
       </Button>
 

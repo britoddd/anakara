@@ -7,6 +7,7 @@ import GarisMarker from "@/components/deko/GarisMarker";
 import Squiggle from "@/components/deko/Squiggle";
 import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
+import GambarEmoji from "@/components/ui/GambarEmoji";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { rutePofil } from "@/features/auth/api";
@@ -29,8 +30,16 @@ export default function LandingPage() {
   return (
     <>
       <header className="flex items-center justify-between px-6 py-4 max-w-4xl mx-auto w-full">
-        <span className="font-display font-extrabold text-lg" aria-hidden="true">
-          🐆 Anakara
+        <span className="flex items-center gap-2 font-display font-extrabold text-lg">
+          <span className="w-8 h-8 flex items-center justify-center text-xl" aria-hidden="true">
+            <GambarEmoji
+              src="/assets/logo.png"
+              emoji="🐆"
+              className="w-full h-full object-contain"
+              emojiClassName="text-xl"
+            />
+          </span>
+          Anakara
         </span>
         <ThemeToggle />
       </header>

@@ -91,10 +91,10 @@ No text, no watermark, no body below the shoulders, no hands, no realistic fur t
 No frame, no border, no card template, no text, no watermark, no rarity gems or badges, no weapons, no dark horror mood, no 3D render, correct anatomy, single character only.
 ```
 
-**GAYA-THUMB** — 5 thumbnail kartu game Home (art dramatis; deviasi sadar aturan A2 — satu-satunya gaya yang BOLEH gelap/pekat):
+**GAYA-THUMB** — 5 thumbnail kartu game Home (gaya flat THYNK, selaras aturan A2 — **bukan lagi art dramatis**; revisi 2026-07-09 atas permintaan user "kartu Home terlihat terlalu 'AI generated'"):
 ```
-[SUBJEK], dramatic cinematic mobile-game menu key art. Rich saturated colors with strong value contrast, glowing magical highlights and soft rim light, clean stylized painterly look with smooth shapes (no gritty texture, no photorealism). Epic sense of wonder that stays kid-friendly: no scary faces, no monsters, no weapons aimed at the viewer. One strong focal point placed in the upper two-thirds of the frame. IMPORTANT: keep the bottom 25% of the image simple, uncluttered and slightly darker — the app renders a dark gradient with white title text there. Add depth with soft foreground glow particles and gently blurred background. Portrait 3:4, high resolution.
-No text, no logo, no watermark, no UI elements or buttons, no human children, no photorealistic rendering, no frame.
+[SUBJEK]. Cute flat 2D vector illustration for a kids nutrition app menu card, playful hand-drawn picture-book / sticker-scene style — NOT cinematic game key art, NOT painterly, NOT 3D. Rounded chunky kawaii shapes; any character has a big friendly face, round eyes with a single white sparkle highlight and soft pink blush cheeks. Cheerful bright FLAT colors from the app palette only: fresh grass green #7DD14D, bubblegum pink #D6336C, warm amber #FFC93C, pastel sky blue #8EC9E8, used as solid fills. Soft thin outline slightly darker than each fill, simple two-tone cel shading at most — absolutely no gradients on the shapes, no glow, no rim light, no bloom, no texture noise. One clear friendly focal subject with a readable silhouette placed in the upper two-thirds, loosely surrounded by a few light hand-drawn doodle accents (curly squiggles, tiny stars, small dots) scattered sparingly. Flat solid pastel background — soft cream #F5F8E7 or ONE gentle pastel tint (pastel green #DDF1C6, pastel pink #FBDCE8, or pastel blue #CDE9F6), completely flat with no vignette and no background scenery clutter. IMPORTANT: keep the bottom ~22% calm, simple and uncluttered — the app renders the game title in that strip. Bright, warm, wholesome, gentle low-contrast mood. Portrait 3:4, high resolution, crisp clean vector edges.
+No text, no logo, no watermark, no UI buttons, no dark or cinematic mood, no dramatic lighting, no glow or magical light rays, no vignette, no gradient background, no photorealistic or 3D render, no painterly rendering, no gritty texture, no frame or border, no scary faces, no human children.
 ```
 
 **GAYA-CERITA** — halaman cerita Bab 1 & thumbnail video (lampirkan `SHEET` + `SCENE`):
@@ -116,7 +116,7 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 ### Logo — folder `public/assets/`
 | ✔ | File | Gaya | Ref | Subjek [SUBJEK] |
 |---|---|---|---|---|
-| [ ] | `logo.png` | GAYA-TAYO | SHEET | App logo: Tayo the cheetah cub head smiling next to nothing else, clean mascot logo mark, horizontal composition |
+| [x] | `logo.png` | GAYA-TAYO | SHEET | App logo: Tayo the cheetah cub head smiling next to nothing else, clean mascot logo mark, horizontal composition |
 
 ### Maskot Tayo inti — folder `public/assets/mascot/`
 | ✔ | File | Gaya | Ref | Subjek | Dipakai untuk |
@@ -146,14 +146,17 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 > ✅ 10 avatar digenerate via **OpenArt** 2026-07-07 (satu sheet 2×5, dipotong 256×256).
 > Latar putih (belum transparan) — di UI dipakai `object-cover` di dalam lingkaran, jadi aman.
 
-### Thumbnail kartu game Home (art dramatis) — folder `public/assets/icons/`
+### Thumbnail kartu game Home (gaya flat THYNK) — folder `public/assets/icons/`
 | ✔ | File | Gaya | Ref | Subjek |
 |---|---|---|---|---|
-| [x] | `thumb-isi-piringku.jpg` | GAYA-THUMB | — | A glowing plate divided into four food-group sections, healthy foods floating around it, magical warm kitchen light — ✅ OpenArt 2026-07-07, disimpan **JPEG** 480×637 (<150 KB) |
-| [ ] | `thumb-video.png` | GAYA-THUMB | CHEST | An opened wooden treasure chest projecting a glowing screen with a play button, purple celebration burst background |
-| [x] | `thumb-kuis.jpg` | GAYA-THUMB | — | A giant glowing mystery card with a question mark among scattered cards, deep purple magical theme — ✅ OpenArt 2026-07-07, disimpan **JPEG** 480×637 (<150 KB) |
-| [ ] | `thumb-battle.png` | GAYA-THUMB | — | Blue team energy versus red team energy clashing with a lightning split down the middle, epic team battle |
-| [ ] | `thumb-cerita.png` | GAYA-THUMB | — | An open magical storybook at night with a paper castle and stars popping out of the pages, dreamy dark blue |
+| [x]¹ | `thumb-isi-piringku.jpg` | GAYA-THUMB | SHEET² | Tayo wearing a small chef hat, cheerfully presenting a plate split into four food-group sections with cute smiling foods (a rice bowl, a chicken drumstick, a carrot and an apple) hopping around it, on a pastel green background |
+| [ ] | `thumb-video.png` | GAYA-THUMB | SHEET² | Tayo sitting and happily pointing at a cute rounded cartoon TV showing a big friendly round play button, a couple of tiny stars and a curly squiggle floating nearby, on a pastel blue background |
+| [ ]¹ | `thumb-kuis.jpg` | GAYA-THUMB | SHEET² | Tayo excitedly holding up a big smiling question-mark quiz card, a few playful cards fanned behind, small sparkle doodles around, on a pastel pink background |
+| [ ] | `thumb-battle.png` | GAYA-THUMB | SHEET² | Tayo on the blue team in a cheerful high-five pose facing a cute red-team character in a friendly quiz duel, a gentle zig-zag divider down the middle (Tayo's side blue #4DA3E0 vs red #E2574C), on a cream background |
+| [ ] | `thumb-cerita.png` | GAYA-THUMB | SHEET² | Tayo happily reading a cozy open storybook with a little pop-up forest scene and a few cute stars floating out of the pages, warm daytime, on a pastel green background |
+
+> ¹ `thumb-isi-piringku.jpg` & `thumb-kuis.jpg` **sudah ada tapi masih gaya lama dramatis** (OpenArt 2026-07-07, latar ungu/gelap, tanpa Tayo). **Regenerate** dengan GAYA-THUMB baru agar seragam THYNK + ada Tayo — file lama boleh ditimpa (tetap simpan **JPEG** 480×637, <150 KB). Sisanya masih placeholder emoji.
+> ² **Tayo kini muncul di kelima thumbnail** → **lampirkan `SHEET`** dan jaga identitasnya tetap sesuai referensi (golden-yellow cheetah cub, tutul cokelat membulat, mata besar bermata-air satu kilau, pipi pink, perut krem). Tayo digambar full-body, kecil–sedang di dua-pertiga atas, membaur dengan gaya flat GAYA-THUMB (Tayo memang sudah flat sticker — identitas TIDAK di-restyle). Kalau model teks-murni, sisipkan deskripsi Tayo dari blok **GAYA-TAYO** sebagai pengganti referensi.
 
 ### Ikon kecil — folder `public/assets/icons/`
 | ✔ | File | Gaya | Subjek |

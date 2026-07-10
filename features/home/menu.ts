@@ -48,7 +48,7 @@ export const MENU_GAME: MenuGame[] = [
     href: "/game/kuis",
     status: "aktif",
     phase: 5,
-    thumbnail: "/assets/icons/thumb-kuis.jpg",
+    thumbnail: "/assets/icons/thumb-kuis.png",
     emoji: "❓",
     gradien: "from-[#2b1145] via-[#4a1e78] to-[#160825]",
   },
@@ -81,11 +81,13 @@ export interface MenuLain {
   id: string;
   judul: string;
   emoji: string;
+  /** ikon asli (opsional); fallback ke emoji kalau file belum ada */
+  gambar?: string;
   href: string;
   status: "aktif" | "segera";
 }
 
 export const MENU_LAIN: MenuLain[] = [
-  { id: "leaderboard", judul: "Leaderboard", emoji: "🏆", href: "/leaderboard", status: "aktif" },
-  { id: "koleksi", judul: "Koleksi Kartu", emoji: "🃏", href: "/koleksi", status: "aktif" },
+  { id: "leaderboard", judul: "Leaderboard", emoji: "🏆", gambar: "/assets/icons/icon-leaderboard.png", href: "/leaderboard", status: "aktif" },
+  { id: "koleksi", judul: "Koleksi Kartu", emoji: "🃏", gambar: "/assets/icons/icon-koleksi.png", href: "/koleksi", status: "aktif" },
 ];

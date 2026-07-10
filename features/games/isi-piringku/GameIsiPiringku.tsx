@@ -414,7 +414,14 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
         <DragOverlay dropAnimation={null}>
           {dragAktif && (
             <div className="flex flex-col items-center gap-1 p-2 rounded-md bg-surface border-2 border-primary shadow-lg w-24">
-              <span className="text-3xl">{dragAktif.emoji}</span>
+              <span className="w-12 h-12 flex items-center justify-center text-3xl">
+                <GambarEmoji
+                  src={dragAktif.gambar}
+                  emoji={dragAktif.emoji}
+                  className="w-full h-full object-contain"
+                  emojiClassName="text-3xl"
+                />
+              </span>
               <span className="text-xs font-bold text-center">{dragAktif.nama}</span>
             </div>
           )}
@@ -522,8 +529,20 @@ function Kuadran({
       </span>
       <span className="text-[11px] sm:text-xs font-bold text-muted">{info.fungsi}</span>
       {items.length > 0 && (
-        <span className="text-lg sm:text-xl leading-tight break-all" aria-hidden="true">
-          {items.map((f) => f.emoji).join(" ")}
+        <span className="flex flex-wrap justify-center gap-0.5 leading-tight" aria-hidden="true">
+          {items.map((f, i) => (
+            <span
+              key={`${f.id}-${i}`}
+              className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center text-lg"
+            >
+              <GambarEmoji
+                src={f.gambar}
+                emoji={f.emoji}
+                className="w-full h-full object-contain"
+                emojiClassName="text-lg"
+              />
+            </span>
+          ))}
         </span>
       )}
     </button>
@@ -559,8 +578,13 @@ function FoodChip({
         isDragging ? "opacity-40" : "",
       ].join(" ")}
     >
-      <span className="text-3xl" aria-hidden="true">
-        {food.emoji}
+      <span className="w-12 h-12 flex items-center justify-center text-3xl" aria-hidden="true">
+        <GambarEmoji
+          src={food.gambar}
+          emoji={food.emoji}
+          className="w-full h-full object-contain"
+          emojiClassName="text-3xl"
+        />
       </span>
       <span className="text-xs font-bold text-center leading-tight">{food.nama}</span>
     </button>
