@@ -236,6 +236,40 @@ h4 {
   }
 }
 
+/* Lompatan sapa Tayo (Home): 3x lalu berhenti — animasi abadi bersaing dengan
+   konten (satu fokus per seksi). Ditrigger ulang lewat React key saat disentuh.
+   Blok prefers-reduced-motion di atas otomatis memangkasnya jadi nyaris statis. */
+@keyframes tayo-lompat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14%);
+  }
+}
+.tayo-lompat {
+  animation: tayo-lompat 650ms ease-in-out 3;
+}
+
+/* Taplak meja gingham (LatarDapur — game Isi Piringku): dua lapis garis
+   semi-transparan saling silang di atas --surface → 3 rona kotak-kotak klasik.
+   Warna dari token (color-mix) sehingga otomatis serasi di tema gelap. */
+.taplak-gingham {
+  --gingham: color-mix(in srgb, var(--primary) 20%, transparent);
+  background-color: var(--surface);
+  background-image:
+    repeating-linear-gradient(0deg, var(--gingham) 0 24px, transparent 24px 48px),
+    repeating-linear-gradient(90deg, var(--gingham) 0 24px, transparent 24px 48px);
+}
+/* renda tepi taplak: setengah-lingkaran --surface berjajar, menonjol ke atas */
+.taplak-renda {
+  background-image: radial-gradient(14px 14px at 50% 100%, var(--surface) 13px, transparent 14px);
+  background-size: 28px 14px;
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+
 /* Skeleton loading (region data status 1/3) */
 @keyframes anakara-shimmer {
   from {

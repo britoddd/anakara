@@ -17,10 +17,41 @@ const nunito = Nunito({
   display: "swap",
 });
 
+/* URL produksi untuk OG/Twitter absolut. Set NEXT_PUBLIC_SITE_URL saat deploy;
+   fallback ke domain placeholder agar metadataBase tidak pernah undefined. */
+const situs = process.env.NEXT_PUBLIC_SITE_URL ?? "https://anakara.app";
+
+const judul = "Anakara — Belajar Gizi Seru";
+const deskripsi =
+  "Belajar makanan bergizi dan pola hidup sehat lewat game seru bersama Tayo si Macan Kecil. Untuk siswa SD kelas 1-2.";
+
 export const metadata: Metadata = {
-  title: "Anakara — Belajar Gizi Seru",
-  description:
-    "Belajar makanan bergizi dan pola hidup sehat lewat game seru bersama Tayo si Macan Kecil. Untuk siswa SD kelas 1-2.",
+  metadataBase: new URL(situs),
+  title: judul,
+  description: deskripsi,
+  applicationName: "Anakara",
+  openGraph: {
+    type: "website",
+    siteName: "Anakara",
+    locale: "id_ID",
+    url: "/",
+    title: judul,
+    description: deskripsi,
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Anakara — Belajar Gizi & Hidup Sehat bareng Tayo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: judul,
+    description: deskripsi,
+    images: ["/og.png"],
+  },
 };
 
 export const viewport: Viewport = {

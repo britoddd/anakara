@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import LatarDapur from "@/components/deko/LatarDapur";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { rutePofil } from "@/features/auth/api";
@@ -19,5 +20,11 @@ export default function IsiPiringkuPage() {
 
   if (loading || !profil || rutePofil(profil) !== "/home") return <LoadingSpinner />;
 
-  return <GameIsiPiringku profil={profil} />;
+  return (
+    <>
+      {/* latar dapur: taplak gingham + doodle peralatan masak */}
+      <LatarDapur />
+      <GameIsiPiringku profil={profil} />
+    </>
+  );
 }

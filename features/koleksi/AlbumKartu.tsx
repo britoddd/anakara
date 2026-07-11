@@ -55,7 +55,9 @@ export default function AlbumKartu({ koleksi }: { koleksi: string[] }) {
                   style={{ backgroundColor: RARITY_INFO[kartu.rarity].warnaBingkai }}
                 >
                   <span className="flex flex-col items-center gap-1 bg-surface rounded-md px-1 py-3 min-h-[7.5rem]">
-                    <span className="text-4xl h-12 flex items-center justify-center">
+                    {/* jendela art putih: art kartu didesain di atas putih —
+                        di dark mode jadi bingkai art ala kartu koleksi asli */}
+                    <span className="text-4xl h-12 w-[calc(100%-8px)] bg-white rounded-md flex items-center justify-center overflow-hidden">
                       <GambarEmoji
                         src={kartu.gambar}
                         emoji={kartu.emoji}
@@ -104,7 +106,7 @@ export default function AlbumKartu({ koleksi }: { koleksi: string[] }) {
               style={{ backgroundColor: RARITY_INFO[detail.rarity].warnaBingkai }}
             >
               <div className="bg-surface rounded-md px-10 py-8 w-56">
-                <span className="text-7xl h-24 flex items-center justify-center">
+                <span className="text-7xl h-24 bg-white rounded-md flex items-center justify-center overflow-hidden">
                   <GambarEmoji
                     src={detail.gambar}
                     emoji={detail.emoji}

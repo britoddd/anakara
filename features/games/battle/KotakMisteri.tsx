@@ -72,7 +72,8 @@ export default function KotakMisteri({ onTerbuka, duplikat }: KotakMisteriProps)
         style={{ backgroundColor: info.warnaBingkai }}
       >
         <div className="bg-surface rounded-md px-8 py-6 w-52">
-          <span className="text-6xl mb-2 h-20 flex items-center justify-center">
+          {/* jendela art putih — art kartu didesain di atas latar putih */}
+          <span className="text-6xl mb-2 h-20 bg-white rounded-md flex items-center justify-center overflow-hidden">
             <GambarEmoji
               src={kartu.gambar}
               emoji={kartu.emoji}

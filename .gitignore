@@ -22,3 +22,6 @@ Thumbs.db
 
 # Generated assets (opsional — hapus baris ini kalau mau commit hasil generate)
 # public/assets/generated/
+
+# Backup thumbnail resolusi tinggi (~26MB, sumber re-encode) — jangan ikut repo
+arsip/thumbnail-hires/

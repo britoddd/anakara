@@ -4,6 +4,7 @@ import { useState } from "react";
 import AwanPikiran from "@/components/deko/AwanPikiran";
 import BlobMata from "@/components/deko/BlobMata";
 import GarisMarker from "@/components/deko/GarisMarker";
+import LatarDapur from "@/components/deko/LatarDapur";
 import LatarDoodle from "@/components/deko/LatarDoodle";
 import Squiggle from "@/components/deko/Squiggle";
 import TepiGelombang from "@/components/deko/TepiGelombang";
@@ -128,16 +129,28 @@ export default function KomponenPage() {
 
         <section aria-labelledby="h-gamecard" className="flex flex-col gap-4">
           <h2 id="h-gamecard" className="text-xl">
-            GameCard — band menu Home (thumbnail asli / placeholder gradien)
+            GameCard — grid bento Home (unggulan besar + kecil, badge & progres)
           </h2>
-          <div className="rounded-xl bg-band-green p-4 sm:p-6">
+          <div className="rounded-xl bg-band-green p-3 sm:p-5">
             <ul
-              className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-2 list-none"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 list-none"
               aria-label="Contoh kartu game"
             >
-              {MENU_GAME.map((game) => (
-                <li key={game.id} className="shrink-0">
-                  <GameCard game={game} />
+              <li className="col-span-2 lg:row-span-2">
+                <GameCard
+                  game={MENU_GAME[0]}
+                  variant="besar"
+                  badge="Main lagi ▶"
+                  progres="⭐ Lv 2"
+                />
+              </li>
+              {MENU_GAME.slice(1).map((game, i) => (
+                <li key={game.id}>
+                  <GameCard
+                    game={game}
+                    badge={i === 0 ? "Baru!" : undefined}
+                    progres={i === 1 ? "📖 Bab 3" : undefined}
+                  />
                 </li>
               ))}
             </ul>
@@ -176,6 +189,13 @@ export default function KomponenPage() {
             <p className="relative p-6 font-bold text-muted">
               LatarDoodle — lapisan doodle samar di belakang konten (dipakai di
               latar Home; bentuk polos tanpa wajah, warna band-*).
+            </p>
+          </div>
+          <div className="relative isolate h-96 rounded-xl border-2 border-border overflow-hidden">
+            <LatarDapur tetap={false} />
+            <p className="relative p-6 font-bold text-muted">
+              LatarDapur — latar game Isi Piringku: doodle dapur di dinding +
+              taplak meja gingham dengan renda (warna token, aman dua tema).
             </p>
           </div>
         </section>
