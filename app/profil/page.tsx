@@ -6,6 +6,7 @@ import GambarEmoji from "@/components/ui/GambarEmoji";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import TombolKembali from "@/components/ui/TombolKembali";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { logout, perbaruiProfil, rutePofil } from "@/features/auth/api";
@@ -173,6 +174,15 @@ export default function ProfilPage() {
             </p>
           )}
         </div>
+      </Card>
+
+      {/* pengaturan tampilan — pindahan dari header Home, biar header lega */}
+      <Card className="mt-6 flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <p className="font-bold">Tampilan</p>
+          <p className="text-muted text-sm font-bold">Mode terang atau gelap</p>
+        </div>
+        <ThemeToggle />
       </Card>
 
       {/* keluar akun — konvensi sama dengan Home (🚪) */}
