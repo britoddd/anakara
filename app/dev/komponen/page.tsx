@@ -4,8 +4,10 @@ import { useState } from "react";
 import AwanPikiran from "@/components/deko/AwanPikiran";
 import BlobMata from "@/components/deko/BlobMata";
 import GarisMarker from "@/components/deko/GarisMarker";
+import LatarArena from "@/components/deko/LatarArena";
 import LatarDapur from "@/components/deko/LatarDapur";
 import LatarDoodle from "@/components/deko/LatarDoodle";
+import LatarKuis from "@/components/deko/LatarKuis";
 import Squiggle from "@/components/deko/Squiggle";
 import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
@@ -196,6 +198,20 @@ export default function KomponenPage() {
             <p className="relative p-6 font-bold text-muted">
               LatarDapur — latar game Isi Piringku: doodle dapur di dinding +
               taplak meja gingham dengan renda (warna token, aman dua tema).
+            </p>
+          </div>
+          <div className="relative isolate h-96 rounded-xl border-2 border-border overflow-hidden">
+            <LatarArena tetap={false} />
+            <p className="relative p-6 font-bold text-muted">
+              LatarArena — latar menu Team Battle 2v2: tali bendera lomba,
+              perisai dua kubu + petir, dan matras garis diagonal warna tim.
+            </p>
+          </div>
+          <div className="relative isolate h-96 rounded-xl border-2 border-border overflow-hidden">
+            <LatarKuis tetap={false} />
+            <p className="relative p-6 font-bold text-muted">
+              LatarKuis — latar menu Kuis Asik: tanda tanya, bola lampu ide,
+              pensil, dan buku tulis bergaris berjilid spiral.
             </p>
           </div>
         </section>
