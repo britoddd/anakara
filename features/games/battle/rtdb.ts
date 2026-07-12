@@ -126,6 +126,24 @@ export async function keluarTim(kode: string, uid: string): Promise<void> {
   }
 }
 
+/** Isi slot rekan tim yang masih kosong dengan bot (D8) — dipakai ketua
+    "Buat Tim" saat tak ada teman yang bergabung, supaya bisa langsung tanding. */
+export async function tambahBotKeTim(kode: string): Promise<void> {
+  const db = getRtdb();
+  const timRef = ref(db, `battle/tim/${kode}`);
+  const snap = await get(timRef);
+  if (!snap.exists()) throw new Error("Tim tidak ditemukan.");
+  const tim = snap.val() as TimBattle;
+  if (Object.keys(tim.anggota ?? {}).length >= 2) {
+    throw new Error("Tim sudah penuh (2 orang).");
+  }
+  const bot = buatBot(0);
+  await update(
+    child(timRef, `anggota/${bot.uid}`),
+    { nama: bot.nama, avatar: null, bot: true } as unknown as Record<string, unknown>
+  );
+}
+
 export function dengarkanTim(
   kode: string,
   callback: (tim: TimBattle | null) => void
