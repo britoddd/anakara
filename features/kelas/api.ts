@@ -12,7 +12,19 @@ export interface TemanKelas {
   avatar: string | null;
   level: number;
   poin: number;
+  /** kemajuan per game — sudah ikut terbaca dari profil, dipakai detail teman */
+  progress: UserProfile["progress"];
+  /** id kartu koleksi yang dimiliki — untuk lihat album kartu teman */
+  koleksi: string[];
 }
+
+/* Default kalau profil lama belum punya field ini (dibuat sebelum Phase 8/9) —
+   tampil sebagai pemain baru, bukan bikin detail teman error. */
+const PROGRESS_DEFAULT: UserProfile["progress"] = {
+  kuis: { levelTerbuka: 1 },
+  cerita: { babTerbuka: 1 },
+  isiPiringku: { levelTerbuka: 1 },
+};
 
 export interface InfoKelas {
   kode: string;
@@ -44,6 +56,8 @@ export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
       avatar: p.avatar,
       level: hitungLevel(p.poin), // D10: turunan poin, bukan field tersimpan
       poin: p.poin,
+      progress: p.progress ?? PROGRESS_DEFAULT,
+      koleksi: p.koleksi ?? [],
     }));
 
   return {
