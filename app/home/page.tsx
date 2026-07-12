@@ -10,7 +10,6 @@ import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import Modal from "@/components/ui/Modal";
 import ProgressBar from "@/components/ui/ProgressBar";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { logout, rutePofil } from "@/features/auth/api";
 import { getAvatar } from "@/features/auth/avatars";
@@ -196,7 +195,6 @@ export default function HomePage() {
               )}
             </Link>
           ))}
-          <ThemeToggle />
           {/* keluar lewat konfirmasi — jempol anak gampang salah pencet */}
           <button
             onClick={() => setModalKeluar(true)}
