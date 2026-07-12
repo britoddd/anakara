@@ -39,15 +39,18 @@ export const POIN = dataConfig.poin as {
 };
 
 /* Info tampilan 4 kelompok — label & fungsi gizi sesuai mockup MacBook Air - 3
-   (Isi Piringku Kemenkes). Warna pastel = dekoratif, teks tetap pakai token. */
+   (Isi Piringku Kemenkes). Warna pastel = dekoratif, teks tetap pakai token.
+   Latar kuadran pakai token --kuadran-* (diremap per tema di globals.css) —
+   BUKAN varian dark: Tailwind, yang mengikuti preferensi OS bukan toggle
+   aplikasi (catatan-restyle-thynk §C: "sudah pernah kejadian"). */
 export const KELOMPOK_INFO: Record<
   Kelompok,
   { label: string; fungsi: string; emoji: string; bgKuadran: string }
 > = {
-  pokok: { label: "Makanan Pokok", fungsi: "Sumber Tenaga", emoji: "🍚", bgKuadran: "bg-[#FFF3D6] dark:bg-[#4a3d20]" },
-  lauk: { label: "Lauk-Pauk", fungsi: "Sumber Protein", emoji: "🍗", bgKuadran: "bg-[#FFE4D6] dark:bg-[#4a2f20]" },
-  sayur: { label: "Sayuran", fungsi: "Vitamin & Serat", emoji: "🥦", bgKuadran: "bg-[#E2F5D9] dark:bg-[#2c4a20]" },
-  buah: { label: "Buah-buahan", fungsi: "Vitamin & Segar", emoji: "🍎", bgKuadran: "bg-[#FFDDE4] dark:bg-[#4a2029]" },
+  pokok: { label: "Makanan Pokok", fungsi: "Sumber Tenaga", emoji: "🍚", bgKuadran: "bg-[var(--kuadran-pokok)]" },
+  lauk: { label: "Lauk-Pauk", fungsi: "Sumber Protein", emoji: "🍗", bgKuadran: "bg-[var(--kuadran-lauk)]" },
+  sayur: { label: "Sayuran", fungsi: "Vitamin & Serat", emoji: "🥦", bgKuadran: "bg-[var(--kuadran-sayur)]" },
+  buah: { label: "Buah-buahan", fungsi: "Vitamin & Segar", emoji: "🍎", bgKuadran: "bg-[var(--kuadran-buah)]" },
 };
 
 export const URUTAN_KELOMPOK: Kelompok[] = ["pokok", "lauk", "sayur", "buah"];
