@@ -262,15 +262,130 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   if (!soal) return null;
   const persenWaktu = (timerSisa / soal.durasiDetik) * 100;
 
+  const waktuKritis = timerSisa <= 5;
+
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
-      <div className="flex items-center gap-4 mb-4">
+      {/* header ramping — kromnya sengaja dibuat tenang agar soal jadi fokus */}
+      <div className="flex items-center gap-3 mb-4">
         <TombolKembali href="/home" label="Keluar dari kuis" />
-        <h1 className="text-xl sm:text-2xl">Kuis Asik — Level {level}</h1>
+        <h1 className="text-base sm:text-lg font-display font-extrabold text-muted">
+          Kuis Asik · Level {level}
+        </h1>
       </div>
 
-      {/* 10 lingkaran progres bernomor */}
-      <ol className="flex flex-wrap gap-2 mb-3 list-none" aria-label="Progres soal">
+      {/* ISLAND: satu panel menonjol yang memegang soal + jawaban (fokus utama) */}
+      <section className="rounded-3xl bg-surface border-2 border-border shadow-[0_10px_30px_rgba(16,32,43,0.12)] p-4 sm:p-6">
+        {/* timer ramping menempel di puncak island + konteks "soal ke-berapa" */}
+        <div className="flex items-center gap-3 mb-4 sm:mb-5">
+          <span className="font-display font-extrabold text-sm text-muted whitespace-nowrap tabular-nums">
+            Soal {index + 1}/{daftarSoal.length}
+          </span>
+          <div
+            role="timer"
+            aria-label={`Sisa waktu ${timerSisa} detik`}
+            className="flex-1 h-2.5 rounded-full bg-surface-2 border-2 border-border overflow-hidden"
+          >
+            <div
+              className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${
+                waktuKritis ? "bg-danger" : "bg-primary"
+              }`}
+              style={{ width: `${persenWaktu}%` }}
+            />
+          </div>
+          <span
+            className={`font-display font-extrabold text-lg tabular-nums w-[2.5ch] text-right ${
+              waktuKritis ? "text-danger motion-safe:animate-pulse" : "text-fg"
+            }`}
+          >
+            {timerSisa}
+          </span>
+        </div>
+
+        {/* pertanyaan — panel berwarna, teks besar: bagian yang paling menonjol */}
+        <div className="rounded-2xl bg-band-blue px-5 py-6 sm:py-8">
+          <p className="font-display font-extrabold text-xl sm:text-2xl text-center text-balance leading-snug">
+            {soal.pertanyaan}
+          </p>
+        </div>
+
+        {/* feedback Tayo saat terkunci */}
+        <p
+          role="status"
+          aria-live="assertive"
+          className="text-center font-bold my-4 min-h-[1.6em]"
+        >
+          {terkunci &&
+            (waktuHabis
+              ? "⏰ Waktu habis! Jawabannya yang benar diberi tanda ✓"
+              : pilihan === soal.kunciIndex
+                ? "🐆✨ Yeay, benar!"
+                : "🐆💛 Yuk coba lagi di soal berikutnya!")}
+        </p>
+
+        {/* 4 opsi ikon + label — kartu surface-2 agar terpisah dari island putih */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {soal.opsi.map((opsi, i) => {
+            const kunci = i === soal.kunciIndex;
+            const dipilih = i === pilihan;
+            let gaya =
+              "bg-surface-2 border-border hover:border-primary hover:bg-surface cursor-pointer";
+            let tanda: string | null = null;
+            if (terkunci) {
+              if (kunci) {
+                gaya = "bg-success/15 border-success";
+                tanda = "✓";
+              } else if (dipilih) {
+                gaya = "bg-danger/10 border-danger";
+                tanda = "✗";
+              } else {
+                gaya = "bg-surface-2 border-border opacity-60";
+              }
+            }
+            return (
+              <button
+                key={i}
+                disabled={terkunci}
+                onClick={() => kunciJawaban(i)}
+                aria-label={`Jawaban: ${opsi}${
+                  terkunci && kunci ? " (benar)" : terkunci && dipilih ? " (salah)" : ""
+                }`}
+                className={[
+                  "relative flex flex-col items-center gap-2 p-4 sm:p-5 rounded-xl border-4 text-fg",
+                  "transition-[transform,border-color,background-color] duration-150",
+                  !terkunci ? "hover:-translate-y-1" : "",
+                  gaya,
+                ].join(" ")}
+              >
+                {soal.opsiEmoji?.[i] && (
+                  <span className="text-4xl" aria-hidden="true">
+                    {soal.opsiEmoji[i]}
+                  </span>
+                )}
+                <span className="font-bold leading-tight">{opsi}</span>
+                {tanda && (
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center font-black text-lg border-2 ${
+                      tanda === "✓"
+                        ? "bg-success text-on-success border-success"
+                        : "bg-danger text-white border-danger"
+                    }`}
+                  >
+                    {tanda}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* progres 10 lingkaran — dipindah ke bawah island (kromnya menepi) */}
+      <ol
+        className="flex flex-wrap justify-center gap-2 mt-6 list-none"
+        aria-label="Progres soal"
+      >
         {daftarSoal.map((s, i) => {
           const status = riwayat[i];
           const sekarang = i === index;
@@ -281,7 +396,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
                   sekarang ? " (sedang dikerjakan)" : status ? `: ${status}` : ""
                 }`}
                 className={[
-                  "w-9 h-9 rounded-full flex items-center justify-center font-display font-bold text-sm border-2",
+                  "w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm border-2",
                   sekarang
                     ? "bg-primary text-on-primary border-primary shadow-[0_0_0_3px_var(--focus)]"
                     : status === "benar"
@@ -299,103 +414,8 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
         })}
       </ol>
 
-      {/* timer visual */}
-      <div className="flex items-center gap-3 mb-6">
-        <div
-          role="timer"
-          aria-label={`Sisa waktu ${timerSisa} detik`}
-          className="flex-1 h-3 rounded-full bg-surface-2 border-2 border-border overflow-hidden"
-        >
-          <div
-            className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${
-              timerSisa <= 5 ? "bg-accent" : "bg-primary"
-            }`}
-            style={{ width: `${persenWaktu}%` }}
-          />
-        </div>
-        <span className="font-display font-extrabold text-lg tabular-nums w-[2ch]">
-          {timerSisa}
-        </span>
-        <span className="text-sm font-bold text-muted">sisa waktu</span>
-      </div>
-
-      {/* pertanyaan */}
-      <Card className="mb-6 border-accent border-2">
-        <p className="font-bold text-lg text-center">{soal.pertanyaan}</p>
-      </Card>
-
-      {/* feedback Tayo saat terkunci */}
-      <p
-        role="status"
-        aria-live="assertive"
-        className="text-center font-bold mb-4 min-h-[1.6em]"
-      >
-        {terkunci &&
-          (waktuHabis
-            ? "⏰ Waktu habis! Jawabannya yang benar diberi tanda ✓"
-            : pilihan === soal.kunciIndex
-              ? "🐆✨ Yeay, benar!"
-              : "🐆💛 Yuk coba lagi di soal berikutnya!")}
-      </p>
-
-      {/* 4 opsi ikon + label */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {soal.opsi.map((opsi, i) => {
-          const kunci = i === soal.kunciIndex;
-          const dipilih = i === pilihan;
-          let gaya = "bg-surface border-border hover:border-primary cursor-pointer";
-          let tanda: string | null = null;
-          if (terkunci) {
-            if (kunci) {
-              gaya = "bg-success/15 border-success";
-              tanda = "✓";
-            } else if (dipilih) {
-              gaya = "bg-danger/10 border-danger";
-              tanda = "✗";
-            } else {
-              gaya = "bg-surface border-border opacity-60";
-            }
-          }
-          return (
-            <button
-              key={i}
-              disabled={terkunci}
-              onClick={() => kunciJawaban(i)}
-              aria-label={`Jawaban: ${opsi}${
-                terkunci && kunci ? " (benar)" : terkunci && dipilih ? " (salah)" : ""
-              }`}
-              className={[
-                "relative flex flex-col items-center gap-2 p-5 rounded-lg border-4 text-fg",
-                "transition-[transform,border-color,background-color] duration-150",
-                !terkunci ? "hover:-translate-y-1" : "",
-                gaya,
-              ].join(" ")}
-            >
-              {soal.opsiEmoji?.[i] && (
-                <span className="text-4xl" aria-hidden="true">
-                  {soal.opsiEmoji[i]}
-                </span>
-              )}
-              <span className="font-bold leading-tight">{opsi}</span>
-              {tanda && (
-                <span
-                  aria-hidden="true"
-                  className={`absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center font-black text-lg border-2 ${
-                    tanda === "✓"
-                      ? "bg-success text-on-success border-success"
-                      : "bg-danger text-white border-danger"
-                  }`}
-                >
-                  {tanda}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
       {/* D4: tanpa tombol "Sebelumnya" — otomatis lanjut setelah feedback */}
-      <p className="text-center text-sm text-muted mt-6">
+      <p className="text-center text-sm text-muted mt-4">
         Soal berlanjut otomatis setelah dijawab. Skor sementara: ⭐{" "}
         {benarTotal * POIN_PER_BENAR}
       </p>
