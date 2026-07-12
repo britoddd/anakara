@@ -174,7 +174,7 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 | [ ] | `tayo-chef.png` | GAYA-TAYO | SHEET | Tayo wearing a white chef hat, holding a wooden spoon proudly | Header Isi Piringku |
 | [ ] | `tayo-point.png` | GAYA-TAYO | SHEET | Tayo pointing to the side with one paw, explaining cheerfully | Instruksi/tutorial |
 
-### Makanan (32) — folder `public/assets/food/` — id HARUS sama dengan `data/makanan.json`
+### Makanan (48) — folder `public/assets/food/` — id HARUS sama dengan `data/makanan.json`
 | ✔ | File | Subjek (pakai GAYA-MAKANAN) |
 |---|---|---|
 | [ ] | `nasi.png` | A small bowl of steamed white rice |
@@ -209,6 +209,22 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 | [ ] | `pepaya.png` | A papaya half with tiny black seeds |
 | [ ] | `anggur.png` | A small bunch of purple grapes |
 | [ ] | `alpukat.png` | An avocado half with round seed |
+| [ ] | `lontong.png` | Indonesian lontong: sliced rice cake rolls on a banana leaf |
+| [ ] | `makaroni.png` | A small bowl of elbow macaroni pasta |
+| [ ] | `bubur.png` | A warm bowl of rice porridge with a spoon |
+| [ ] | `ketan.png` | Sticky rice pressed into a small block on a banana leaf |
+| [ ] | `cumi.png` | A cute purple-pink squid |
+| [ ] | `kepiting.png` | A cute orange crab with big claws |
+| [ ] | `keju.png` | A wedge of yellow cheese with holes |
+| [ ] | `teri.png` | A few tiny silver anchovies on a small plate |
+| [ ] | `timun.png` | A green cucumber with two thin slices |
+| [ ] | `jamur.png` | Two cute button mushrooms |
+| [ ] | `paprika.png` | A red bell pepper with green stem |
+| [ ] | `selada.png` | A head of fresh green lettuce |
+| [ ] | `nanas.png` | A pineapple with spiky green crown |
+| [ ] | `stroberi.png` | A red strawberry with tiny seeds |
+| [ ] | `kelapa.png` | A young coconut with a straw |
+| [ ] | `pir.png` | A green pear |
 
 ### Kotak misteri — folder `public/assets/cards/`
 | ✔ | File | Gaya | Ref | Subjek |

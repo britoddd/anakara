@@ -352,6 +352,798 @@
       "kunciIndex": 0,
       "durasiDetik": 15,
       "sumber": "anakara"
+    },
+    {
+      "id": "q4-01",
+      "level": 4,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Bekal sekolah yang paling sehat adalah…",
+      "opsi": ["Permen dan cokelat", "Keripik pedas", "Nasi, ayam, dan sayur", "Es krim"],
+      "opsiEmoji": ["🍬", "🌶️", "🍱", "🍦"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-02",
+      "level": 4,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sarapan paling baik dilakukan…",
+      "opsi": ["Sebelum berangkat sekolah", "Saat jam istirahat", "Sore hari", "Tengah malam"],
+      "opsiEmoji": ["🌅", "🏫", "🌇", "🌙"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-03",
+      "level": 4,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Pengganti nasi untuk sarapan yang sehat adalah…",
+      "opsi": ["Permen kapas", "Roti gandum", "Es sirup", "Keripik"],
+      "opsiEmoji": ["🍭", "🍞", "🧋", "🍟"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-04",
+      "level": 4,
+      "kategori": "gizi",
+      "pertanyaan": "Kalau tidak sarapan, di kelas kita bisa merasa…",
+      "opsi": ["Kuat sekali", "Makin pintar", "Kenyang", "Lapar dan lemas"],
+      "opsiEmoji": ["💪", "🧠", "😊", "😪"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-05",
+      "level": 4,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Minuman yang baik menemani sarapan adalah…",
+      "opsi": ["Soda", "Kopi", "Susu", "Es teh manis"],
+      "opsiEmoji": ["🥤", "☕", "🥛", "🧋"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-06",
+      "level": 4,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Buah yang mudah dibawa untuk bekal adalah…",
+      "opsi": ["Pisang", "Semangka utuh", "Kelapa utuh", "Nanas utuh"],
+      "opsiEmoji": ["🍌", "🍉", "🥥", "🍍"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-07",
+      "level": 4,
+      "kategori": "gizi",
+      "pertanyaan": "Telur rebus di bekal berguna untuk…",
+      "opsi": ["Membuat mengantuk", "Membuat otot kuat", "Membuat gigi bolong", "Membuat haus"],
+      "opsiEmoji": ["😴", "💪", "🦷", "🥵"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-08",
+      "level": 4,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Bekal yang bergizi seharusnya berisi…",
+      "opsi": ["Hanya nasi saja", "Hanya kerupuk", "Hanya saus", "Nasi, lauk, sayur, dan buah"],
+      "opsiEmoji": ["🍚", "🍘", "🥫", "🍱"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-09",
+      "level": 4,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sebelum diisi makanan, kotak bekal harus…",
+      "opsi": ["Kotor", "Bersih dan kering", "Basah", "Terbuka semalaman"],
+      "opsiEmoji": ["🦠", "✨", "💦", "🌙"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-10",
+      "level": 4,
+      "kategori": "gizi",
+      "pertanyaan": "Lontong, bubur, dan roti termasuk kelompok…",
+      "opsi": ["Makanan pokok", "Buah-buahan", "Sayuran", "Minuman"],
+      "opsiEmoji": ["🍚", "🍎", "🥦", "🥤"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-11",
+      "level": 4,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Camilan sekolah yang paling sehat adalah…",
+      "opsi": ["Permen karet", "Keripik pedas", "Buah potong", "Es serut warna-warni"],
+      "opsiEmoji": ["🍬", "🌶️", "🍉", "🍧"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q4-12",
+      "level": 4,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Makan terburu-buru bisa membuat kita…",
+      "opsi": ["Tersedak", "Makin sehat", "Lebih tinggi", "Kenyang lebih lama"],
+      "opsiEmoji": ["😵", "💪", "📏", "😊"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-01",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Cuci tangan yang benar memakai…",
+      "opsi": ["Air saja", "Sabun dan air mengalir", "Tisu saja", "Angin"],
+      "opsiEmoji": ["💧", "🧼", "🧻", "💨"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-02",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Makanan yang jatuh ke lantai sebaiknya…",
+      "opsi": ["Langsung dimakan", "Ditiup lalu dimakan", "Diberikan teman", "Tidak dimakan"],
+      "opsiEmoji": ["😋", "💨", "🤝", "🚫"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-03",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Supaya tidak dihinggapi lalat, makanan harus…",
+      "opsi": ["Ditutup rapat", "Dibiarkan terbuka", "Ditaruh di lantai", "Dijemur di jalan"],
+      "opsiEmoji": ["🍽️", "🪰", "⬇️", "🛣️"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-04",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Air minum yang aman adalah air yang…",
+      "opsi": ["Dari selokan", "Dari genangan hujan", "Sudah dimasak sampai matang", "Berwarna keruh"],
+      "opsiEmoji": ["🚱", "💦", "♨️", "🟤"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-05",
+      "level": 5,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Jajanan aman dibeli kalau…",
+      "opsi": ["Tertutup dan bersih", "Dikerubungi lalat", "Sudah bau", "Jatuh di tanah"],
+      "opsiEmoji": ["✅", "🪰", "🤢", "⬇️"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-06",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Setelah memegang hewan peliharaan, sebelum makan kita…",
+      "opsi": ["Langsung makan", "Cuci tangan pakai sabun", "Mengelap tangan ke celana", "Meniup tangan"],
+      "opsiEmoji": ["🍽️", "🧼", "👖", "💨"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-07",
+      "level": 5,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Makanan basi biasanya…",
+      "opsi": ["Makin lezat", "Lebih bergizi", "Berbau tidak enak", "Lebih segar"],
+      "opsiEmoji": ["😋", "💪", "🤢", "✨"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-08",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Kuku panjang dan kotor bisa menyimpan…",
+      "opsi": ["Kuman", "Vitamin", "Tenaga", "Protein"],
+      "opsiEmoji": ["🦠", "💊", "⚡", "🍗"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-09",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Setelah buang air, kita wajib…",
+      "opsi": ["Langsung main", "Langsung makan", "Tidur", "Cuci tangan pakai sabun"],
+      "opsiEmoji": ["⚽", "🍽️", "😴", "🧼"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-10",
+      "level": 5,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Susu yang sudah dibuka sebaiknya disimpan di…",
+      "opsi": ["Bawah matahari", "Kulkas", "Dalam tas seharian", "Lantai"],
+      "opsiEmoji": ["☀️", "🧊", "🎒", "⬇️"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-11",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sikat gigi dilakukan pagi dan…",
+      "opsi": ["Malam sebelum tidur", "Setahun sekali", "Kalau ingat saja", "Tidak perlu"],
+      "opsiEmoji": ["🪥", "📅", "🤔", "🚫"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q5-12",
+      "level": 5,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Tempat makan dan minum yang bersih membuat kita…",
+      "opsi": ["Mudah sakit", "Cepat lapar", "Terhindar dari kuman", "Cepat haus"],
+      "opsiEmoji": ["🤒", "😋", "🛡️", "🥵"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-01",
+      "level": 6,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Minuman terbaik saat haus adalah…",
+      "opsi": ["Soda", "Air putih", "Es sirup", "Minuman berenergi"],
+      "opsiEmoji": ["🥤", "💧", "🧋", "⚡"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-02",
+      "level": 6,
+      "kategori": "gizi",
+      "pertanyaan": "Terlalu banyak gula membuat badan mudah…",
+      "opsi": ["Gemuk dan sakit", "Kuat", "Tinggi", "Pintar"],
+      "opsiEmoji": ["⚠️", "💪", "📏", "🧠"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-03",
+      "level": 6,
+      "kategori": "gizi",
+      "pertanyaan": "Minuman yang paling banyak gulanya adalah…",
+      "opsi": ["Air putih", "Susu tanpa gula", "Jus tanpa gula", "Soda"],
+      "opsiEmoji": ["💧", "🥛", "🧃", "🥤"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-04",
+      "level": 6,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Jus buah paling sehat kalau…",
+      "opsi": ["Tanpa gula tambahan", "Ditambah banyak gula", "Ditambah pewarna", "Ditambah soda"],
+      "opsiEmoji": ["🍊", "🍬", "🌈", "🥤"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-05",
+      "level": 6,
+      "kategori": "gizi",
+      "pertanyaan": "Susu baik untuk anak karena mengandung…",
+      "opsi": ["Pewarna", "Soda", "Kalsium", "Banyak garam"],
+      "opsiEmoji": ["🌈", "🥤", "🦴", "🧂"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-06",
+      "level": 6,
+      "kategori": "gizi",
+      "pertanyaan": "Gula tersembunyi paling banyak ada di…",
+      "opsi": ["Minuman kemasan manis", "Air putih", "Buah segar", "Sayur rebus"],
+      "opsiEmoji": ["🧋", "💧", "🍎", "🥦"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-07",
+      "level": 6,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Minuman warna sangat mencolok mungkin memakai…",
+      "opsi": ["Buah asli", "Pewarna buatan", "Susu", "Madu"],
+      "opsiEmoji": ["🍎", "🌈", "🥛", "🍯"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-08",
+      "level": 6,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Es krim dan permen boleh dimakan…",
+      "opsi": ["Setiap jam", "Sebagai sarapan", "Sebagai makan malam", "Sesekali saja"],
+      "opsiEmoji": ["⏰", "🌅", "🌙", "🍦"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-09",
+      "level": 6,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Setelah minum manis, mulut sebaiknya…",
+      "opsi": ["Dibilas air putih", "Dibiarkan manis", "Diberi permen lagi", "Ditutup rapat"],
+      "opsiEmoji": ["💧", "🍬", "🍭", "🤐"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-10",
+      "level": 6,
+      "kategori": "gizi",
+      "pertanyaan": "Buah utuh lebih sehat dari permen rasa buah karena punya…",
+      "opsi": ["Lebih banyak gula", "Warna lebih bagus", "Vitamin dan serat asli", "Bungkus lucu"],
+      "opsiEmoji": ["🍬", "🌈", "🍎", "🎁"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-11",
+      "level": 6,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Waktu terbaik minum air putih adalah…",
+      "opsi": ["Hanya saat sakit", "Sepanjang hari saat haus", "Setahun sekali", "Tidak pernah"],
+      "opsiEmoji": ["🤒", "💧", "📅", "🚫"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q6-12",
+      "level": 6,
+      "kategori": "gizi",
+      "pertanyaan": "Minuman bersoda banyak mengandung…",
+      "opsi": ["Gula", "Sayur", "Protein", "Serat"],
+      "opsiEmoji": ["🍬", "🥦", "🍗", "🌾"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-01",
+      "level": 7,
+      "kategori": "olahraga",
+      "pertanyaan": "Supaya badan sehat, tiap hari kita perlu…",
+      "opsi": ["Rebahan seharian", "Main HP terus", "Bergerak dan berolahraga", "Ngemil terus"],
+      "opsiEmoji": ["🛏️", "📱", "⚽", "🍿"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-02",
+      "level": 7,
+      "kategori": "olahraga",
+      "pertanyaan": "Sebelum berolahraga, sebaiknya melakukan…",
+      "opsi": ["Pemanasan", "Tidur dulu", "Makan sangat banyak", "Langsung lari kencang"],
+      "opsiEmoji": ["🤸", "😴", "🍛", "🏃"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-03",
+      "level": 7,
+      "kategori": "olahraga",
+      "pertanyaan": "Yang termasuk olahraga adalah…",
+      "opsi": ["Menonton TV", "Bersepeda", "Main HP", "Tidur siang"],
+      "opsiEmoji": ["📺", "🚲", "📱", "😴"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-04",
+      "level": 7,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Tidur malam yang cukup membuat kita bangun dengan…",
+      "opsi": ["Badan segar", "Badan lelah", "Mata perih", "Perasaan marah"],
+      "opsiEmoji": ["🌞", "😪", "😵", "😠"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-05",
+      "level": 7,
+      "kategori": "olahraga",
+      "pertanyaan": "Bermain di luar saat pagi membuat tubuh mendapat…",
+      "opsi": ["Kuman", "Gula", "Garam", "Vitamin D dari matahari"],
+      "opsiEmoji": ["🦠", "🍬", "🧂", "☀️"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-06",
+      "level": 7,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Menatap layar terlalu lama membuat mata…",
+      "opsi": ["Lelah dan perih", "Makin terang", "Makin sehat", "Berwarna-warni"],
+      "opsiEmoji": ["😵", "✨", "💪", "🌈"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-07",
+      "level": 7,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Kalau lelah setelah bermain, tubuh butuh…",
+      "opsi": ["Lari lagi", "Makan permen", "Istirahat", "Begadang"],
+      "opsiEmoji": ["🏃", "🍬", "😴", "🦉"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-08",
+      "level": 7,
+      "kategori": "olahraga",
+      "pertanyaan": "Olahraga yang seru bersama teman adalah…",
+      "opsi": ["Tidur", "Sepak bola", "Menonton TV", "Main HP"],
+      "opsiEmoji": ["😴", "⚽", "📺", "📱"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-09",
+      "level": 7,
+      "kategori": "olahraga",
+      "pertanyaan": "Duduk terlalu lama tanpa bergerak membuat badan…",
+      "opsi": ["Kaku", "Lentur", "Makin kuat", "Makin tinggi"],
+      "opsiEmoji": ["🪑", "🤸", "💪", "📏"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-10",
+      "level": 7,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sebelum tidur malam, sebaiknya kita…",
+      "opsi": ["Minum soda", "Makan banyak", "Lari keliling rumah", "Sikat gigi"],
+      "opsiEmoji": ["🥤", "🍛", "🏃", "🪥"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-11",
+      "level": 7,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Bangun pagi lebih mudah kalau malamnya…",
+      "opsi": ["Tidur lebih awal", "Begadang", "Main game sampai malam", "Minum kopi"],
+      "opsiEmoji": ["🌙", "🦉", "🎮", "☕"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q7-12",
+      "level": 7,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Setelah bermain bola, baju basah keringat sebaiknya…",
+      "opsi": ["Dipakai terus", "Diganti baju kering", "Dibiarkan", "Dipakai tidur"],
+      "opsiEmoji": ["👕", "✨", "🤷", "😴"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-01",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Nasi, roti, dan kentang memberi tubuh…",
+      "opsi": ["Kuman", "Pewarna", "Angin", "Tenaga (karbohidrat)"],
+      "opsiEmoji": ["🦠", "🌈", "💨", "⚡"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-02",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Serat dari sayur dan buah membantu…",
+      "opsi": ["Pencernaan lancar", "Rambut keriting", "Suara merdu", "Kuku panjang"],
+      "opsiEmoji": ["😊", "💇", "🎤", "💅"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-03",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Zat besi dari bayam dan daging mencegah badan…",
+      "opsi": ["Terlalu tinggi", "Lemas dan pucat", "Cepat kenyang", "Banyak bicara"],
+      "opsiEmoji": ["📏", "😪", "😊", "🗣️"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-04",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Vitamin D didapat tubuh dari…",
+      "opsi": ["Lampu kamar", "Angin malam", "Sinar matahari pagi", "Air es"],
+      "opsiEmoji": ["💡", "🌬️", "☀️", "🧊"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-05",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Lemak baik untuk otak ada di…",
+      "opsi": ["Alpukat dan ikan", "Permen", "Soda", "Es serut"],
+      "opsiEmoji": ["🥑", "🍬", "🥤", "🍧"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-06",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Tubuh kita sebagian besar terdiri dari…",
+      "opsi": ["Gula", "Air", "Batu", "Angin"],
+      "opsiEmoji": ["🍬", "💧", "🪨", "💨"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-07",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Makan sayur dan buah beraneka warna membuat gizi…",
+      "opsi": ["Makin lengkap", "Berkurang", "Hilang", "Sama saja"],
+      "opsiEmoji": ["🌈", "📉", "💨", "🤷"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-08",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Protein dari laut contohnya…",
+      "opsi": ["Permen laut", "Air garam", "Ikan, udang, dan cumi", "Pasir pantai"],
+      "opsiEmoji": ["🍬", "🧂", "🐟", "🏖️"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-09",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Keju terbuat dari…",
+      "opsi": ["Air", "Batu", "Daun", "Susu"],
+      "opsiEmoji": ["💧", "🪨", "🍃", "🥛"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-10",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Air di dalam tubuh berguna untuk…",
+      "opsi": ["Membawa zat gizi ke seluruh tubuh", "Membuat badan berat", "Mewarnai kulit", "Tidak ada gunanya"],
+      "opsiEmoji": ["💧", "⚖️", "🎨", "🚫"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-11",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Kalau makan hanya satu jenis makanan saja, gizi kita…",
+      "opsi": ["Sangat lengkap", "Tidak lengkap", "Bertambah terus", "Sempurna"],
+      "opsiEmoji": ["💯", "⚠️", "📈", "✨"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q8-12",
+      "level": 8,
+      "kategori": "gizi",
+      "pertanyaan": "Buah dan sayur oranye seperti labu kaya akan…",
+      "opsi": ["Vitamin A", "Garam", "Minyak", "Soda"],
+      "opsiEmoji": ["🥕", "🧂", "🛢️", "🥤"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-01",
+      "level": 9,
+      "kategori": "gizi",
+      "pertanyaan": "Bagian sayur di piring makan kita sebaiknya…",
+      "opsi": ["Lebih banyak daripada lauk", "Tidak usah ada", "Sedikit sekali", "Diganti kerupuk"],
+      "opsiEmoji": ["🥦", "🚫", "🤏", "🍘"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-02",
+      "level": 9,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Menu paling seimbang adalah…",
+      "opsi": ["Nasi + kerupuk", "Mie + es sirup", "Nasi + ayam + bayam + pisang", "Permen + cokelat + soda"],
+      "opsiEmoji": ["🍘", "🍜", "🍱", "🍬"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-03",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Habis bermain bola dan berkeringat, sebelum makan Dodi harus…",
+      "opsi": ["Langsung makan", "Cuci tangan lalu minum air putih", "Minum soda dingin", "Tidur dulu"],
+      "opsiEmoji": ["🍽️", "🧼", "🥤", "😴"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-04",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Sarapan sehat + olahraga + tidur cukup membuat kita…",
+      "opsi": ["Lemas", "Mengantuk", "Malas", "Kuat dan semangat"],
+      "opsiEmoji": ["😪", "😴", "🦥", "💪"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-05",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Urutan yang benar sebelum makan adalah…",
+      "opsi": ["Cuci tangan, duduk, berdoa, makan", "Makan dulu, cuci tangan belakangan", "Lari-lari lalu langsung makan", "Tidur lalu makan"],
+      "opsiEmoji": ["✅", "🔁", "🏃", "😴"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-06",
+      "level": 9,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Kalau menu hari ini belum ada sayur, sebaiknya…",
+      "opsi": ["Tambah kerupuk", "Tambahkan sayur atau buah", "Tambah permen", "Biarkan saja"],
+      "opsiEmoji": ["🍘", "🥗", "🍬", "🤷"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-07",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Teman menawari jajanan terbuka yang dihinggapi lalat. Kita…",
+      "opsi": ["Langsung memakannya", "Meminta dua", "Menolak dengan sopan", "Menyimpannya untuk nanti"],
+      "opsiEmoji": ["😋", "✌️", "🙅", "📦"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-08",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Setelah makan, sampah bungkusnya kita…",
+      "opsi": ["Buang ke tempat sampah", "Lempar ke jalan", "Sembunyikan di laci", "Tinggalkan di meja"],
+      "opsiEmoji": ["🗑️", "🛣️", "🗄️", "🪑"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-09",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Badan sehat berasal dari makan bergizi, olahraga, dan…",
+      "opsi": ["Begadang", "Banyak jajan", "Main HP lama", "Tidur cukup"],
+      "opsiEmoji": ["🦉", "🍬", "📱", "😴"],
+      "kunciIndex": 3,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-10",
+      "level": 9,
+      "kategori": "makanan-sehat",
+      "pertanyaan": "Camilan sore paling sehat adalah…",
+      "opsi": ["Permen sekantong", "Buah potong", "Soda dingin", "Keripik bungkus besar"],
+      "opsiEmoji": ["🍬", "🍎", "🥤", "🍟"],
+      "kunciIndex": 1,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-11",
+      "level": 9,
+      "kategori": "kebiasaan-baik",
+      "pertanyaan": "Gigi sehat didapat dengan rajin sikat gigi dan…",
+      "opsi": ["Mengurangi makanan manis", "Menambah permen", "Sering minum soda", "Menggigit es batu"],
+      "opsiEmoji": ["😁", "🍬", "🥤", "🧊"],
+      "kunciIndex": 0,
+      "durasiDetik": 15,
+      "sumber": "anakara"
+    },
+    {
+      "id": "q9-12",
+      "level": 9,
+      "kategori": "gizi",
+      "pertanyaan": "Tayo makan nasi, telur, bayam, dan pepaya. Menu Tayo…",
+      "opsi": ["Kurang permen", "Terlalu banyak", "Lengkap dan seimbang", "Harus diganti keripik"],
+      "opsiEmoji": ["🍬", "📈", "🌟", "🍟"],
+      "kunciIndex": 2,
+      "durasiDetik": 15,
+      "sumber": "anakara"
     }
   ],
   "aturanLevel": {
@@ -364,6 +1156,30 @@
       "syaratBuka": { "lulusLevel": 2 },
       "syaratLulus": { "minBenar": 7 }
     },
-    "catatan": "D4: tidak ada tombol kembali di dalam kuis — jawaban terkunci begitu dipilih atau waktu habis, lalu otomatis lanjut soal berikutnya."
+    "level4": {
+      "syaratBuka": { "lulusLevel": 3 },
+      "syaratLulus": { "minBenar": 7 }
+    },
+    "level5": {
+      "syaratBuka": { "lulusLevel": 4 },
+      "syaratLulus": { "minBenar": 7 }
+    },
+    "level6": {
+      "syaratBuka": { "lulusLevel": 5 },
+      "syaratLulus": { "minBenar": 8 }
+    },
+    "level7": {
+      "syaratBuka": { "lulusLevel": 6 },
+      "syaratLulus": { "minBenar": 8 }
+    },
+    "level8": {
+      "syaratBuka": { "lulusLevel": 7 },
+      "syaratLulus": { "minBenar": 8 }
+    },
+    "level9": {
+      "syaratBuka": { "lulusLevel": 8 },
+      "syaratLulus": { "minBenar": 8 }
+    },
+    "catatan": "D4: tidak ada tombol kembali di dalam kuis — jawaban terkunci begitu dipilih atau waktu habis, lalu otomatis lanjut soal berikutnya. Level 10 = Mode Tanpa Batas (endless): tidak ada syarat lulus, terbuka setelah lulus Level 9 — aturannya di features/games/kuis/config.ts (ENDLESS_KUIS)."
   }
 }
