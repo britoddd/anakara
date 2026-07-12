@@ -1,6 +1,7 @@
 import { doc, updateDoc, increment } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
+import { ENDLESS_IP } from "./config";
 
 /* Simpan hasil sesi ke store progress terpusat users/{uid} (kontrak §6 / Phase 9). */
 export async function simpanHasilIsiPiringku(
@@ -8,9 +9,10 @@ export async function simpanHasilIsiPiringku(
   hasil: { level: number; lulus: boolean; poinTambah: number }
 ): Promise<void> {
   const terbukaSekarang = profil.progress.isiPiringku.levelTerbuka;
+  // selesai level 9 → terbuka 10 = Piring Tanpa Batas (level pamungkas)
   const terbukaBaru =
     hasil.lulus && hasil.level === terbukaSekarang
-      ? Math.min(terbukaSekarang + 1, 3)
+      ? Math.min(terbukaSekarang + 1, ENDLESS_IP.level)
       : terbukaSekarang;
 
   await updateDoc(doc(getDb(), "users", profil.userId), {

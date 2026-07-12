@@ -447,6 +447,19 @@ public/assets/{mascot, avatars, food, icons, cards, backgrounds, stories, audio,
   doodle samar (bentuk polos `wajah={false}`, warna `band-*`) di latar `/home`, pratinjau
   di `/dev/komponen`; (d) `prompt.md` & `prompt-clarifications.md` **diarsipkan ke
   `arsip/`** (11 phase selesai; semua rujukan diperbarui).
+- ✅ **Level 1-10 + Mode Tanpa Batas (2026-07-12)** — Kuis Asik & Isi Piringku diperluas dari
+  3 → **10 level**: level 4-9 baru (kuis: 72 soal baru `data/soal-kuis.json`, total 102;
+  piring: 16 makanan baru `data/makanan.json` total 48, config `data/isi-piringku.json`),
+  **level 10 = Mode Tanpa Batas** (endless): soal/ronde terus mengalir makin cepat, ❤️ 3
+  nyawa, poin 5/benar (lebih kecil dari mode biasa — sesi tak terbatas), **papan rekor
+  sendiri** koleksi Firestore `rekorEndless` (dok `game_uid` = skor terbaik; satu `where` +
+  sortir klien, tanpa composite index) via modul bersama `features/games/endless/`
+  (`api.ts` + `PapanRekorEndless`). Aturan level kuis kini dibaca dinamis dari JSON
+  (`ATURAN`/`LEVEL_MAKS`); D1 "3 level" digantikan jalur 10 level (D9 tetap: unlock
+  independen per fitur). Halaman uji tanpa login: `/dev/level?game=kuis|piring&buka=N`.
+  ⚠️ **Wajib publish ulang `firestore.rules`** (koleksi `rekorEndless` baru). Asset baru
+  yang disarankan (tidak memblokir — fallback emoji jalan): 16 ilustrasi makanan baru di
+  `daftar-gambar.md`. Battle/Cerita/Video tidak berlevel (PvP/bab/feed) — di luar jalur ini.
 
 Untuk asset gambar: user generate manual mengikuti `daftar-gambar.md` (atau aktifkan billing
 Gemini, lihat §8) — bisa berjalan paralel, tidak memblokir.

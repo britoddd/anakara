@@ -17,6 +17,8 @@ import {
   BOT_AKURASI,
   BOT_JEDA_MAX_MS,
   BOT_JEDA_MIN_MS,
+  BOT_PENDAMPING_JEDA_MAX_MS,
+  BOT_PENDAMPING_JEDA_MIN_MS,
   JUMLAH_SOAL_BATTLE,
   adalahBot,
   buatBot,
@@ -282,6 +284,21 @@ export function dengarkanRuang(
   );
 }
 
+/** Baca ruang sekali (tanpa listener) — validasi sesi "Lanjutkan" di lobi. */
+export async function ambilRuangSekali(ruangId: string): Promise<RuangBattle | null> {
+  const snap = await get(ref(getRtdb(), `battle/ruang/${ruangId}`));
+  return snap.exists() ? (snap.val() as RuangBattle) : null;
+}
+
+/** Kode tim yang beranggotakan uid di ruang ini — pemulihan sesi tidak
+    memercayai kode dari localStorage, melainkan membacanya dari ruang. */
+export function kodeTimDiRuang(ruang: RuangBattle, uid: string): string | null {
+  for (const warna of ["biru", "merah"] as const) {
+    if (ruang.tim[warna].anggota?.[uid]) return ruang.tim[warna].kode;
+  }
+  return null;
+}
+
 export async function tulisJawaban(
   ruangId: string,
   uid: string,
@@ -351,21 +368,27 @@ export function tentukanPemenang(ruang: RuangBattle): WarnaTim | "seri" {
 
 /* ---------- driver bot (dijalankan HANYA oleh klien pembuat ruang) ---------- */
 
-/** Simulasikan semua bot di ruang: tiap soal dijawab dengan jeda acak dan
-    akurasi ~70%. Return fungsi stop untuk cleanup effect. */
+/** Simulasikan semua bot di ruang. Dua perilaku:
+    - Rekan bot (satu tim dengan 1 manusia, D8): meniru tempo manusianya —
+      tiap si manusia menjawab soal, bot menyusul menjawab BENAR sesaat kemudian.
+    - Tim bot penuh (lawan ROBO, D7): jeda acak, akurasi ~70%.
+    Bot melanjutkan dari jawaban yang sudah tertulis (rejoin sesi).
+    Return fungsi stop untuk cleanup effect. */
 export function jalankanBot(ruangId: string, ruang: RuangBattle): () => void {
   let berhenti = false;
   const timeouts: ReturnType<typeof setTimeout>[] = [];
+  const unsubs: Unsubscribe[] = [];
+  const db = getRtdb();
 
-  const semuaBot = (["biru", "merah"] as const).flatMap((warna) =>
-    Object.keys(ruang.tim[warna].anggota ?? {}).filter(adalahBot)
-  );
+  const jumlahJawaban = (uid: string) =>
+    Object.keys(ruang.jawaban?.[uid] ?? {}).length;
 
-  for (const uid of semuaBot) {
+  /* tim ROBO: tempo sendiri, mulai dari soal yang belum terjawab */
+  const jalanMandiri = (uid: string) => {
     const jawabSoal = (index: number) => {
       if (berhenti) return;
       if (index >= JUMLAH_SOAL_BATTLE) {
-        void tandaiSelesai(ruangId, uid);
+        if (!ruang.selesai?.[uid]) void tandaiSelesai(ruangId, uid);
         return;
       }
       const jeda =
@@ -378,11 +401,62 @@ export function jalankanBot(ruangId: string, ruang: RuangBattle): () => void {
         }, jeda)
       );
     };
-    jawabSoal(0);
+    jawabSoal(jumlahJawaban(uid));
+  };
+
+  /* rekan bot: dengarkan jawaban rekan manusianya, susul menjawab benar */
+  const jalanPendamping = (uidBot: string, uidKawan: string) => {
+    let indexBot = jumlahJawaban(uidBot);
+    let targetKawan = 0;
+    let menunggu = false;
+    let selesaiDitandai = Boolean(ruang.selesai?.[uidBot]);
+
+    const jawabBerikut = () => {
+      if (berhenti || menunggu) return;
+      if (indexBot >= JUMLAH_SOAL_BATTLE) {
+        if (!selesaiDitandai) {
+          selesaiDitandai = true;
+          void tandaiSelesai(ruangId, uidBot);
+        }
+        return;
+      }
+      if (indexBot >= targetKawan) return; // kawan belum menjawab soal ini
+      menunggu = true;
+      const jeda =
+        BOT_PENDAMPING_JEDA_MIN_MS +
+        Math.random() * (BOT_PENDAMPING_JEDA_MAX_MS - BOT_PENDAMPING_JEDA_MIN_MS);
+      timeouts.push(
+        setTimeout(() => {
+          menunggu = false;
+          if (berhenti) return;
+          void tulisJawaban(ruangId, uidBot, indexBot, true);
+          indexBot += 1;
+          jawabBerikut();
+        }, jeda)
+      );
+    };
+
+    unsubs.push(
+      onValue(ref(db, `battle/ruang/${ruangId}/jawaban/${uidKawan}`), (snap) => {
+        const jawaban = snap.val() as Record<string, boolean> | null;
+        targetKawan = jawaban ? Object.keys(jawaban).length : 0;
+        jawabBerikut();
+      })
+    );
+  };
+
+  for (const warna of ["biru", "merah"] as const) {
+    const anggota = Object.keys(ruang.tim[warna].anggota ?? {});
+    const manusia = anggota.filter((uid) => !adalahBot(uid));
+    for (const uid of anggota.filter(adalahBot)) {
+      if (manusia.length === 1) jalanPendamping(uid, manusia[0]);
+      else jalanMandiri(uid);
+    }
   }
 
   return () => {
     berhenti = true;
     timeouts.forEach(clearTimeout);
+    unsubs.forEach((unsub) => unsub());
   };
 }

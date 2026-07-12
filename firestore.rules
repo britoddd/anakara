@@ -32,5 +32,17 @@ service cloud.firestore {
       allow update, delete: if request.auth != null
         && resource.data.guruId == request.auth.uid;
     }
+
+    // Rekor Mode Tanpa Batas (level 10 Kuis & Isi Piringku): satu dokumen
+    // per (game, siswa) — id "game_uid" — berisi skor terbaik saja. Semua
+    // user login boleh membaca (papan rekor); menulis hanya rekor miliknya
+    // sendiri, dan id dokumen wajib cocok dengan isinya (anti menimpa rekor
+    // siswa lain / menulis atas nama orang lain).
+    match /rekorEndless/{rekorId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && rekorId == request.resource.data.game + '_' + request.auth.uid;
+    }
   }
 }

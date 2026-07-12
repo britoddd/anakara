@@ -37,6 +37,78 @@
       "syaratLulus": { "minBenarPersen": 80 },
       "bintang": { "3": 100, "2": 90, "1": 80 },
       "catatan": "Timer lembut: kalau habis, ronde tetap selesai dengan item yang sudah disortir — tidak ada layar 'kalah'."
+    },
+    {
+      "level": 4,
+      "nama": "Piring Gesit",
+      "itemPerRonde": 8,
+      "jumlahRonde": 3,
+      "timerDetik": 90,
+      "syaratBuka": { "selesaiLevel": 3 },
+      "syaratLulus": { "minBenarPersen": 80 },
+      "bintang": { "3": 100, "2": 90, "1": 80 }
+    },
+    {
+      "level": 5,
+      "nama": "Piring Tangkas",
+      "itemPerRonde": 10,
+      "jumlahRonde": 3,
+      "timerDetik": 90,
+      "syaratBuka": { "selesaiLevel": 4 },
+      "syaratLulus": { "minBenarPersen": 80 },
+      "bintang": { "3": 100, "2": 90, "1": 80 }
+    },
+    {
+      "level": 6,
+      "nama": "Piring Cermat",
+      "itemPerRonde": 10,
+      "jumlahRonde": 3,
+      "timerDetik": 75,
+      "syaratBuka": { "selesaiLevel": 5 },
+      "syaratLulus": { "minBenarPersen": 85 },
+      "bintang": { "3": 100, "2": 92, "1": 85 }
+    },
+    {
+      "level": 7,
+      "nama": "Piring Hebat",
+      "itemPerRonde": 12,
+      "jumlahRonde": 3,
+      "timerDetik": 80,
+      "syaratBuka": { "selesaiLevel": 6 },
+      "syaratLulus": { "minBenarPersen": 85 },
+      "bintang": { "3": 100, "2": 92, "1": 85 }
+    },
+    {
+      "level": 8,
+      "nama": "Piring Super",
+      "itemPerRonde": 12,
+      "jumlahRonde": 4,
+      "timerDetik": 70,
+      "syaratBuka": { "selesaiLevel": 7 },
+      "syaratLulus": { "minBenarPersen": 85 },
+      "bintang": { "3": 100, "2": 92, "1": 85 }
+    },
+    {
+      "level": 9,
+      "nama": "Piring Master",
+      "itemPerRonde": 12,
+      "jumlahRonde": 4,
+      "timerDetik": 60,
+      "syaratBuka": { "selesaiLevel": 8 },
+      "syaratLulus": { "minBenarPersen": 90 },
+      "bintang": { "3": 100, "2": 95, "1": 90 }
     }
-  ]
+  ],
+  "endless": {
+    "level": 10,
+    "nama": "Piring Tanpa Batas",
+    "itemPerRonde": 8,
+    "timerAwalDetik": 60,
+    "timerMinDetik": 30,
+    "timerKurangPerRonde": 5,
+    "nyawa": 3,
+    "poinPerBenar": 5,
+    "syaratBuka": { "selesaiLevel": 9 },
+    "catatan": "Level 10 = Mode Tanpa Batas: ronde terus berlanjut, timer makin cepat tiap ronde (60→30 dtk). Salah 3 kali (nyawa habis) atau waktu habis = sesi selesai; skor = total makanan benar, tersimpan ke papan rekor rekorEndless."
+  }
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AwanPikiran from "@/components/deko/AwanPikiran";
 import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
-import TombolKembali from "@/components/ui/TombolKembali";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
@@ -164,12 +164,17 @@ export default function BacaCerita({
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       {/* header: kembali + judul + toggle audio */}
       <div className="flex items-center gap-3 mb-4">
-        <TombolKembali
-          onClick={() => {
+        <KonfirmasiKeluar
+          label="Kembali ke daftar cerita"
+          aktif={index > 0}
+          judul="Berhenti membaca?"
+          pesan="Ceritanya belum selesai — kemajuan membacamu di bab ini akan hilang."
+          labelKeluar="Ya, Berhenti"
+          labelBatal="Lanjut Baca"
+          onKeluar={() => {
             hentikanNarasi();
             onKembali();
           }}
-          label="Kembali ke daftar cerita"
         />
         <h1 className="text-lg sm:text-2xl flex-1 truncate">
           Bab {nomorBab}: {bab.judul}

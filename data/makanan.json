@@ -41,6 +41,26 @@
     { "id": "mangga", "nama": "Mangga", "emoji": "🥭", "gambar": "/assets/food/mangga.png", "kelompok": "buah", "fungsiGizi": "Vitamin A & C", "fakta": "Mangga manis kesukaan banyak anak Indonesia.", "level": 3 },
     { "id": "pepaya", "nama": "Pepaya", "emoji": "🍈", "gambar": "/assets/food/pepaya.png", "kelompok": "buah", "fungsiGizi": "Vitamin & serat", "fakta": "Pepaya membuat perut lancar setiap pagi.", "level": 3 },
     { "id": "anggur", "nama": "Anggur", "emoji": "🍇", "gambar": "/assets/food/anggur.png", "kelompok": "buah", "fungsiGizi": "Vitamin & antioksidan", "fakta": "Anggur kecil-kecil tapi penuh kebaikan.", "level": 3 },
-    { "id": "alpukat", "nama": "Alpukat", "emoji": "🥑", "gambar": "/assets/food/alpukat.png", "kelompok": "buah", "fungsiGizi": "Lemak baik", "fakta": "Alpukat punya lemak baik untuk otak.", "level": 3 }
+    { "id": "alpukat", "nama": "Alpukat", "emoji": "🥑", "gambar": "/assets/food/alpukat.png", "kelompok": "buah", "fungsiGizi": "Lemak baik", "fakta": "Alpukat punya lemak baik untuk otak.", "level": 3 },
+
+    { "id": "lontong", "nama": "Lontong", "emoji": "🍙", "gambar": "/assets/food/lontong.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Lontong dibuat dari beras yang dikukus di daun pisang.", "level": 4 },
+    { "id": "makaroni", "nama": "Makaroni", "emoji": "🍝", "gambar": "/assets/food/makaroni.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Makaroni kenyal memberi tenaga untuk bermain.", "level": 5 },
+    { "id": "bubur", "nama": "Bubur", "emoji": "🥣", "gambar": "/assets/food/bubur.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Bubur hangat mudah dicerna, enak untuk sarapan.", "level": 6 },
+    { "id": "ketan", "nama": "Ketan", "emoji": "🍘", "gambar": "/assets/food/ketan.png", "kelompok": "pokok", "fungsiGizi": "Sumber tenaga", "fakta": "Ketan lengket memberi tenaga tahan lama.", "level": 6 },
+
+    { "id": "cumi", "nama": "Cumi-cumi", "emoji": "🦑", "gambar": "/assets/food/cumi.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Cumi-cumi dari laut penuh protein untuk otot.", "level": 4 },
+    { "id": "kepiting", "nama": "Kepiting", "emoji": "🦀", "gambar": "/assets/food/kepiting.png", "kelompok": "lauk", "fungsiGizi": "Sumber protein", "fakta": "Daging kepiting membantu badanmu tumbuh kuat.", "level": 5 },
+    { "id": "keju", "nama": "Keju", "emoji": "🧀", "gambar": "/assets/food/keju.png", "kelompok": "lauk", "fungsiGizi": "Protein & kalsium", "fakta": "Keju punya kalsium untuk tulang dan gigi.", "level": 5 },
+    { "id": "teri", "nama": "Ikan Teri", "emoji": "🐠", "gambar": "/assets/food/teri.png", "kelompok": "lauk", "fungsiGizi": "Protein & kalsium", "fakta": "Ikan teri kecil, tapi kalsiumnya banyak sekali!", "level": 6 },
+
+    { "id": "timun", "nama": "Timun", "emoji": "🥒", "gambar": "/assets/food/timun.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & air", "fakta": "Timun dingin dan segar, banyak airnya.", "level": 4 },
+    { "id": "jamur", "nama": "Jamur", "emoji": "🍄", "gambar": "/assets/food/jamur.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & serat", "fakta": "Jamur kenyal seperti daging, tapi dari kebun.", "level": 4 },
+    { "id": "paprika", "nama": "Paprika", "emoji": "🫑", "gambar": "/assets/food/paprika.png", "kelompok": "sayur", "fungsiGizi": "Vitamin C", "fakta": "Paprika warna-warni penuh vitamin C.", "level": 5 },
+    { "id": "selada", "nama": "Selada", "emoji": "🥗", "gambar": "/assets/food/selada.png", "kelompok": "sayur", "fungsiGizi": "Vitamin & serat", "fakta": "Selada renyah enak jadi lalapan segar.", "level": 6 },
+
+    { "id": "nanas", "nama": "Nanas", "emoji": "🍍", "gambar": "/assets/food/nanas.png", "kelompok": "buah", "fungsiGizi": "Vitamin C", "fakta": "Nanas manis-asam membantu tubuh melawan kuman.", "level": 4 },
+    { "id": "stroberi", "nama": "Stroberi", "emoji": "🍓", "gambar": "/assets/food/stroberi.png", "kelompok": "buah", "fungsiGizi": "Vitamin C", "fakta": "Stroberi merah kecil penuh vitamin C.", "level": 4 },
+    { "id": "kelapa", "nama": "Kelapa", "emoji": "🥥", "gambar": "/assets/food/kelapa.png", "kelompok": "buah", "fungsiGizi": "Vitamin & air", "fakta": "Air kelapa segar mengganti cairan tubuh.", "level": 5 },
+    { "id": "pir", "nama": "Pir", "emoji": "🍐", "gambar": "/assets/food/pir.png", "kelompok": "buah", "fungsiGizi": "Vitamin & serat", "fakta": "Pir renyah banyak airnya, bikin segar.", "level": 6 }
   ]
 }

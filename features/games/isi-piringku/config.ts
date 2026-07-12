@@ -1,7 +1,8 @@
 import dataMakanan from "@/data/makanan.json";
 import dataConfig from "@/data/isi-piringku.json";
 
-/* Tipe & helper konfigurasi Isi Piringku (Phase 3, D1: 3 level).
+/* Tipe & helper konfigurasi Isi Piringku (Phase 3, D1: berlevel — kini
+   level 1-9 + level 10 Mode Tanpa Batas).
    Sumber data: data/makanan.json + data/isi-piringku.json (kontrak §6). */
 
 export type Kelompok = "pokok" | "lauk" | "sayur" | "buah";
@@ -28,15 +29,39 @@ export interface LevelConfig {
   bintang: Record<string, number>;
 }
 
+/** Config Mode Tanpa Batas (level 10) — blok "endless" di isi-piringku.json. */
+export interface EndlessIPConfig {
+  level: number;
+  nama: string;
+  itemPerRonde: number;
+  timerAwalDetik: number;
+  timerMinDetik: number;
+  timerKurangPerRonde: number;
+  nyawa: number;
+  poinPerBenar: number;
+  syaratBuka: { selesaiLevel: number };
+}
+
 /* Akar makanan.json = objek { keterangan, kelompok, makanan: [...] } —
    ambil field .makanan (pola sama dengan soal-kuis: data.soal). */
 export const MAKANAN = (dataMakanan as unknown as { makanan: Makanan[] }).makanan;
 export const LEVELS = dataConfig.levels as unknown as LevelConfig[];
+export const ENDLESS_IP = dataConfig.endless as unknown as EndlessIPConfig;
+/** Level biasa tertinggi (9); Mode Tanpa Batas = level di atasnya (10). */
+export const LEVEL_MAKS_IP = LEVELS[LEVELS.length - 1].level;
 export const POIN = dataConfig.poin as {
   benarPerItem: number;
   bonusRondeSempurna: number;
   salah: number;
 };
+
+/** Timer ronde endless: menyusut tiap ronde, tak lebih cepat dari batas min. */
+export function timerRondeEndless(ronde: number): number {
+  return Math.max(
+    ENDLESS_IP.timerMinDetik,
+    ENDLESS_IP.timerAwalDetik - (ronde - 1) * ENDLESS_IP.timerKurangPerRonde
+  );
+}
 
 /* Info tampilan 4 kelompok — label & fungsi gizi sesuai mockup MacBook Air - 3
    (Isi Piringku Kemenkes). Warna pastel = dekoratif, teks tetap pakai token.

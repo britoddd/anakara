@@ -6,18 +6,28 @@ import RuangKelas from "@/features/kelas/RuangKelas";
 /* Halaman uji dev untuk Kelasku tanpa login (seperti /dev/phase8).
    Bukan bagian produk — jangan ditautkan dari halaman siswa. */
 
+/* progress + koleksi contoh — supaya detail teman (kemajuan game + album kartu)
+   ikut teruji tanpa login. Nilai levelTerbuka/babTerbuka & id kartu bervariasi. */
+const prog = (kuis: number, cerita: number, piring: number) => ({
+  kuis: { levelTerbuka: kuis },
+  cerita: { babTerbuka: cerita },
+  isiPiringku: { levelTerbuka: piring },
+});
+const kartuSampai = (n: number) =>
+  Array.from({ length: n }, (_, i) => `kartu-${String(i + 1).padStart(2, "0")}`);
+
 const infoUji: InfoKelas = {
   kode: "ABC23",
   namaKelas: "Kelas 1A",
   namaGuru: "Bu Rina",
   teman: [
-    { userId: "u2", nama: "Bima", avatar: "avatar-01", level: 4, poin: 455 },
-    { userId: "u3", nama: "Citra", avatar: "avatar-06", level: 3, poin: 390 },
-    { userId: "u5", nama: "Dodi", avatar: "avatar-07", level: 2, poin: 275 },
-    { userId: "u6", nama: "Eka", avatar: "avatar-09", level: 2, poin: 180 },
-    { userId: "u7", nama: "Fajar", avatar: "avatar-10", level: 1, poin: 95 },
-    { userId: "u1", nama: "Salsa", avatar: "avatar-02", level: 4, poin: 480 },
-    { userId: "dev-uji", nama: "Tayo", avatar: "avatar-04", level: 3, poin: 320 },
+    { userId: "u2", nama: "Bima", avatar: "avatar-01", level: 4, poin: 455, progress: prog(3, 1, 3), koleksi: kartuSampai(18) },
+    { userId: "u3", nama: "Citra", avatar: "avatar-06", level: 3, poin: 390, progress: prog(2, 1, 3), koleksi: kartuSampai(12) },
+    { userId: "u5", nama: "Dodi", avatar: "avatar-07", level: 2, poin: 275, progress: prog(2, 1, 2), koleksi: kartuSampai(7) },
+    { userId: "u6", nama: "Eka", avatar: "avatar-09", level: 2, poin: 180, progress: prog(1, 1, 2), koleksi: kartuSampai(4) },
+    { userId: "u7", nama: "Fajar", avatar: "avatar-10", level: 1, poin: 95, progress: prog(1, 1, 1), koleksi: [] },
+    { userId: "u1", nama: "Salsa", avatar: "avatar-02", level: 4, poin: 480, progress: prog(3, 1, 3), koleksi: kartuSampai(24) },
+    { userId: "dev-uji", nama: "Tayo", avatar: "avatar-04", level: 3, poin: 320, progress: prog(2, 1, 3), koleksi: kartuSampai(10) },
   ],
 };
 

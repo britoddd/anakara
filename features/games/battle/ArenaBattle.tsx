@@ -6,6 +6,7 @@ import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
@@ -28,6 +29,7 @@ import {
   tentukanPemenang,
   tulisJawaban,
 } from "./rtdb";
+import { hapusSesiBattle } from "./sesi";
 import type { AnggotaTim, RuangBattle, WarnaTim } from "./types";
 
 /* Arena Battle 2v2 (Phase 6): tiap pemain menjawab 5 soal yang sama dengan
@@ -68,6 +70,23 @@ export default function ArenaBattle({
 
   /* ---------- sinkronisasi ruang ---------- */
   useEffect(() => dengarkanRuang(ruangId, setRuang), [ruangId]);
+
+  /* ---------- pulihkan progres saat lanjut sesi (keluar tak sengaja) ----------
+     Lompat ke soal pertama yang belum terjawab supaya jawaban lama tidak
+     tertimpa; kalau semua sudah terjawab, langsung ke layar menunggu. */
+  const dipulihkan = useRef(false);
+  useEffect(() => {
+    if (!ruang || dipulihkan.current) return;
+    dipulihkan.current = true;
+    const terjawab = Object.keys(ruang.jawaban?.[uid] ?? {}).length;
+    if (terjawab >= JUMLAH_SOAL_BATTLE) {
+      setSelesaiKu(true);
+      // keluar sebelum tanda selesai sempat tertulis → tuntaskan sekarang
+      if (!ruang.selesai?.[uid]) void tandaiSelesai(ruangId, uid);
+    } else if (terjawab > 0) {
+      setIndex(terjawab);
+    }
+  }, [ruang, ruangId, uid]);
 
   /* ---------- driver bot: hanya klien pembuat ruang, mulai sekali ---------- */
   const botMulai = useRef(false);
@@ -135,6 +154,7 @@ export default function ArenaBattle({
   useEffect(() => {
     if (!ruang || !battleSelesai || sudahTutup.current) return;
     sudahTutup.current = true;
+    hapusSesiBattle(); // battle tuntas — tak ada lagi sesi untuk dilanjutkan
     if (ruang.pembuat === uid) void tandaiRuangSelesai(ruangId);
     void bersihkanTim(kodeTimKu);
   }, [battleSelesai, ruang, ruangId, uid, kodeTimKu]);
@@ -236,6 +256,14 @@ export default function ArenaBattle({
   if (selesaiKu) {
     return (
       <main id="konten-utama" className="max-w-2xl mx-auto px-4 sm:px-6 py-10 text-center">
+        {/* cegat back browser/HP — battle belum selesai, tim masih menunggu */}
+        <KonfirmasiKeluar
+          tanpaTombol
+          href="/home"
+          judul="Keluar dari battle?"
+          pesan="Battle belum selesai — kalau keluar, hasil timmu tidak kamu lihat."
+          labelBatal="Tetap Menunggu"
+        />
         <h1 className="text-2xl mb-6">Jawabanmu selesai! 🎉</h1>
         <PapanSkor
           ruang={ruang}
@@ -257,6 +285,15 @@ export default function ArenaBattle({
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       <h1 className="sr-only">Team Battle 2 lawan 2</h1>
+
+      {/* cegat back browser/HP — keluar di tengah battle merugikan tim */}
+      <KonfirmasiKeluar
+        tanpaTombol
+        href="/home"
+        judul="Keluar dari battle?"
+        pesan="Battle masih berlangsung! Kalau keluar, timmu bertanding tanpa kamu."
+        labelBatal="Lanjut Battle"
+      />
 
       <PapanSkor ruang={ruang} warnaKu={warnaKu} uid={uid} />
 

@@ -9,6 +9,8 @@ export const POIN_PER_BENAR_BATTLE = 5;
 export const POIN_DUPLIKAT = 25; // D2: kartu duplikat otomatis jadi poin
 /** lama menunggu tim lawan sungguhan sebelum fallback bot (D7) */
 export const BATAS_CARI_DETIK = 15;
+/** sesi tersimpan hanya bisa dilanjutkan selama ruang lebih muda dari ini */
+export const BATAS_LANJUT_RUANG_MENIT = 30;
 
 /* ---------- kartu koleksi & gacha ---------- */
 
@@ -76,6 +78,12 @@ export function getSoal(id: string): Soal | undefined {
 export const BOT_AKURASI = 0.7; // peluang bot menjawab benar
 export const BOT_JEDA_MIN_MS = 4000;
 export const BOT_JEDA_MAX_MS = 10000;
+
+/* Rekan bot (D8) meniru tempo rekan manusianya: menjawab BENAR sesaat
+   setelah si manusia menjawab (benar/salah/kehabisan waktu). Jeda kecil
+   supaya terasa "ikut menjawab", bukan instan. */
+export const BOT_PENDAMPING_JEDA_MIN_MS = 600;
+export const BOT_PENDAMPING_JEDA_MAX_MS = 1600;
 
 const NAMA_BOT = ["Robo Milo", "Robo Bibi", "Robo Kiko", "Robo Nana"];
 

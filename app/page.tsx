@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BlobMata from "@/components/deko/BlobMata";
 import GarisMarker from "@/components/deko/GarisMarker";
-import Squiggle from "@/components/deko/Squiggle";
 import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
+import Footer from "@/components/ui/Footer";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/features/auth/AuthProvider";
@@ -129,10 +129,7 @@ export default function LandingPage() {
         <TepiGelombang arah="bawah" className="text-band-pink" />
       </main>
 
-      <footer className="text-center text-sm text-muted py-8">
-        <Squiggle className="block w-24 mx-auto mb-2 text-green-bright" />
-        Anakara — Fase A Learning Platform
-      </footer>
+      <Footer />
     </>
   );
 }
