@@ -372,7 +372,6 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
           </Button>
         </div>
       </main>
-      </>
     );
   }
 
