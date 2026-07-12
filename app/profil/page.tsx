@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import TombolKembali from "@/components/ui/TombolKembali";
@@ -75,7 +76,15 @@ export default function ProfilPage() {
       {/* header band biru pastel — seragam dengan Leaderboard */}
       <div className="relative rounded-xl bg-band-blue p-4 sm:p-5 mb-6 overflow-hidden">
         <div className="flex items-center gap-3">
-          <TombolKembali href="/home" label="Kembali ke Home" />
+          <KonfirmasiKeluar
+            href="/home"
+            label="Kembali ke Home"
+            aktif={berubah}
+            judul="Perubahan belum disimpan"
+            pesan="Nama atau avatar barumu belum disimpan. Tetap keluar?"
+            labelKeluar="Keluar Tanpa Simpan"
+            labelBatal="Kembali Mengedit"
+          />
           <h1 className="text-2xl sm:text-3xl">Profilku 🙂</h1>
         </div>
       </div>
