@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
-import type { Soal } from "./config";
+import { LEVEL_ENDLESS, type Soal } from "./config";
 
 /* Simpan hasil kuis ke store progress terpusat users/{uid} (kontrak §6 / Phase 9). */
 export async function simpanHasilKuis(
@@ -19,9 +19,10 @@ export async function simpanHasilKuis(
   hasil: { level: number; lulus: boolean; poinTambah: number }
 ): Promise<void> {
   const terbukaSekarang = profil.progress.kuis.levelTerbuka;
+  // lulus level 9 → terbuka 10 = Mode Tanpa Batas (level pamungkas)
   const terbukaBaru =
     hasil.lulus && hasil.level === terbukaSekarang
-      ? Math.min(terbukaSekarang + 1, 3)
+      ? Math.min(terbukaSekarang + 1, LEVEL_ENDLESS)
       : terbukaSekarang;
 
   await updateDoc(doc(getDb(), "users", profil.userId), {

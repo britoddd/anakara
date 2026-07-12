@@ -6,7 +6,6 @@ import {
   DragOverlay,
   PointerSensor,
   useDraggable,
-  useDroppable,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -20,25 +19,31 @@ import GambarEmoji from "@/components/ui/GambarEmoji";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
+import PapanRekorEndless from "@/features/games/endless/PapanRekorEndless";
+import { simpanHasilEndless } from "@/features/games/endless/api";
 import {
+  ENDLESS_IP,
   KELOMPOK_INFO,
   LEVELS,
   POIN,
-  URUTAN_KELOMPOK,
   acak,
   hitungBintang,
   poolLevel,
+  timerRondeEndless,
   type Kelompok,
   type LevelConfig,
   type Makanan,
 } from "./config";
+import PiringGizi from "./PiringGizi";
 import { simpanHasilIsiPiringku } from "./api";
 
 /* Game "Isi Piringku" (Phase 3, mockup MacBook Air - 3).
    Sortir makanan ke 4 kelompok gizi. Dua cara main (mobile + a11y):
    1) seret makanan ke kuadran piring (dnd-kit), atau
    2) ketuk makanan lalu ketuk kuadran tujuan.
-   Salah tidak mengurangi poin (ramah anak); persen benar menentukan bintang. */
+   Salah tidak mengurangi poin (ramah anak); persen benar menentukan bintang.
+   Level 1-9 = mode biasa; level 10 "Piring Tanpa Batas" = endless: ronde terus
+   berlanjut dengan timer menyusut, ❤️ 3 nyawa, papan rekor sendiri. */
 
 type Fase = "pilih" | "main" | "hasil";
 
@@ -50,6 +55,24 @@ interface PesanTayo {
 const PESAN_AWAL: PesanTayo = {
   teks: "Seret setiap makanan ke bagian piring yang tepat sesuai kelompoknya!",
   tipe: "info",
+};
+
+const PESAN_AWAL_ENDLESS: PesanTayo = {
+  teks: "Mode Tanpa Batas! Sortir terus selama nyawamu ada — waktunya makin cepat tiap ronde! ⚡",
+  tipe: "info",
+};
+
+/* cfg sintetis level 10: ronde tak terhingga; timer per ronde dihitung
+   timerRondeEndless() saat buatRonde, bukan dari timerDetik ini */
+const CFG_ENDLESS: LevelConfig = {
+  level: ENDLESS_IP.level,
+  nama: ENDLESS_IP.nama,
+  itemPerRonde: ENDLESS_IP.itemPerRonde,
+  jumlahRonde: Number.POSITIVE_INFINITY,
+  timerDetik: ENDLESS_IP.timerAwalDetik,
+  syaratBuka: ENDLESS_IP.syaratBuka,
+  syaratLulus: { minBenarPersen: 0 },
+  bintang: {},
 };
 
 export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
@@ -85,6 +108,15 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
   } | null>(null);
   const [statusSimpan, setStatusSimpan] = useState<"idle" | "proses" | "ok" | "gagal">("idle");
 
+  /* --- Mode Tanpa Batas (level 10) --- */
+  const modeEndless = cfg?.level === ENDLESS_IP.level;
+  const [nyawa, setNyawa] = useState<number>(ENDLESS_IP.nyawa);
+  const [hasilEndless, setHasilEndless] = useState<{ skor: number; poin: number } | null>(null);
+  const [rekor, setRekor] = useState<{ pecahRekor: boolean; skorTerbaik: number } | null>(null);
+  // penjaga agar sesi endless tak "selesai" dua kali (nyawa habis + waktu habis
+  // bisa beririsan di jeda 900ms) → simpan ganda ke Firestore
+  const sesiSelesaiRef = useRef(false);
+
   const sensors = useSensors(
     // jarak aktivasi 6px: klik/ketuk biasa tetap terhitung klik (mode tap)
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
@@ -92,12 +124,13 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
 
   /* ---------- alur permainan ---------- */
 
-  function buatRonde(c: LevelConfig) {
+  function buatRonde(c: LevelConfig, rondeKe: number) {
     setTray(acak(poolLevel(c.level)).slice(0, c.itemPerRonde));
     setTertempat({ pokok: [], lauk: [], sayur: [], buah: [] });
     setSalahRonde(0);
     setPilihanTap(null);
-    setTimerSisa(c.timerDetik);
+    // endless: timer menyusut tiap ronde (60→30 dtk); mode biasa: dari config
+    setTimerSisa(c.level === ENDLESS_IP.level ? timerRondeEndless(rondeKe) : c.timerDetik);
   }
 
   function mulaiLevel(c: LevelConfig) {
@@ -108,9 +141,13 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
     setSalahTotal(0);
     setPoinSesi(0);
     setHasil(null);
+    setHasilEndless(null);
+    setRekor(null);
+    setNyawa(ENDLESS_IP.nyawa);
+    sesiSelesaiRef.current = false;
     setStatusSimpan("idle");
-    setPesan(PESAN_AWAL);
-    buatRonde(c);
+    setPesan(c.level === ENDLESS_IP.level ? PESAN_AWAL_ENDLESS : PESAN_AWAL);
+    buatRonde(c, 1);
     setFase("main");
   }
 
@@ -122,7 +159,9 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
       const lulus = persen >= c.syaratLulus.minBenarPersen;
       const bintang = hitungBintang(c, persen);
       const bukaLevelBaru =
-        lulus && c.level === profil.progress.isiPiringku.levelTerbuka && c.level < 3;
+        lulus &&
+        c.level === profil.progress.isiPiringku.levelTerbuka &&
+        c.level < ENDLESS_IP.level;
 
       setHasil({ persen, bintang, lulus, poin, bukaLevelBaru });
       setFase("hasil");
@@ -139,12 +178,53 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
     [profil, refreshProfil]
   );
 
+  /* akhir sesi Tanpa Batas (nyawa habis / waktu habis): skor = total benar,
+     simpan ke papan rekor rekorEndless + poin ⭐ ke profil */
+  const selesaiEndless = useCallback(
+    async (benar: number, poin: number) => {
+      if (sesiSelesaiRef.current) return;
+      sesiSelesaiRef.current = true;
+
+      setHasilEndless({ skor: benar, poin });
+      setFase("hasil");
+      setStatusSimpan("proses");
+      try {
+        const r = await simpanHasilEndless(profil, "isi-piringku", benar, poin);
+        setRekor(r);
+        await refreshProfil();
+        setStatusSimpan("ok");
+      } catch {
+        setStatusSimpan("gagal");
+      }
+    },
+    [profil, refreshProfil]
+  );
+  const selesaiEndlessRef = useRef(selesaiEndless);
+  selesaiEndlessRef.current = selesaiEndless;
+
   function lanjutkanSetelahRonde(
     sisaTray: Makanan[],
     salahRondeAkhir: number,
     opsi?: { waktuHabis?: boolean }
   ) {
     if (!cfg) return;
+
+    if (modeEndless) {
+      // Tanpa Batas: waktu habis = sesi selesai (item tersisa tak dihitung
+      // salah); selain itu ronde berikutnya selalu datang, makin cepat
+      if (opsi?.waktuHabis) {
+        void selesaiEndless(benarTotal, poinSesi);
+        return;
+      }
+      setRonde((r) => r + 1);
+      buatRonde(cfg, ronde + 1);
+      setPesan({
+        teks: `Ronde ${ronde + 1} — waktunya makin cepat! ⚡`,
+        tipe: "info",
+      });
+      return;
+    }
+
     let poinBaru = poinSesi;
     let salahBaru = salahTotal;
 
@@ -160,7 +240,7 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
 
     if (ronde < cfg.jumlahRonde) {
       setRonde((r) => r + 1);
-      buatRonde(cfg);
+      buatRonde(cfg, ronde + 1);
       setPesan({
         teks: `Ronde ${ronde + 1} dimulai! Semangat! 💪`,
         tipe: "info",
@@ -172,6 +252,7 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
 
   function tempatkan(foodId: string, target: Kelompok) {
     if (!cfg) return;
+    if (modeEndless && (nyawa <= 0 || sesiSelesaiRef.current)) return; // sesi sedang ditutup
     const food = tray.find((f) => f.id === foodId);
     if (!food) return;
     setPilihanTap(null);
@@ -179,7 +260,8 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
     if (food.kelompok === target) {
       const trayBaru = tray.filter((f) => f.id !== foodId);
       const benarBaru = benarTotal + 1;
-      const poinBaru = poinSesi + POIN.benarPerItem;
+      const poinBaru =
+        poinSesi + (modeEndless ? ENDLESS_IP.poinPerBenar : POIN.benarPerItem);
       setTray(trayBaru);
       setTertempat((t) => ({ ...t, [target]: [...t[target], food] }));
       setBenarTotal(benarBaru);
@@ -194,6 +276,28 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
     } else {
       setSalahTotal((s) => s + 1);
       setSalahRonde((s) => s + 1);
+
+      if (modeEndless) {
+        const nyawaBaru = nyawa - 1;
+        setNyawa(nyawaBaru);
+        if (nyawaBaru <= 0) {
+          setPesan({
+            teks: "Nyawa habis — sesi selesai. Skormu keren, lihat yuk! 🐆💛",
+            tipe: "salah",
+          });
+          // beri waktu membaca pesan sebelum layar hasil
+          const benarAkhir = benarTotal;
+          const poinAkhir = poinSesi;
+          setTimeout(() => selesaiEndlessRef.current(benarAkhir, poinAkhir), 900);
+          return;
+        }
+        setPesan({
+          teks: `Yuk hati-hati! ${food.nama} bukan ${KELOMPOK_INFO[target].label}. Sisa nyawa: ${"❤️".repeat(nyawaBaru)} 🐆`,
+          tipe: "salah",
+        });
+        return;
+      }
+
       setPesan({
         teks: `Yuk coba lagi! ${food.nama} bukan ${KELOMPOK_INFO[target].label}. 🐆`,
         tipe: "salah",
@@ -233,7 +337,75 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
       <PilihLevel
         levelTerbuka={profil.progress.isiPiringku.levelTerbuka}
         onPilih={mulaiLevel}
+        uidKu={profil.userId}
       />
+    );
+  }
+
+  /* ---------- layar hasil: Piring Tanpa Batas ---------- */
+  if (fase === "hasil" && modeEndless && hasilEndless) {
+    return (
+      <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        <span className="relative inline-block mb-4" aria-hidden="true">
+          <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
+          <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
+          <span className="w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center">
+            <GambarEmoji
+              src={rekor?.pecahRekor ? "/assets/mascot/tayo-happy.png" : "/assets/mascot/tayo-cheer.png"}
+              emoji={rekor?.pecahRekor ? "🐆🎉" : "🐆💛"}
+              className="w-full h-full object-cover"
+            />
+          </span>
+        </span>
+        <h1 className="text-3xl mb-2">
+          {rekor?.pecahRekor ? "Rekor baru! 🏅" : "Sesi selesai!"}
+        </h1>
+        <p className="text-lg text-muted mb-6">
+          Kamu menyortir {hasilEndless.skor} makanan dengan benar di {ENDLESS_IP.nama}!
+        </p>
+
+        <Card className="mb-6">
+          <p className="font-display font-extrabold text-4xl mb-1">{hasilEndless.skor}</p>
+          <p className="text-muted font-bold mb-2">makanan benar</p>
+          <p className="font-bold text-lg">+ ⭐ {hasilEndless.poin} poin</p>
+          {rekor && !rekor.pecahRekor && (
+            <p className="text-sm text-muted mt-1">
+              Rekor terbaikmu: {rekor.skorTerbaik} benar
+            </p>
+          )}
+          {hitungLevel(poinAwalRef.current + hasilEndless.poin) >
+            hitungLevel(poinAwalRef.current) && (
+            <p className="font-bold text-success mt-1">
+              🎉 Kamu naik ke Lv {hitungLevel(poinAwalRef.current + hasilEndless.poin)}!
+            </p>
+          )}
+          <p className="text-sm text-muted mt-2" role="status">
+            {statusSimpan === "proses" && "Menyimpan progres…"}
+            {statusSimpan === "ok" && "✓ Progres tersimpan"}
+            {statusSimpan === "gagal" &&
+              "⚠️ Progres belum tersimpan (cek koneksi) — poin sesi ini mungkin hilang."}
+          </p>
+        </Card>
+
+        <Card className="mb-6 text-left">
+          <h2 className="text-lg text-center mb-3">🏆 Papan Rekor</h2>
+          {statusSimpan === "proses" ? (
+            <p className="text-center text-muted font-bold py-4">Memuat papan rekor…</p>
+          ) : (
+            <PapanRekorEndless game="isi-piringku" uidKu={profil.userId} />
+          )}
+        </Card>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button onClick={() => mulaiLevel(CFG_ENDLESS)}>🔁 Main Lagi</Button>
+          <Button variant="ghost" onClick={() => setFase("pilih")}>
+            Pilih Level
+          </Button>
+          <Button variant="ghost" onClick={() => (window.location.href = "/home")}>
+            🏠 Home
+          </Button>
+        </div>
+      </main>
     );
   }
 
@@ -276,7 +448,9 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
           <p className="font-bold text-center text-lg">+ ⭐ {hasil.poin} poin</p>
           {hasil.bukaLevelBaru && (
             <p className="text-center font-bold text-success mt-2">
-              🔓 Level {cfg.level + 1} terbuka!
+              {cfg.level + 1 === ENDLESS_IP.level
+                ? `🔓 ${ENDLESS_IP.nama} terbuka!`
+                : `🔓 Level ${cfg.level + 1} terbuka!`}
             </p>
           )}
           {hitungLevel(poinAwalRef.current + hasil.poin) >
@@ -317,8 +491,18 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
           <h1 className="text-2xl text-center">Isi Piringku!</h1>
           <div className="flex items-center gap-2">
             <span className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-1.5">
-              Ronde {ronde}/{cfg.jumlahRonde}
+              {modeEndless ? `Ronde ${ronde} ♾️` : `Ronde ${ronde}/${cfg.jumlahRonde}`}
             </span>
+            {modeEndless && (
+              <span
+                className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-1.5 tracking-wider"
+                role="status"
+                aria-label={`Sisa nyawa ${nyawa} dari ${ENDLESS_IP.nyawa}`}
+              >
+                {"❤️".repeat(nyawa)}
+                {"🤍".repeat(Math.max(0, ENDLESS_IP.nyawa - nyawa))}
+              </span>
+            )}
             {timerSisa !== null && (
               <span
                 className={`font-display font-bold border-2 rounded-full px-4 py-1.5 ${
@@ -357,30 +541,14 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
 
         <div className="grid gap-8 lg:grid-cols-[1fr_minmax(280px,380px)] items-start">
           {/* piring 4 kuadran */}
-          <div className="mx-auto w-full max-w-[440px]">
-            <div
-              className="relative grid grid-cols-2 grid-rows-2 aspect-square rounded-full overflow-hidden border-8 border-surface shadow-[0_8px_24px_rgba(16,32,43,0.15)]"
-              aria-label="Piring dengan empat bagian kelompok makanan"
-            >
-              {URUTAN_KELOMPOK.map((k) => (
-                <Kuadran
-                  key={k}
-                  kelompok={k}
-                  items={tertempat[k]}
-                  onTap={() => {
-                    if (pilihanTap) tempatkan(pilihanTap, k);
-                  }}
-                  modeTapAktif={pilihanTap !== null}
-                />
-              ))}
-              {/* pusat piring (dekoratif) */}
-              <span
-                aria-hidden="true"
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-surface border-4 border-border flex items-center justify-center text-2xl"
-              >
-                ❤️
-              </span>
-            </div>
+          <div className="mx-auto w-full max-w-[560px]">
+            <PiringGizi
+              tertempat={tertempat}
+              modeTapAktif={pilihanTap !== null}
+              onTapKuadran={(k) => {
+                if (pilihanTap) tempatkan(pilihanTap, k);
+              }}
+            />
           </div>
 
           {/* nampan makanan */}
@@ -433,13 +601,23 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
 
 /* ---------- sub-komponen ---------- */
 
+/* Emoji kartu level 1-9 (makin "hebat"); Tanpa Batas = ♾️ */
+const EMOJI_LEVEL_IP = ["🍽️", "🍱", "🥗", "⚡", "🎯", "🧠", "🚀", "🌟", "🏆"];
+
+function formatTimer(detik: number): string {
+  return detik % 60 === 0 ? `${detik / 60} menit` : `${detik} detik`;
+}
+
 function PilihLevel({
   levelTerbuka,
   onPilih,
+  uidKu,
 }: {
   levelTerbuka: number;
   onPilih: (c: LevelConfig) => void;
+  uidKu: string;
 }) {
+  const endlessTerbuka = levelTerbuka >= ENDLESS_IP.level;
   return (
     <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between mb-8">
@@ -450,7 +628,7 @@ function PilihLevel({
         Seret setiap makanan ke bagian piring yang tepat sesuai kelompoknya!
       </p>
 
-      <div className="grid gap-6 sm:grid-cols-3">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3">
         {LEVELS.map((c) => {
           const terkunci = c.level > levelTerbuka;
           return (
@@ -464,88 +642,74 @@ function PilihLevel({
                   : `Main ${c.nama}`
               }
               className={[
-                "flex flex-col items-center gap-2 p-8 rounded-xl bg-surface border-4 text-fg",
+                "flex flex-col items-center gap-1.5 p-5 rounded-xl bg-surface border-4 text-fg",
                 "transition-[transform,border-color] duration-150",
                 terkunci
                   ? "border-border opacity-60 grayscale cursor-not-allowed"
                   : "border-border hover:border-primary hover:-translate-y-1 cursor-pointer",
               ].join(" ")}
             >
-              <span className="text-5xl" aria-hidden="true">
-                {terkunci ? "🔒" : ["🍽️", "🍱", "🏆"][c.level - 1]}
+              <span className="text-4xl" aria-hidden="true">
+                {terkunci ? "🔒" : EMOJI_LEVEL_IP[c.level - 1]}
               </span>
-              <span className="font-display font-extrabold text-xl">
+              <span className="font-display font-extrabold text-lg">
                 Level {c.level}
               </span>
-              <span className="font-bold">{c.nama}</span>
-              <span className="text-sm text-muted text-center">
+              <span className="font-bold text-sm">{c.nama}</span>
+              <span className="text-sm text-muted text-center leading-snug">
                 {terkunci
                   ? `Selesaikan Level ${c.level - 1} untuk buka ini!`
                   : `${c.itemPerRonde} makanan × ${c.jumlahRonde} ronde${
-                      c.timerDetik ? ` · ⏰ ${c.timerDetik / 60} menit` : ""
+                      c.timerDetik ? ` · ⏰ ${formatTimer(c.timerDetik)}` : ""
                     }`}
               </span>
             </button>
           );
         })}
       </div>
-    </main>
-  );
-}
 
-function Kuadran({
-  kelompok,
-  items,
-  onTap,
-  modeTapAktif,
-}: {
-  kelompok: Kelompok;
-  items: Makanan[];
-  onTap: () => void;
-  modeTapAktif: boolean;
-}) {
-  const { isOver, setNodeRef } = useDroppable({ id: kelompok });
-  const info = KELOMPOK_INFO[kelompok];
-  return (
-    <button
-      ref={setNodeRef}
-      onClick={onTap}
-      aria-label={`Bagian ${info.label} (${info.fungsi})${
-        items.length ? `, berisi ${items.length} makanan` : ""
-      }`}
-      className={[
-        "flex flex-col items-center justify-center gap-1 p-3 sm:p-5 text-center",
-        info.bgKuadran,
-        "border border-border/50 transition-[filter,box-shadow] duration-150",
-        isOver ? "brightness-95 shadow-[inset_0_0_0_4px_var(--focus)]" : "",
-        modeTapAktif ? "cursor-pointer shadow-[inset_0_0_0_2px_var(--primary)]" : "",
-      ].join(" ")}
-    >
-      <span className="text-2xl" aria-hidden="true">
-        {info.emoji}
-      </span>
-      <span className="font-display font-extrabold text-sm sm:text-base leading-tight text-fg">
-        {info.label}
-      </span>
-      <span className="text-[11px] sm:text-xs font-bold text-muted">{info.fungsi}</span>
-      {items.length > 0 && (
-        <span className="flex flex-wrap justify-center gap-0.5 leading-tight" aria-hidden="true">
-          {items.map((f, i) => (
-            <span
-              key={`${f.id}-${i}`}
-              className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center text-lg"
-            >
-              <GambarEmoji
-                src={f.gambar}
-                emoji={f.emoji}
-                className="w-full h-full object-contain"
-                emojiClassName="text-lg"
-              />
-            </span>
-          ))}
+      {/* level pamungkas: Piring Tanpa Batas (kartu lebar, aksen) */}
+      <button
+        disabled={!endlessTerbuka}
+        onClick={() => onPilih(CFG_ENDLESS)}
+        aria-label={
+          endlessTerbuka
+            ? `Main ${ENDLESS_IP.nama}`
+            : `${ENDLESS_IP.nama} terkunci. Selesaikan Level ${ENDLESS_IP.level - 1} untuk membukanya`
+        }
+        className={[
+          "mt-6 w-full flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4",
+          "p-6 rounded-xl bg-surface border-4 text-fg",
+          "transition-[transform,border-color] duration-150",
+          endlessTerbuka
+            ? "border-accent hover:border-primary hover:-translate-y-1 cursor-pointer"
+            : "border-border opacity-60 grayscale cursor-not-allowed",
+        ].join(" ")}
+      >
+        <span className="text-5xl" aria-hidden="true">
+          {endlessTerbuka ? "♾️" : "🔒"}
         </span>
+        <span className="flex flex-col items-center sm:items-start">
+          <span className="font-display font-extrabold text-xl">
+            Level {ENDLESS_IP.level} · {ENDLESS_IP.nama}
+          </span>
+          <span className="text-sm text-muted text-center sm:text-left">
+            {endlessTerbuka
+              ? `Ronde terus berlanjut makin cepat, ${ENDLESS_IP.nyawa} ❤️ nyawa — kejar rekor tertinggi!`
+              : `Selesaikan Level ${ENDLESS_IP.level - 1} untuk buka ini!`}
+          </span>
+        </span>
+      </button>
+
+      {endlessTerbuka && (
+        <section aria-labelledby="judul-rekor-piring" className="mt-10 max-w-xl mx-auto">
+          <h2 id="judul-rekor-piring" className="text-xl text-center mb-4">
+            🏆 Papan Rekor Tanpa Batas
+          </h2>
+          <PapanRekorEndless game="isi-piringku" uidKu={uidKu} />
+        </section>
       )}
-    </button>
+    </main>
   );
 }
 
