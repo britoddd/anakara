@@ -270,6 +270,40 @@ h4 {
   background-position: bottom;
 }
 
+/* Matras arena (LatarArena — menu Team Battle 2v2): garis diagonal
+   selang-seling warna dua tim. --tim-biru/--tim-merah dekoratif dan tidak
+   ikut tema, jadi dicampur transparan agar tetap samar di atas --surface
+   pada tema terang maupun gelap. */
+.lantai-arena {
+  --matras-biru: color-mix(in srgb, var(--tim-biru) 26%, transparent);
+  --matras-merah: color-mix(in srgb, var(--tim-merah) 22%, transparent);
+  background-color: var(--surface);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--matras-biru) 0 24px,
+    transparent 24px 48px,
+    var(--matras-merah) 48px 72px,
+    transparent 72px 96px
+  );
+}
+
+/* Buku tulis (LatarKuis — menu Kuis Asik): kertas bergaris + garis margin
+   merah muda khas buku sekolah. Warna via color-mix token → serasi dua tema. */
+.kertas-garis {
+  --garis-tulis: color-mix(in srgb, var(--sky) 45%, transparent);
+  --garis-margin: color-mix(in srgb, var(--primary) 50%, transparent);
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(90deg, transparent 0 48px, var(--garis-margin) 48px 51px, transparent 51px),
+    repeating-linear-gradient(0deg, transparent 0 29px, var(--garis-tulis) 29px 32px);
+}
+/* lubang jilid spiral: deretan lingkaran --bg "melubangi" tepi atas kertas */
+.kertas-lubang {
+  background-image: radial-gradient(7px 7px at 50% 50%, var(--bg) 6px, transparent 7px);
+  background-size: 34px 16px;
+  background-repeat: repeat-x;
+}
+
 /* Skeleton loading (region data status 1/3) */
 @keyframes anakara-shimmer {
   from {

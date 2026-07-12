@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import BlobMata from "@/components/deko/BlobMata";
+import LatarKuis from "@/components/deko/LatarKuis";
 import Button from "@/components/ui/Button";
 import TombolKembali from "@/components/ui/TombolKembali";
 import Card from "@/components/ui/Card";
@@ -141,6 +142,8 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   if (fase === "pilih") {
     const levelTerbuka = profil.progress.kuis.levelTerbuka;
     return (
+      <>
+      <LatarKuis />
       <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-12">
         <TombolKembali href="/home" label="Kembali ke Home" />
         <h1 className="text-3xl text-center mb-2 mt-4">Kuis Asik! ❓</h1>
@@ -184,6 +187,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
           })}
         </div>
       </main>
+      </>
     );
   }
 

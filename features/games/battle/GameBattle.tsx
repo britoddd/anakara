@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import LatarArena from "@/components/deko/LatarArena";
 import TombolKembali from "@/components/ui/TombolKembali";
 import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
@@ -36,6 +37,10 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   const [fase, setFase] = useState<Fase>("lobi");
   const [kodeTim, setKodeTim] = useState<string | null>(null);
   const [tim, setTim] = useState<TimBattle | null>(null);
+  /* ruangId disimpan terpisah dari node tim: setelah battle usai, ArenaBattle
+     menghapus node tim (bersihkanTim) — arena harus tetap tampil tanpa node itu */
+  const [ruangId, setRuangId] = useState<string | null>(null);
+  const ruangIdRef = useRef<string | null>(null);
   const [kodeInput, setKodeInput] = useState("");
   const [sibuk, setSibuk] = useState(false);
   const [galat, setGalat] = useState<string | null>(null);
@@ -46,7 +51,13 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     if (!kodeTim) return;
     const unsub = dengarkanTim(kodeTim, (t) => {
       setTim(t);
-      if (!t) {
+      if (t?.ruangId) {
+        ruangIdRef.current = t.ruangId;
+        setRuangId(t.ruangId);
+      }
+      // node tim hilang SETELAH masuk arena = pembersihan normal usai battle,
+      // bukan pembubaran — jangan tendang pemain keluar dari layar hasil
+      if (!t && !ruangIdRef.current) {
         // tim dibubarkan ketua / koneksi ketua putus → kembali ke lobi
         setKodeTim(null);
         setFase("lobi");
@@ -155,6 +166,8 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     });
 
   function mainLagi() {
+    ruangIdRef.current = null;
+    setRuangId(null);
     setKodeTim(null);
     setTim(null);
     setKodeInput("");
@@ -165,10 +178,10 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   /* ================== render ================== */
 
   /* ---------- arena ---------- */
-  if (tim?.ruangId && kodeTim) {
+  if (ruangId && kodeTim) {
     return (
       <ArenaBattle
-        ruangId={tim.ruangId}
+        ruangId={ruangId}
         kodeTimKu={kodeTim}
         profil={profil}
         onMainLagi={mainLagi}
@@ -181,6 +194,8 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     if (!tim) return <LoadingSpinner label="Membuka ruang tim…" />;
     const mencari = tim.status === "mencari";
     return (
+      <>
+      <LatarArena />
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-10 text-center">
         <h1 className="text-3xl mb-2">Ruang Tim ⚔️</h1>
         <p className="text-muted font-bold mb-6">
@@ -270,12 +285,15 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
           </p>
         )}
       </main>
+      </>
     );
   }
 
   /* ---------- gabung tim (input kode) ---------- */
   if (fase === "gabung") {
     return (
+      <>
+      <LatarArena />
       <main id="konten-utama" className="max-w-md mx-auto px-6 py-10 text-center">
         <h1 className="text-3xl mb-2">Gabung Tim 🤝</h1>
         <p className="text-muted font-bold mb-8">
@@ -315,11 +333,14 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
           </p>
         )}
       </main>
+      </>
     );
   }
 
   /* ---------- lobi ---------- */
   return (
+    <>
+    <LatarArena />
     <main id="konten-utama" className="max-w-2xl mx-auto px-6 py-10">
       <div className="flex items-center gap-4 mb-2">
         <TombolKembali href="/home" label="Kembali ke Home" />
@@ -358,6 +379,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
         </p>
       )}
     </main>
+    </>
   );
 }
 
