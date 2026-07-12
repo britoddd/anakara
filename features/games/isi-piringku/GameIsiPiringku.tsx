@@ -6,7 +6,6 @@ import {
   DragOverlay,
   PointerSensor,
   useDraggable,
-  useDroppable,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -24,7 +23,6 @@ import {
   KELOMPOK_INFO,
   LEVELS,
   POIN,
-  URUTAN_KELOMPOK,
   acak,
   hitungBintang,
   poolLevel,
@@ -32,6 +30,7 @@ import {
   type LevelConfig,
   type Makanan,
 } from "./config";
+import PiringGizi from "./PiringGizi";
 import { simpanHasilIsiPiringku } from "./api";
 
 /* Game "Isi Piringku" (Phase 3, mockup MacBook Air - 3).
@@ -357,30 +356,14 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
 
         <div className="grid gap-8 lg:grid-cols-[1fr_minmax(280px,380px)] items-start">
           {/* piring 4 kuadran */}
-          <div className="mx-auto w-full max-w-[440px]">
-            <div
-              className="relative grid grid-cols-2 grid-rows-2 aspect-square rounded-full overflow-hidden border-8 border-surface shadow-[0_8px_24px_rgba(16,32,43,0.15)]"
-              aria-label="Piring dengan empat bagian kelompok makanan"
-            >
-              {URUTAN_KELOMPOK.map((k) => (
-                <Kuadran
-                  key={k}
-                  kelompok={k}
-                  items={tertempat[k]}
-                  onTap={() => {
-                    if (pilihanTap) tempatkan(pilihanTap, k);
-                  }}
-                  modeTapAktif={pilihanTap !== null}
-                />
-              ))}
-              {/* pusat piring (dekoratif) */}
-              <span
-                aria-hidden="true"
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-surface border-4 border-border flex items-center justify-center text-2xl"
-              >
-                ❤️
-              </span>
-            </div>
+          <div className="mx-auto w-full max-w-[560px]">
+            <PiringGizi
+              tertempat={tertempat}
+              modeTapAktif={pilihanTap !== null}
+              onTapKuadran={(k) => {
+                if (pilihanTap) tempatkan(pilihanTap, k);
+              }}
+            />
           </div>
 
           {/* nampan makanan */}
@@ -490,62 +473,6 @@ function PilihLevel({
         })}
       </div>
     </main>
-  );
-}
-
-function Kuadran({
-  kelompok,
-  items,
-  onTap,
-  modeTapAktif,
-}: {
-  kelompok: Kelompok;
-  items: Makanan[];
-  onTap: () => void;
-  modeTapAktif: boolean;
-}) {
-  const { isOver, setNodeRef } = useDroppable({ id: kelompok });
-  const info = KELOMPOK_INFO[kelompok];
-  return (
-    <button
-      ref={setNodeRef}
-      onClick={onTap}
-      aria-label={`Bagian ${info.label} (${info.fungsi})${
-        items.length ? `, berisi ${items.length} makanan` : ""
-      }`}
-      className={[
-        "flex flex-col items-center justify-center gap-1 p-3 sm:p-5 text-center",
-        info.bgKuadran,
-        "border border-border/50 transition-[filter,box-shadow] duration-150",
-        isOver ? "brightness-95 shadow-[inset_0_0_0_4px_var(--focus)]" : "",
-        modeTapAktif ? "cursor-pointer shadow-[inset_0_0_0_2px_var(--primary)]" : "",
-      ].join(" ")}
-    >
-      <span className="text-2xl" aria-hidden="true">
-        {info.emoji}
-      </span>
-      <span className="font-display font-extrabold text-sm sm:text-base leading-tight text-fg">
-        {info.label}
-      </span>
-      <span className="text-[11px] sm:text-xs font-bold text-muted">{info.fungsi}</span>
-      {items.length > 0 && (
-        <span className="flex flex-wrap justify-center gap-0.5 leading-tight" aria-hidden="true">
-          {items.map((f, i) => (
-            <span
-              key={`${f.id}-${i}`}
-              className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center text-lg"
-            >
-              <GambarEmoji
-                src={f.gambar}
-                emoji={f.emoji}
-                className="w-full h-full object-contain"
-                emojiClassName="text-lg"
-              />
-            </span>
-          ))}
-        </span>
-      )}
-    </button>
   );
 }
 

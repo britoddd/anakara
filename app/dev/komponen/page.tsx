@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DndContext } from "@dnd-kit/core";
 import AwanPikiran from "@/components/deko/AwanPikiran";
 import BlobMata from "@/components/deko/BlobMata";
 import GarisMarker from "@/components/deko/GarisMarker";
@@ -20,12 +21,37 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 import TombolKembali from "@/components/ui/TombolKembali";
 import GameCard from "@/features/home/GameCard";
 import { MENU_GAME } from "@/features/home/menu";
+import PiringGizi from "@/features/games/isi-piringku/PiringGizi";
+import { MAKANAN, type Kelompok, type Makanan } from "@/features/games/isi-piringku/config";
 
 /* Galeri dev untuk test manual komponen Phase 0 di dua tema.
    Bukan bagian produk — jangan ditautkan dari halaman siswa. */
+
+const PIRING_KOSONG: Record<Kelompok, Makanan[]> = {
+  pokok: [],
+  lauk: [],
+  sayur: [],
+  buah: [],
+};
+/* piring terisi: uji zona aman dengan jumlah item beragam (>6 → ikon rapat) */
+const PIRING_TERISI: Record<Kelompok, Makanan[]> = {
+  pokok: MAKANAN.filter((m) => m.kelompok === "pokok").slice(0, 2),
+  lauk: MAKANAN.filter((m) => m.kelompok === "lauk").slice(0, 7),
+  sayur: MAKANAN.filter((m) => m.kelompok === "sayur").slice(0, 4),
+  buah: MAKANAN.filter((m) => m.kelompok === "buah").slice(0, 1),
+};
 export default function KomponenPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [progress, setProgress] = useState(60);
+
+  // ?tema=light|dark memaksa tema — untuk screenshot headless (tema OS tak bisa
+  // dipaksa dari CLI Edge; galeri ini dev-only jadi override di sini aman)
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get("tema");
+    if (t === "light" || t === "dark") {
+      document.documentElement.setAttribute("data-theme", t);
+    }
+  }, []);
 
   return (
     <>
@@ -156,6 +182,24 @@ export default function KomponenPage() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        <section aria-labelledby="h-piring" className="flex flex-col gap-4">
+          <h2 id="h-piring" className="text-xl">
+            PiringGizi — piring 4 kuadran Isi Piringku (kosong & terisi + mode ketuk)
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2 items-start">
+            <DndContext>
+              <div className="mx-auto w-full max-w-[560px]">
+                <PiringGizi tertempat={PIRING_KOSONG} />
+              </div>
+            </DndContext>
+            <DndContext>
+              <div className="mx-auto w-full max-w-[560px]">
+                <PiringGizi tertempat={PIRING_TERISI} modeTapAktif />
+              </div>
+            </DndContext>
           </div>
         </section>
 
