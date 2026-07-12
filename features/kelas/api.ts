@@ -1,0 +1,79 @@
+import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
+import { getDb } from "@/lib/firebase";
+import { hitungLevel, type UserProfile } from "@/features/auth/types";
+
+/* Halaman Kelasku: info kelas milik siswa — wali kelas + daftar teman sekelas.
+   Rules sudah mengizinkan: users & kelas terbaca semua user login (Phase 8/10).
+   Query sengaja satu klausa where + sortir di klien (tanpa composite index). */
+
+export interface TemanKelas {
+  userId: string;
+  nama: string;
+  avatar: string | null;
+  level: number;
+  poin: number;
+}
+
+export interface InfoKelas {
+  kode: string;
+  namaKelas: string;
+  /** nama wali kelas dari users/{guruId}; null bila profil guru tak ditemukan */
+  namaGuru: string | null;
+  /** teman sekelas (termasuk diri sendiri), urut abjad — ranking urusan Leaderboard */
+  teman: TemanKelas[];
+}
+
+export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
+  const db = getDb();
+  const kelasSnap = await getDoc(doc(db, "kelas", kode));
+  if (!kelasSnap.exists()) return null;
+  const { nama, guruId } = kelasSnap.data() as { nama?: string; guruId?: string };
+
+  const [guruSnap, siswaSnap] = await Promise.all([
+    guruId ? getDoc(doc(db, "users", guruId)) : Promise.resolve(null),
+    getDocs(query(collection(db, "users"), where("kelasId", "==", kode), limit(300))),
+  ]);
+
+  const teman = siswaSnap.docs
+    .map((d) => d.data() as UserProfile)
+    .filter((p) => p.role === "siswa")
+    .sort((a, b) => a.nama.localeCompare(b.nama))
+    .map((p) => ({
+      userId: p.userId,
+      nama: p.nama,
+      avatar: p.avatar,
+      level: hitungLevel(p.poin), // D10: turunan poin, bukan field tersimpan
+      poin: p.poin,
+    }));
+
+  return {
+    kode,
+    namaKelas: nama ?? kode,
+    namaGuru: guruSnap?.exists() ? (guruSnap.data() as UserProfile).nama : null,
+    teman,
+  };
+}
+
+/* ---------- statistik kelas (turunan murni dari daftar teman) ---------- */
+
+export interface StatKelas {
+  jumlahSiswa: number;
+  totalPoin: number;
+  rataLevel: number;
+  /** teman dengan poin tertinggi; null bila kelas kosong */
+  bintang: TemanKelas | null;
+}
+
+export function hitungStatKelas(teman: TemanKelas[]): StatKelas {
+  const totalPoin = teman.reduce((t, s) => t + s.poin, 0);
+  const bintang = teman.reduce<TemanKelas | null>(
+    (juara, s) => (juara === null || s.poin > juara.poin ? s : juara),
+    null
+  );
+  return {
+    jumlahSiswa: teman.length,
+    totalPoin,
+    rataLevel: teman.length === 0 ? 0 : hitungLevel(totalPoin / teman.length),
+    bintang,
+  };
+}

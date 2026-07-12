@@ -88,6 +88,7 @@ export interface MenuLain {
 }
 
 export const MENU_LAIN: MenuLain[] = [
+  { id: "kelas", judul: "Kelasku", emoji: "🏫", href: "/kelas", status: "aktif" },
   { id: "leaderboard", judul: "Leaderboard", emoji: "🏆", gambar: "/assets/icons/icon-leaderboard.png", href: "/leaderboard", status: "aktif" },
   { id: "koleksi", judul: "Koleksi Kartu", emoji: "🃏", gambar: "/assets/icons/icon-koleksi.png", href: "/koleksi", status: "aktif" },
 ];

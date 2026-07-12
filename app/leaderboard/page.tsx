@@ -97,7 +97,15 @@ export default function LeaderboardPage() {
       ) : baris === null ? (
         <LoadingSpinner label="Menghitung peringkat…" />
       ) : (
-        <PapanPeringkat baris={baris} uidKu={profil.userId} />
+        <>
+          <PapanPeringkat baris={baris} uidKu={profil.userId} />
+          {/* tautan silang ke halaman Kelasku (lihat guru & teman sekelas) */}
+          <div className="mt-8 text-center">
+            <Button variant="ghost" onClick={() => router.push("/kelas")}>
+              Kunjungi Kelasku 🏫
+            </Button>
+          </div>
+        </>
       )}
     </main>
   );
