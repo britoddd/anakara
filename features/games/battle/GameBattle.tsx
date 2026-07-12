@@ -10,8 +10,9 @@ import Modal from "@/components/ui/Modal";
 import type { UserProfile } from "@/features/auth/types";
 import { getAvatar } from "@/features/auth/avatars";
 import ArenaBattle from "./ArenaBattle";
-import { BATAS_CARI_DETIK } from "./config";
+import { BATAS_CARI_DETIK, BATAS_LANJUT_RUANG_MENIT } from "./config";
 import {
+  ambilRuangSekali,
   buatRuangLawanBot,
   buatRuangLawanKode,
   buatTim,
@@ -21,10 +22,12 @@ import {
   gabungTim,
   keluarAntrean,
   keluarTim,
+  kodeTimDiRuang,
   masukAntrean,
   setStatusTim,
   tambahBotKeTim,
 } from "./rtdb";
+import { ambilSesiBattle, hapusSesiBattle, simpanSesiBattle } from "./sesi";
 import type { TimBattle } from "./types";
 
 /* Team Battle 2v2 (Phase 6) — alur:
@@ -50,6 +53,39 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   const [galat, setGalat] = useState<string | null>(null);
   const [sisaCari, setSisaCari] = useState(BATAS_CARI_DETIK);
   const [bantuanTerbuka, setBantuanTerbuka] = useState(false);
+  /* sesi belum selesai yang bisa dilanjutkan (keluar tak sengaja) */
+  const [sesiLanjut, setSesiLanjut] = useState<{ ruangId: string; kodeTim: string } | null>(null);
+
+  /* ---------- tawaran "Lanjutkan" bila ada battle yang belum selesai ----------
+     Sesi arena tersimpan di localStorage; validasi ke RTDB dulu: ruang masih
+     ada, masih "main", belum kedaluwarsa, dan uid memang anggota di dalamnya. */
+  useEffect(() => {
+    let aktif = true;
+    void (async () => {
+      const sesi = ambilSesiBattle(uid);
+      if (!sesi) return;
+      const ruang = await ambilRuangSekali(sesi.ruangId);
+      const kodeTimKu = ruang ? kodeTimDiRuang(ruang, uid) : null;
+      const bisaLanjut =
+        ruang &&
+        kodeTimKu &&
+        ruang.status === "main" &&
+        Date.now() - ruang.dibuat < BATAS_LANJUT_RUANG_MENIT * 60_000;
+      if (!bisaLanjut) {
+        hapusSesiBattle();
+        return;
+      }
+      if (aktif) setSesiLanjut({ ruangId: sesi.ruangId, kodeTim: kodeTimKu });
+    })();
+    return () => {
+      aktif = false;
+    };
+  }, [uid]);
+
+  /* simpan sesi arena — bekal tombol "Lanjutkan" bila keluar tak sengaja */
+  useEffect(() => {
+    if (ruangId && kodeTim) simpanSesiBattle({ uid, ruangId, kodeTim });
+  }, [uid, ruangId, kodeTim]);
 
   /* ---------- listener tim ---------- */
   useEffect(() => {
@@ -187,6 +223,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     });
 
   function mainLagi() {
+    hapusSesiBattle();
     ruangIdRef.current = null;
     setRuangId(null);
     setKodeTim(null);
@@ -194,6 +231,21 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     setKodeInput("");
     setGalat(null);
     setFase("lobi");
+  }
+
+  /* masuk kembali ke arena battle yang belum selesai */
+  function lanjutkanBattle() {
+    if (!sesiLanjut) return;
+    // set ref dulu supaya listener tim (node sudah terhapus) tidak menendang ke lobi
+    ruangIdRef.current = sesiLanjut.ruangId;
+    setRuangId(sesiLanjut.ruangId);
+    setKodeTim(sesiLanjut.kodeTim);
+    setSesiLanjut(null);
+  }
+
+  function abaikanSesi() {
+    hapusSesiBattle();
+    setSesiLanjut(null);
   }
 
   /* ================== render ================== */
@@ -434,6 +486,25 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
           ⚠️ {galat}
         </p>
       )}
+
+      {/* keluar tak sengaja di tengah battle? tawarkan kembali ke arena */}
+      <Modal
+        open={Boolean(sesiLanjut)}
+        onClose={abaikanSesi}
+        title="Battle Belum Selesai! ⚔️"
+      >
+        <p className="font-bold mb-6">
+          Pertandinganmu tadi masih menunggu. Mau lanjut main?
+        </p>
+        <div className="grid gap-3">
+          <Button fullWidth onClick={lanjutkanBattle}>
+            Lanjutkan Battle ⚔️
+          </Button>
+          <Button fullWidth variant="ghost" onClick={abaikanSesi}>
+            Tidak, mulai baru
+          </Button>
+        </div>
+      </Modal>
 
       <Modal
         open={bantuanTerbuka}
