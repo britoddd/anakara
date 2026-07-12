@@ -7,11 +7,13 @@ import TombolKembali from "@/components/ui/TombolKembali";
 import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Modal from "@/components/ui/Modal";
 import type { UserProfile } from "@/features/auth/types";
 import { getAvatar } from "@/features/auth/avatars";
 import ArenaBattle from "./ArenaBattle";
-import { BATAS_CARI_DETIK } from "./config";
+import { BATAS_CARI_DETIK, BATAS_LANJUT_RUANG_MENIT } from "./config";
 import {
+  ambilRuangSekali,
   buatRuangLawanBot,
   buatRuangLawanKode,
   buatTim,
@@ -21,10 +23,12 @@ import {
   gabungTim,
   keluarAntrean,
   keluarTim,
+  kodeTimDiRuang,
   masukAntrean,
   setStatusTim,
   tambahBotKeTim,
 } from "./rtdb";
+import { ambilSesiBattle, hapusSesiBattle, simpanSesiBattle } from "./sesi";
 import type { TimBattle } from "./types";
 
 /* Team Battle 2v2 (Phase 6) — alur:
@@ -49,6 +53,40 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   const [sibuk, setSibuk] = useState(false);
   const [galat, setGalat] = useState<string | null>(null);
   const [sisaCari, setSisaCari] = useState(BATAS_CARI_DETIK);
+  const [bantuanTerbuka, setBantuanTerbuka] = useState(false);
+  /* sesi belum selesai yang bisa dilanjutkan (keluar tak sengaja) */
+  const [sesiLanjut, setSesiLanjut] = useState<{ ruangId: string; kodeTim: string } | null>(null);
+
+  /* ---------- tawaran "Lanjutkan" bila ada battle yang belum selesai ----------
+     Sesi arena tersimpan di localStorage; validasi ke RTDB dulu: ruang masih
+     ada, masih "main", belum kedaluwarsa, dan uid memang anggota di dalamnya. */
+  useEffect(() => {
+    let aktif = true;
+    void (async () => {
+      const sesi = ambilSesiBattle(uid);
+      if (!sesi) return;
+      const ruang = await ambilRuangSekali(sesi.ruangId);
+      const kodeTimKu = ruang ? kodeTimDiRuang(ruang, uid) : null;
+      const bisaLanjut =
+        ruang &&
+        kodeTimKu &&
+        ruang.status === "main" &&
+        Date.now() - ruang.dibuat < BATAS_LANJUT_RUANG_MENIT * 60_000;
+      if (!bisaLanjut) {
+        hapusSesiBattle();
+        return;
+      }
+      if (aktif) setSesiLanjut({ ruangId: sesi.ruangId, kodeTim: kodeTimKu });
+    })();
+    return () => {
+      aktif = false;
+    };
+  }, [uid]);
+
+  /* simpan sesi arena — bekal tombol "Lanjutkan" bila keluar tak sengaja */
+  useEffect(() => {
+    if (ruangId && kodeTim) simpanSesiBattle({ uid, ruangId, kodeTim });
+  }, [uid, ruangId, kodeTim]);
 
   /* ---------- listener tim ---------- */
   useEffect(() => {
@@ -186,6 +224,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     });
 
   function mainLagi() {
+    hapusSesiBattle();
     ruangIdRef.current = null;
     setRuangId(null);
     setKodeTim(null);
@@ -193,6 +232,21 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     setKodeInput("");
     setGalat(null);
     setFase("lobi");
+  }
+
+  /* masuk kembali ke arena battle yang belum selesai */
+  function lanjutkanBattle() {
+    if (!sesiLanjut) return;
+    // set ref dulu supaya listener tim (node sudah terhapus) tidak menendang ke lobi
+    ruangIdRef.current = sesiLanjut.ruangId;
+    setRuangId(sesiLanjut.ruangId);
+    setKodeTim(sesiLanjut.kodeTim);
+    setSesiLanjut(null);
+  }
+
+  function abaikanSesi() {
+    hapusSesiBattle();
+    setSesiLanjut(null);
   }
 
   /* ================== render ================== */
@@ -381,36 +435,62 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   return (
     <>
     <LatarArena />
-    <main id="konten-utama" className="max-w-2xl mx-auto px-6 py-10">
-      <div className="flex items-center gap-4 mb-2">
+    <main id="konten-utama" className="max-w-xl mx-auto px-6 py-8 sm:py-10">
+      <div className="flex items-center justify-between mb-8">
         <TombolKembali href="/home" label="Kembali ke Home" />
-        <h1 className="text-3xl">Team Battle 2 vs 2 ⚔️</h1>
+        <button
+          onClick={() => setBantuanTerbuka(true)}
+          aria-label="Cara main"
+          className={[
+            "shrink-0 w-11 h-11 rounded-full cursor-pointer",
+            "flex items-center justify-center font-display font-extrabold text-xl",
+            "bg-accent text-on-accent shadow-[0_3px_0_var(--accent-edge)]",
+            "transition-[transform,box-shadow,filter] duration-150 ease-out",
+            "hover:brightness-95 active:translate-y-[3px] active:shadow-none",
+          ].join(" ")}
+        >
+          ?
+        </button>
       </div>
-      <p className="text-muted font-bold mb-8 text-lg">
-        Berdua lebih seru! Jawab soal gizi bersama temanmu, kalahkan tim lawan,
-        dan menangkan kotak misteri! 🎁
-      </p>
+
+      {/* hero: emblem 2 VS 2 dua kubu (biru vs pink, senada perisai LatarArena) */}
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-3 mb-4" aria-hidden="true">
+          <span className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-band-blue border-2 border-border -rotate-6 flex items-center justify-center font-display font-extrabold text-3xl sm:text-4xl">
+            2
+          </span>
+          <span className="font-display font-extrabold text-2xl text-primary">VS</span>
+          <span className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-band-pink border-2 border-border rotate-6 flex items-center justify-center font-display font-extrabold text-3xl sm:text-4xl">
+            2
+          </span>
+        </div>
+        <h1 className="text-4xl mb-1">
+          Team Battle<span className="sr-only"> 2 lawan 2</span> ⚔️
+        </h1>
+        <p className="text-muted font-bold text-lg">Berdua lebih seru!</p>
+      </div>
 
       <div className="grid gap-4">
         <TombolLobi
           utama
-          judul="⚡ Main"
-          keterangan="Tanding cepat! Langsung cari lawan — Robo Milo jadi rekan timmu kalau belum ada teman."
+          judul="⚡ Main Sekarang!"
           onClick={() => void mainCepat()}
           disabled={sibuk}
         />
-        <TombolLobi
-          judul="🛡️ Buat Tim"
-          keterangan="Dapatkan kode tim, lalu ajak 1 teman (atau Robo) bergabung."
-          onClick={() => void buat()}
-          disabled={sibuk}
-        />
-        <TombolLobi
-          judul="🤝 Gabung Tim"
-          keterangan="Punya kode dari teman? Masuk di sini."
-          onClick={() => setFase("gabung")}
-          disabled={sibuk}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <TombolLobi
+            ikon="🛡️"
+            judul="Buat Tim"
+            onClick={() => void buat()}
+            disabled={sibuk}
+          />
+          <TombolLobi
+            ikon="🤝"
+            judul="Gabung Tim"
+            onClick={() => setFase("gabung")}
+            disabled={sibuk}
+          />
+        </div>
       </div>
 
       {sibuk && <LoadingSpinner label="Menyiapkan tim…" />}
@@ -419,22 +499,81 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
           ⚠️ {galat}
         </p>
       )}
+
+      {/* keluar tak sengaja di tengah battle? tawarkan kembali ke arena */}
+      <Modal
+        open={Boolean(sesiLanjut)}
+        onClose={abaikanSesi}
+        title="Battle Belum Selesai! ⚔️"
+      >
+        <p className="font-bold mb-6">
+          Pertandinganmu tadi masih menunggu. Mau lanjut main?
+        </p>
+        <div className="grid gap-3">
+          <Button fullWidth onClick={lanjutkanBattle}>
+            Lanjutkan Battle ⚔️
+          </Button>
+          <Button fullWidth variant="ghost" onClick={abaikanSesi}>
+            Tidak, mulai baru
+          </Button>
+        </div>
+      </Modal>
+
+      <Modal
+        open={bantuanTerbuka}
+        onClose={() => setBantuanTerbuka(false)}
+        title="Cara Main ⚔️"
+      >
+        <ul className="grid gap-4 list-none mb-4">
+          <li className="flex items-start gap-3">
+            <span className="text-2xl shrink-0" aria-hidden="true">⚡</span>
+            <p className="font-bold">
+              <span className="font-display font-extrabold">Main Sekarang</span> —
+              tanding cepat! Langsung cari lawan; Robo Milo jadi rekan timmu
+              kalau belum ada teman.
+            </p>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="text-2xl shrink-0" aria-hidden="true">🛡️</span>
+            <p className="font-bold">
+              <span className="font-display font-extrabold">Buat Tim</span> —
+              dapatkan kode tim, lalu ajak 1 teman (atau Robo) bergabung.
+            </p>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="text-2xl shrink-0" aria-hidden="true">🤝</span>
+            <p className="font-bold">
+              <span className="font-display font-extrabold">Gabung Tim</span> —
+              punya kode dari teman? Masukkan kodenya di sana.
+            </p>
+          </li>
+        </ul>
+        <p className="font-bold text-muted mb-6">
+          Jawab soal gizi bersama temanmu, kalahkan tim lawan, dan menangkan
+          kotak misteri! 🎁
+        </p>
+        <Button fullWidth onClick={() => setBantuanTerbuka(false)}>
+          Oke, siap!
+        </Button>
+      </Modal>
     </main>
     </>
   );
 }
 
 /* Kartu aksi lobi sebagai <button> asli supaya bisa diakses keyboard.
-   utama = aksi utama "Main" (quick match): kartu primary menonjol + lebih besar. */
+   Tanpa teks penjelasan — penjelasan pindah ke modal "Cara Main" (tombol ?).
+   utama = CTA "Main Sekarang" (quick match): kartu primary besar selebar grid;
+   kartu sekunder (ikon besar + judul) tampil berdampingan dua kolom. */
 function TombolLobi({
   judul,
-  keterangan,
+  ikon,
   onClick,
   disabled,
   utama = false,
 }: {
   judul: string;
-  keterangan: string;
+  ikon?: string;
   onClick: () => void;
   disabled: boolean;
   utama?: boolean;
@@ -444,37 +583,34 @@ function TombolLobi({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "text-left rounded-lg border-2 cursor-pointer",
+        "text-center rounded-lg border-2 cursor-pointer",
         "transition-[transform,box-shadow,border-color,filter] duration-200 ease-out",
         "disabled:opacity-60 disabled:cursor-not-allowed",
         utama
           ? [
-              "bg-primary text-on-primary border-primary p-7",
+              "bg-primary text-on-primary border-primary px-6 py-7",
               "shadow-[0_5px_0_var(--primary-active)]",
               "hover:-translate-y-1 hover:brightness-105 hover:shadow-[0_12px_26px_rgba(214,51,108,0.35)]",
             ].join(" ")
           : [
-              "bg-surface text-fg border-border p-6",
+              "bg-surface text-fg border-border px-4 py-5",
               "shadow-[0_2px_8px_rgba(16,32,43,0.06)]",
               "hover:-translate-y-1 hover:border-primary hover:shadow-[0_8px_20px_rgba(16,32,43,0.12)]",
             ].join(" "),
       ].join(" ")}
     >
+      {ikon && (
+        <span className="block text-4xl mb-2" aria-hidden="true">
+          {ikon}
+        </span>
+      )}
       <span
         className={[
           "block font-display font-extrabold",
-          utama ? "text-2xl" : "text-xl",
+          utama ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl",
         ].join(" ")}
       >
         {judul}
-      </span>
-      <span
-        className={[
-          "block font-bold",
-          utama ? "text-on-primary opacity-90" : "text-muted",
-        ].join(" ")}
-      >
-        {keterangan}
       </span>
     </button>
   );

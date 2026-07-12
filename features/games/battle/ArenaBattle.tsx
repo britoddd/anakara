@@ -29,6 +29,7 @@ import {
   tentukanPemenang,
   tulisJawaban,
 } from "./rtdb";
+import { hapusSesiBattle } from "./sesi";
 import type { AnggotaTim, RuangBattle, WarnaTim } from "./types";
 
 /* Arena Battle 2v2 (Phase 6): tiap pemain menjawab 5 soal yang sama dengan
@@ -69,6 +70,23 @@ export default function ArenaBattle({
 
   /* ---------- sinkronisasi ruang ---------- */
   useEffect(() => dengarkanRuang(ruangId, setRuang), [ruangId]);
+
+  /* ---------- pulihkan progres saat lanjut sesi (keluar tak sengaja) ----------
+     Lompat ke soal pertama yang belum terjawab supaya jawaban lama tidak
+     tertimpa; kalau semua sudah terjawab, langsung ke layar menunggu. */
+  const dipulihkan = useRef(false);
+  useEffect(() => {
+    if (!ruang || dipulihkan.current) return;
+    dipulihkan.current = true;
+    const terjawab = Object.keys(ruang.jawaban?.[uid] ?? {}).length;
+    if (terjawab >= JUMLAH_SOAL_BATTLE) {
+      setSelesaiKu(true);
+      // keluar sebelum tanda selesai sempat tertulis → tuntaskan sekarang
+      if (!ruang.selesai?.[uid]) void tandaiSelesai(ruangId, uid);
+    } else if (terjawab > 0) {
+      setIndex(terjawab);
+    }
+  }, [ruang, ruangId, uid]);
 
   /* ---------- driver bot: hanya klien pembuat ruang, mulai sekali ---------- */
   const botMulai = useRef(false);
@@ -136,6 +154,7 @@ export default function ArenaBattle({
   useEffect(() => {
     if (!ruang || !battleSelesai || sudahTutup.current) return;
     sudahTutup.current = true;
+    hapusSesiBattle(); // battle tuntas — tak ada lagi sesi untuk dilanjutkan
     if (ruang.pembuat === uid) void tandaiRuangSelesai(ruangId);
     void bersihkanTim(kodeTimKu);
   }, [battleSelesai, ruang, ruangId, uid, kodeTimKu]);
