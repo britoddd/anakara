@@ -22,13 +22,16 @@ import {
   keluarTim,
   masukAntrean,
   setStatusTim,
+  tambahBotKeTim,
 } from "./rtdb";
 import type { TimBattle } from "./types";
 
 /* Team Battle 2v2 (Phase 6) — alur:
-   lobi (Buat Tim / Gabung Tim / Main Sendiri D8) → ruang tim (kode 4 huruf)
-   → ketua tekan "Cari Lawan" → antrean RTDB; 15 dtk tak ada lawan → bot (D7)
-   → arena (ArenaBattle). Ketua tim = pembuat & penggerak matchmaking. */
+   lobi → "Main" (quick match: buat tim + rekan bot D8 + langsung antre) atau
+   Buat Tim / Gabung Tim → ruang tim (kode 4 huruf). Di ruang tim, ketua bisa
+   "Main dengan Robo" (isi slot kosong dengan bot D8) lalu tekan "Cari Lawan"
+   → antrean RTDB; 15 dtk tak ada lawan → tim bot (D7) → arena (ArenaBattle).
+   Ketua tim = pembuat & penggerak matchmaking. */
 
 type Fase = "lobi" | "gabung" | "tim";
 
@@ -131,9 +134,20 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     }
   }
 
-  const buat = (denganBot: boolean) =>
+  /* Quick match: buat tim + rekan bot otomatis (D8) lalu LANGSUNG antre lawan.
+     Kalau nanti ada tim sungguhan di antrean → lawan pemain; kalau tidak
+     (15 dtk, D7) → lawan tim bot. Bot hanya mengisi slot rekan yang kosong. */
+  const mainCepat = () =>
     aksi(async () => {
-      const kode = await buatTim(profil, denganBot);
+      const kode = await buatTim(profil, true);
+      setKodeTim(kode);
+      setFase("tim");
+      await masukAntrean(kode);
+    });
+
+  const buat = () =>
+    aksi(async () => {
+      const kode = await buatTim(profil, false);
       setKodeTim(kode);
       setFase("tim");
     });
@@ -143,6 +157,11 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
       const kode = await gabungTim(profil, kodeInput);
       setKodeTim(kode);
       setFase("tim");
+    });
+
+  const tambahBot = () =>
+    aksi(async () => {
+      if (kodeTim) await tambahBotKeTim(kodeTim);
     });
 
   const cariLawan = () =>
@@ -262,9 +281,17 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
               Cari Lawan ⚔️
             </Button>
             {jumlahAnggota < 2 && (
-              <p className="text-sm font-bold text-muted">
-                Tunggu 1 teman lagi masuk dengan kode di atas, ya!
-              </p>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-sm font-bold text-muted">
+                  Tunggu 1 teman lagi masuk dengan kode di atas, atau…
+                </p>
+                <Button variant="accent" onClick={tambahBot} disabled={sibuk}>
+                  🤖 Main dengan Robo
+                </Button>
+                <p className="text-xs font-bold text-muted">
+                  Robo Milo akan mengisi timmu supaya bisa langsung tanding.
+                </p>
+              </div>
             )}
             <Button variant="ghost" onClick={keluar} disabled={sibuk}>
               Bubarkan Tim
@@ -353,21 +380,22 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
 
       <div className="grid gap-4">
         <TombolLobi
+          utama
+          judul="⚡ Main"
+          keterangan="Tanding cepat! Langsung cari lawan — Robo Milo jadi rekan timmu kalau belum ada teman."
+          onClick={() => void mainCepat()}
+          disabled={sibuk}
+        />
+        <TombolLobi
           judul="🛡️ Buat Tim"
-          keterangan="Dapatkan kode tim, lalu ajak 1 teman bergabung."
-          onClick={() => void buat(false)}
+          keterangan="Dapatkan kode tim, lalu ajak 1 teman (atau Robo) bergabung."
+          onClick={() => void buat()}
           disabled={sibuk}
         />
         <TombolLobi
           judul="🤝 Gabung Tim"
           keterangan="Punya kode dari teman? Masuk di sini."
           onClick={() => setFase("gabung")}
-          disabled={sibuk}
-        />
-        <TombolLobi
-          judul="🤖 Main Sendiri"
-          keterangan="Belum ada teman online? Robo Milo siap jadi rekan satu timmu!"
-          onClick={() => void buat(true)}
           disabled={sibuk}
         />
       </div>
@@ -383,32 +411,58 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   );
 }
 
-/* Kartu aksi lobi sebagai <button> asli supaya bisa diakses keyboard */
+/* Kartu aksi lobi sebagai <button> asli supaya bisa diakses keyboard.
+   utama = aksi utama "Main" (quick match): kartu primary menonjol + lebih besar. */
 function TombolLobi({
   judul,
   keterangan,
   onClick,
   disabled,
+  utama = false,
 }: {
   judul: string;
   keterangan: string;
   onClick: () => void;
   disabled: boolean;
+  utama?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={[
-        "text-left bg-surface border-2 border-border rounded-lg p-6 text-fg",
-        "shadow-[0_2px_8px_rgba(16,32,43,0.06)] cursor-pointer",
-        "transition-[transform,box-shadow,border-color] duration-200 ease-out",
-        "hover:-translate-y-1 hover:border-primary hover:shadow-[0_8px_20px_rgba(16,32,43,0.12)]",
+        "text-left rounded-lg border-2 cursor-pointer",
+        "transition-[transform,box-shadow,border-color,filter] duration-200 ease-out",
         "disabled:opacity-60 disabled:cursor-not-allowed",
+        utama
+          ? [
+              "bg-primary text-on-primary border-primary p-7",
+              "shadow-[0_5px_0_var(--primary-active)]",
+              "hover:-translate-y-1 hover:brightness-105 hover:shadow-[0_12px_26px_rgba(214,51,108,0.35)]",
+            ].join(" ")
+          : [
+              "bg-surface text-fg border-border p-6",
+              "shadow-[0_2px_8px_rgba(16,32,43,0.06)]",
+              "hover:-translate-y-1 hover:border-primary hover:shadow-[0_8px_20px_rgba(16,32,43,0.12)]",
+            ].join(" "),
       ].join(" ")}
     >
-      <span className="block font-display font-extrabold text-xl">{judul}</span>
-      <span className="block text-muted font-bold">{keterangan}</span>
+      <span
+        className={[
+          "block font-display font-extrabold",
+          utama ? "text-2xl" : "text-xl",
+        ].join(" ")}
+      >
+        {judul}
+      </span>
+      <span
+        className={[
+          "block font-bold",
+          utama ? "text-on-primary opacity-90" : "text-muted",
+        ].join(" ")}
+      >
+        {keterangan}
+      </span>
     </button>
   );
 }

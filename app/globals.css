@@ -41,6 +41,13 @@
   /* identitas tim battle (dekoratif; tidak ikut tema) */
   --tim-biru: #4da3e0;
   --tim-merah: #e2574c;
+  /* kuadran piring "Isi Piringku" — pastel per kelompok gizi (dekoratif).
+     Diremap per tema di bawah; JANGAN pakai varian dark: Tailwind yang
+     mengikuti preferensi OS, bukan toggle aplikasi (catatan-restyle-thynk §C). */
+  --kuadran-pokok: #fff3d6;
+  --kuadran-lauk: #ffe4d6;
+  --kuadran-sayur: #e2f5d9;
+  --kuadran-buah: #ffdde4;
 }
 
 :root[data-theme="dark"] {
@@ -66,6 +73,10 @@
   --band-pink: #43222e;
   --band-green: #22421a;
   --band-blue: #173648;
+  --kuadran-pokok: #4a3d20;
+  --kuadran-lauk: #4a2f20;
+  --kuadran-sayur: #2c4a20;
+  --kuadran-buah: #4a2029;
 }
 
 /* Fallback tanpa JS: ikuti preferensi OS (script no-flash di layout
@@ -94,6 +105,10 @@
     --band-pink: #43222e;
     --band-green: #22421a;
     --band-blue: #173648;
+    --kuadran-pokok: #4a3d20;
+    --kuadran-lauk: #4a2f20;
+    --kuadran-sayur: #2c4a20;
+    --kuadran-buah: #4a2029;
   }
 }
 
