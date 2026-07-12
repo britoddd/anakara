@@ -25,3 +25,8 @@ Thumbs.db
 
 # Backup thumbnail resolusi tinggi (~26MB, sumber re-encode) — jangan ikut repo
 arsip/thumbnail-hires/
+
+# Tooling lokal Claude Code / graphify (hasil generate & setelan per-mesin)
+.claude/
+.agents/
+graphify-out/
