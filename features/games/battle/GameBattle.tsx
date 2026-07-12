@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import LatarArena from "@/components/deko/LatarArena";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import TombolKembali from "@/components/ui/TombolKembali";
 import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
@@ -215,6 +216,18 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
     return (
       <>
       <LatarArena />
+      {/* cegat back browser/HP: keluar ruang tim harus lewat konfirmasi */}
+      <KonfirmasiKeluar
+        tanpaTombol
+        judul="Keluar dari ruang tim?"
+        pesan={
+          akuKetua
+            ? "Kalau kamu keluar, tim akan dibubarkan dan pencarian lawan berhenti."
+            : "Kamu akan keluar dari tim ini dan kembali ke lobi."
+        }
+        labelBatal="Tetap di Tim"
+        onKeluar={keluar}
+      />
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-10 text-center">
         <h1 className="text-3xl mb-2">Ruang Tim ⚔️</h1>
         <p className="text-muted font-bold mb-6">

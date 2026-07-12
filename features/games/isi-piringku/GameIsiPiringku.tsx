@@ -15,6 +15,7 @@ import {
 import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import TombolKembali from "@/components/ui/TombolKembali";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import ProgressBar from "@/components/ui/ProgressBar";
@@ -313,7 +314,12 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
       <main id="konten-utama" className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         {/* bar status permainan */}
         <div className="flex flex-wrap items-center justify-between gap-3 py-4">
-          <TombolKembali href="/home" label="Keluar dari permainan" />
+          <KonfirmasiKeluar
+            href="/home"
+            label="Keluar dari permainan"
+            judul="Keluar dari permainan?"
+            pesan="Permainan masih berlangsung — kalau keluar, poin sesi ini tidak tersimpan."
+          />
           <h1 className="text-2xl text-center">Isi Piringku!</h1>
           <div className="flex items-center gap-2">
             <span className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-1.5">

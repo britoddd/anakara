@@ -6,6 +6,7 @@ import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
@@ -236,6 +237,14 @@ export default function ArenaBattle({
   if (selesaiKu) {
     return (
       <main id="konten-utama" className="max-w-2xl mx-auto px-4 sm:px-6 py-10 text-center">
+        {/* cegat back browser/HP — battle belum selesai, tim masih menunggu */}
+        <KonfirmasiKeluar
+          tanpaTombol
+          href="/home"
+          judul="Keluar dari battle?"
+          pesan="Battle belum selesai — kalau keluar, hasil timmu tidak kamu lihat."
+          labelBatal="Tetap Menunggu"
+        />
         <h1 className="text-2xl mb-6">Jawabanmu selesai! 🎉</h1>
         <PapanSkor
           ruang={ruang}
@@ -257,6 +266,15 @@ export default function ArenaBattle({
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       <h1 className="sr-only">Team Battle 2 lawan 2</h1>
+
+      {/* cegat back browser/HP — keluar di tengah battle merugikan tim */}
+      <KonfirmasiKeluar
+        tanpaTombol
+        href="/home"
+        judul="Keluar dari battle?"
+        pesan="Battle masih berlangsung! Kalau keluar, timmu bertanding tanpa kamu."
+        labelBatal="Lanjut Battle"
+      />
 
       <PapanSkor ruang={ruang} warnaKu={warnaKu} uid={uid} />
 

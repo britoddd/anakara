@@ -13,6 +13,7 @@ import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
+import { DialogKeluar } from "@/components/ui/KonfirmasiKeluar";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ProgressBar from "@/components/ui/ProgressBar";
@@ -25,6 +26,7 @@ import { MENU_GAME } from "@/features/home/menu";
    Bukan bagian produk — jangan ditautkan dari halaman siswa. */
 export default function KomponenPage() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [dialogKeluarOpen, setDialogKeluarOpen] = useState(false);
   const [progress, setProgress] = useState(60);
 
   return (
@@ -93,6 +95,28 @@ export default function KomponenPage() {
               Lanjut
             </Button>
           </Modal>
+        </section>
+
+        <section aria-labelledby="h-dialog-keluar" className="flex flex-col gap-4">
+          <h2 id="h-dialog-keluar" className="text-xl">
+            DialogKeluar — konfirmasi sebelum keluar (game & form)
+          </h2>
+          <p className="text-muted">
+            Dipakai lewat KonfirmasiKeluar: menjaga tombol ←, tombol back
+            browser/HP, dan tutup tab saat progres bisa hilang.
+          </p>
+          <div>
+            <Button onClick={() => setDialogKeluarOpen(true)}>
+              Coba Dialog Keluar
+            </Button>
+          </div>
+          <DialogKeluar
+            terbuka={dialogKeluarOpen}
+            judul="Keluar dari kuis?"
+            pesan="Kuis masih berlangsung — kalau keluar, skor level ini tidak tersimpan."
+            onBatal={() => setDialogKeluarOpen(false)}
+            onKeluar={() => setDialogKeluarOpen(false)}
+          />
         </section>
 
         <section aria-labelledby="h-spinner" className="flex flex-col gap-4">

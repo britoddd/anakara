@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import BlobMata from "@/components/deko/BlobMata";
 import LatarKuis from "@/components/deko/LatarKuis";
 import Button from "@/components/ui/Button";
+import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import TombolKembali from "@/components/ui/TombolKembali";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
@@ -272,7 +273,12 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
     <main id="konten-utama" className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       {/* header ramping — kromnya sengaja dibuat tenang agar soal jadi fokus */}
       <div className="flex items-center gap-3 mb-4">
-        <TombolKembali href="/home" label="Keluar dari kuis" />
+        <KonfirmasiKeluar
+          href="/home"
+          label="Keluar dari kuis"
+          judul="Keluar dari kuis?"
+          pesan="Kuis masih berlangsung — kalau keluar, skor level ini tidak tersimpan."
+        />
         <h1 className="text-base sm:text-lg font-display font-extrabold text-muted">
           Kuis Asik · Level {level}
         </h1>
