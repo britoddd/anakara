@@ -73,6 +73,15 @@
       "thumbnail": "/assets/videos/thumb/vid-08.png",
       "url": "/assets/videos/vid-08.mp4",
       "status": "placeholder"
+    },
+    {
+      "id": "vid-09",
+      "judul": "Menyikat Gigi",
+      "kategori": "Kebiasaan Baik",
+      "durasiDetik": 18,
+      "thumbnail": "/assets/videos/thumb/vid-09.png",
+      "url": "/assets/videos/vid-09.mp4",
+      "status": "tersedia"
     }
   ]
 }
