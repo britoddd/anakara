@@ -30,3 +30,6 @@ arsip/thumbnail-hires/
 .claude/
 .agents/
 graphify-out/
+
+# Skrip hapus-background lokal (tool per-mesin, butuh python+pillow+numpy)
+scripts/remove-bg.py

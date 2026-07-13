@@ -150,10 +150,10 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 | ✔ | File | Gaya | Ref | Subjek |
 |---|---|---|---|---|
 | [x]¹ | `thumb-isi-piringku.jpg` | GAYA-THUMB | SHEET² | Tayo wearing a small chef hat, cheerfully presenting a plate split into four food-group sections with cute smiling foods (a rice bowl, a chicken drumstick, a carrot and an apple) hopping around it, on a pastel green background |
-| [ ] | `thumb-video.png` | GAYA-THUMB | SHEET² | Tayo sitting and happily pointing at a cute rounded cartoon TV showing a big friendly round play button, a couple of tiny stars and a curly squiggle floating nearby, on a pastel blue background |
-| [ ]¹ | `thumb-kuis.jpg` | GAYA-THUMB | SHEET² | Tayo excitedly holding up a big smiling question-mark quiz card, a few playful cards fanned behind, small sparkle doodles around, on a pastel pink background |
-| [ ] | `thumb-battle.png` | GAYA-THUMB | SHEET² | Tayo on the blue team in a cheerful high-five pose facing a cute red-team character in a friendly quiz duel, a gentle zig-zag divider down the middle (Tayo's side blue #4DA3E0 vs red #E2574C), on a cream background |
-| [ ] | `thumb-cerita.png` | GAYA-THUMB | SHEET² | Tayo happily reading a cozy open storybook with a little pop-up forest scene and a few cute stars floating out of the pages, warm daytime, on a pastel green background |
+| [x] | `thumb-video.png` | GAYA-THUMB | SHEET² | Tayo sitting and happily pointing at a cute rounded cartoon TV showing a big friendly round play button, a couple of tiny stars and a curly squiggle floating nearby, on a pastel blue background |
+| [x]¹ | `thumb-kuis.jpg` | GAYA-THUMB | SHEET² | Tayo excitedly holding up a big smiling question-mark quiz card, a few playful cards fanned behind, small sparkle doodles around, on a pastel pink background |
+| [x] | `thumb-battle.png` | GAYA-THUMB | SHEET² | Tayo on the blue team in a cheerful high-five pose facing a cute red-team character in a friendly quiz duel, a gentle zig-zag divider down the middle (Tayo's side blue #4DA3E0 vs red #E2574C), on a cream background |
+| [x] | `thumb-cerita.png` | GAYA-THUMB | SHEET² | Tayo happily reading a cozy open storybook with a little pop-up forest scene and a few cute stars floating out of the pages, warm daytime, on a pastel green background |
 
 > ¹ `thumb-isi-piringku.jpg` & `thumb-kuis.jpg` **sudah ada tapi masih gaya lama dramatis** (OpenArt 2026-07-07, latar ungu/gelap, tanpa Tayo). **Regenerate** dengan GAYA-THUMB baru agar seragam THYNK + ada Tayo — file lama boleh ditimpa (tetap simpan **JPEG** 480×637, <150 KB). Sisanya masih placeholder emoji.
 > ² **Tayo kini muncul di kelima thumbnail** → **lampirkan `SHEET`** dan jaga identitasnya tetap sesuai referensi (golden-yellow cheetah cub, tutul cokelat membulat, mata besar bermata-air satu kilau, pipi pink, perut krem). Tayo digambar full-body, kecil–sedang di dua-pertiga atas, membaur dengan gaya flat GAYA-THUMB (Tayo memang sudah flat sticker — identitas TIDAK di-restyle). Kalau model teks-murni, sisipkan deskripsi Tayo dari blok **GAYA-TAYO** sebagai pengganti referensi.
@@ -161,8 +161,8 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 ### Ikon kecil — folder `public/assets/icons/`
 | ✔ | File | Gaya | Subjek |
 |---|---|---|---|
-| [ ] | `icon-leaderboard.png` | GAYA-IKON | A golden trophy with a small star |
-| [ ] | `icon-koleksi.png` | GAYA-IKON | A neat stack of collectible cards with sparkles |
+| [x] | `icon-leaderboard.png` | GAYA-IKON | A golden trophy with a small star |
+| [x] | `icon-koleksi.png` | GAYA-IKON | A neat stack of collectible cards with sparkles |
 
 ---
 
@@ -177,54 +177,54 @@ No text, no watermark, no 3D bevel, no drop shadow, no gloss reflection, no extr
 ### Makanan (48) — folder `public/assets/food/` — id HARUS sama dengan `data/makanan.json`
 | ✔ | File | Subjek (pakai GAYA-MAKANAN) |
 |---|---|---|
-| [ ] | `nasi.png` | A small bowl of steamed white rice |
-| [ ] | `jagung.png` | A corn cob with green husk |
-| [ ] | `kentang.png` | A brown potato |
-| [ ] | `roti.png` | A soft bread loaf with one slice |
-| [ ] | `ubi.png` | A purple-skinned sweet potato |
-| [ ] | `singkong.png` | Cassava roots with light brown skin |
-| [ ] | `mie.png` | A bowl of wavy noodles with chopsticks |
-| [ ] | `sagu.png` | Papeda (sago porridge) in a small bowl |
-| [ ] | `ayam.png` | A roasted chicken drumstick |
-| [ ] | `telur.png` | A boiled egg, one whole and one half showing yolk |
-| [ ] | `ikan.png` | A cute whole cooked fish on a small plate |
-| [ ] | `tempe.png` | Sliced tempeh pieces on a small plate |
-| [ ] | `tahu.png` | White tofu cubes |
-| [ ] | `daging.png` | A slice of cooked beef |
-| [ ] | `udang.png` | A curled orange shrimp |
-| [ ] | `kacang-merah.png` | Red kidney beans in a small bowl |
-| [ ] | `wortel.png` | A carrot with leafy green top |
-| [ ] | `bayam.png` | A fresh bunch of spinach leaves |
-| [ ] | `brokoli.png` | A broccoli floret like a tiny tree |
-| [ ] | `tomat.png` | A round red tomato |
-| [ ] | `kangkung.png` | A bunch of water spinach with long stems |
-| [ ] | `buncis.png` | A few green beans |
-| [ ] | `terong.png` | A purple eggplant |
-| [ ] | `labu.png` | A slice of yellow pumpkin |
-| [ ] | `pisang.png` | A yellow banana |
-| [ ] | `apel.png` | A shiny red apple |
-| [ ] | `jeruk.png` | A bright orange |
-| [ ] | `semangka.png` | A triangle watermelon slice |
-| [ ] | `mangga.png` | A ripe yellow mango |
-| [ ] | `pepaya.png` | A papaya half with tiny black seeds |
-| [ ] | `anggur.png` | A small bunch of purple grapes |
-| [ ] | `alpukat.png` | An avocado half with round seed |
-| [ ] | `lontong.png` | Indonesian lontong: sliced rice cake rolls on a banana leaf |
-| [ ] | `makaroni.png` | A small bowl of elbow macaroni pasta |
-| [ ] | `bubur.png` | A warm bowl of rice porridge with a spoon |
-| [ ] | `ketan.png` | Sticky rice pressed into a small block on a banana leaf |
-| [ ] | `cumi.png` | A cute purple-pink squid |
-| [ ] | `kepiting.png` | A cute orange crab with big claws |
-| [ ] | `keju.png` | A wedge of yellow cheese with holes |
-| [ ] | `teri.png` | A few tiny silver anchovies on a small plate |
-| [ ] | `timun.png` | A green cucumber with two thin slices |
-| [ ] | `jamur.png` | Two cute button mushrooms |
-| [ ] | `paprika.png` | A red bell pepper with green stem |
-| [ ] | `selada.png` | A head of fresh green lettuce |
-| [ ] | `nanas.png` | A pineapple with spiky green crown |
-| [ ] | `stroberi.png` | A red strawberry with tiny seeds |
-| [ ] | `kelapa.png` | A young coconut with a straw |
-| [ ] | `pir.png` | A green pear |
+| [x] | `nasi.png` | A small bowl of steamed white rice |
+| [x] | `jagung.png` | A corn cob with green husk |
+| [x] | `kentang.png` | A brown potato |
+| [x] | `roti.png` | A soft bread loaf with one slice |
+| [x] | `ubi.png` | A purple-skinned sweet potato |
+| [x] | `singkong.png` | Cassava roots with light brown skin |
+| [x] | `mie.png` | A bowl of wavy noodles with chopsticks |
+| [x] | `sagu.png` | Papeda (sago porridge) in a small bowl |
+| [x] | `ayam.png` | A roasted chicken drumstick |
+| [x] | `telur.png` | A boiled egg, one whole and one half showing yolk |
+| [x] | `ikan.png` | A cute whole cooked fish on a small plate |
+| [x] | `tempe.png` | Sliced tempeh pieces on a small plate |
+| [x] | `tahu.png` | White tofu cubes |
+| [x] | `daging.png` | A slice of cooked beef |
+| [x] | `udang.png` | A curled orange shrimp |
+| [x] | `kacang-merah.png` | Red kidney beans in a small bowl |
+| [x] | `wortel.png` | A carrot with leafy green top |
+| [x] | `bayam.png` | A fresh bunch of spinach leaves |
+| [x] | `brokoli.png` | A broccoli floret like a tiny tree |
+| [x] | `tomat.png` | A round red tomato |
+| [x] | `kangkung.png` | A bunch of water spinach with long stems |
+| [x] | `buncis.png` | A few green beans |
+| [x] | `terong.png` | A purple eggplant |
+| [x] | `labu.png` | A slice of yellow pumpkin |
+| [x] | `pisang.png` | A yellow banana |
+| [x] | `apel.png` | A shiny red apple |
+| [x] | `jeruk.png` | A bright orange |
+| [x] | `semangka.png` | A triangle watermelon slice |
+| [x] | `mangga.png` | A ripe yellow mango |
+| [x] | `pepaya.png` | A papaya half with tiny black seeds |
+| [x] | `anggur.png` | A small bunch of purple grapes |
+| [x] | `alpukat.png` | An avocado half with round seed |
+| [x] | `lontong.png` | Indonesian lontong: sliced rice cake rolls on a banana leaf |
+| [x] | `makaroni.png` | A small bowl of elbow macaroni pasta |
+| [x] | `bubur.png` | A warm bowl of rice porridge with a spoon |
+| [x] | `ketan.png` | Sticky rice pressed into a small block on a banana leaf |
+| [x] | `cumi.png` | A cute purple-pink squid |
+| [x] | `kepiting.png` | A cute orange crab with big claws |
+| [x] | `keju.png` | A wedge of yellow cheese with holes |
+| [x] | `teri.png` | A few tiny silver anchovies on a small plate |
+| [x] | `timun.png` | A green cucumber with two thin slices |
+| [x] | `jamur.png` | Two cute button mushrooms |
+| [x] | `paprika.png` | A red bell pepper with green stem |
+| [x] | `selada.png` | A head of fresh green lettuce |
+| [x] | `nanas.png` | A pineapple with spiky green crown |
+| [x] | `stroberi.png` | A red strawberry with tiny seeds |
+| [x] | `kelapa.png` | A young coconut with a straw |
+| [x] | `pir.png` | A green pear |
 
 ### Kotak misteri — folder `public/assets/cards/`
 | ✔ | File | Gaya | Ref | Subjek |
@@ -237,30 +237,30 @@ Rarity TIDAK digambar (bingkai dirender aplikasi). Semua pakai **GAYA-KARTU**; d
 
 | ✔ | File | Ref | Subjek |
 |---|---|---|---|
-| [ ] | `kartu-01.png` | — | A rice bowl character wearing a captain's hat, saluting |
-| [ ] | `kartu-02.png` | — | A cheerful corn cob character laughing |
-| [ ] | `kartu-03.png` | — | A strong potato character flexing tiny arms |
-| [ ] | `kartu-04.png` | — | A warm smiling bread loaf character |
-| [ ] | `kartu-05.png` | — | A chicken drumstick character wearing a champion medal |
-| [ ] | `kartu-06.png` | — | A fast swimming fish character with speed lines |
-| [ ] | `kartu-07.png` | — | A heroic egg character with a tiny cape |
-| [ ] | `kartu-08.png` | — | A mighty tempeh character flexing proudly |
-| [ ] | `kartu-09.png` | — | A spinach superhero character with a flowing cape |
-| [ ] | `kartu-10.png` | — | A bright carrot character with sparkling eyes |
-| [ ] | `kartu-11.png` | — | An agile banana character running joyfully |
-| [ ] | `kartu-12.png` | — | A fresh apple character winking |
-| [ ] | `kartu-13.png` | — | A sweet smiling orange character |
-| [ ] | `kartu-14.png` | — | A clear glass of water character with a calm smile |
-| [ ] | `kartu-15.png` | — | An armored broccoli knight character with a small shield |
-| [ ] | `kartu-16.png` | — | A tough tofu character wearing a martial arts headband |
-| [ ] | `kartu-17.png` | — | A lightning-fast shrimp character dashing with electric sparks |
-| [ ] | `kartu-18.png` | — | A golden glowing avocado character |
-| [ ] | `kartu-19.png` | — | A giant friendly watermelon character |
-| [ ] | `kartu-20.png` | — | A milk glass character with a small rainbow above it |
-| [ ] | `kartu-21.png` | — | An energetic soccer ball character mid-bounce |
-| [ ] | `kartu-22.png` | SHEET | Tayo the cheetah cub wearing an explorer hat and tiny backpack, adventuring in a jungle |
-| [ ] | `kartu-23.png` | SHEET | Tayo the cheetah cub wearing a chef hat, proudly presenting a balanced healthy meal plate |
-| [ ] | `kartu-24.png` | — | A legendary golden plate filled with balanced healthy Indonesian food, radiant glow, floating sparkles |
+| [x] | `kartu-01.png` | — | A rice bowl character wearing a captain's hat, saluting |
+| [x] | `kartu-02.png` | — | A cheerful corn cob character laughing |
+| [x] | `kartu-03.png` | — | A strong potato character flexing tiny arms |
+| [x] | `kartu-04.png` | — | A warm smiling bread loaf character |
+| [x] | `kartu-05.png` | — | A chicken drumstick character wearing a champion medal |
+| [x] | `kartu-06.png` | — | A fast swimming fish character with speed lines |
+| [x] | `kartu-07.png` | — | A heroic egg character with a tiny cape |
+| [x] | `kartu-08.png` | — | A mighty tempeh character flexing proudly |
+| [x] | `kartu-09.png` | — | A spinach superhero character with a flowing cape |
+| [x] | `kartu-10.png` | — | A bright carrot character with sparkling eyes |
+| [x] | `kartu-11.png` | — | An agile banana character running joyfully |
+| [x] | `kartu-12.png` | — | A fresh apple character winking |
+| [x] | `kartu-13.png` | — | A sweet smiling orange character |
+| [x] | `kartu-14.png` | — | A clear glass of water character with a calm smile |
+| [x] | `kartu-15.png` | — | An armored broccoli knight character with a small shield |
+| [x] | `kartu-16.png` | — | A tough tofu character wearing a martial arts headband |
+| [x] | `kartu-17.png` | — | A lightning-fast shrimp character dashing with electric sparks |
+| [x] | `kartu-18.png` | — | A golden glowing avocado character |
+| [x] | `kartu-19.png` | — | A giant friendly watermelon character |
+| [x] | `kartu-20.png` | — | A milk glass character with a small rainbow above it |
+| [x] | `kartu-21.png` | — | An energetic soccer ball character mid-bounce |
+| [x] | `kartu-22.png` | SHEET | Tayo the cheetah cub wearing an explorer hat and tiny backpack, adventuring in a jungle |
+| [x] | `kartu-23.png` | SHEET | Tayo the cheetah cub wearing a chef hat, proudly presenting a balanced healthy meal plate |
+| [x] | `kartu-24.png` | — | A legendary golden plate filled with balanced healthy Indonesian food, radiant glow, floating sparkles |
 
 ---
 
