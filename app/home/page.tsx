@@ -11,6 +11,7 @@ import GambarEmoji from "@/components/ui/GambarEmoji";
 import Modal from "@/components/ui/Modal";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { useAuth } from "@/features/auth/AuthProvider";
+import { useOnline } from "@/features/offline/OnlineContext";
 import { logout, rutePofil } from "@/features/auth/api";
 import { getAvatar } from "@/features/auth/avatars";
 import {
@@ -98,6 +99,7 @@ function HomeSkeleton() {
 export default function HomePage() {
   const router = useRouter();
   const { user, profil, loading } = useAuth();
+  const { mintaOnline } = useOnline();
   const [modalKeluar, setModalKeluar] = useState(false);
   /* panduan pemain baru — juga bisa dibuka lagi lewat tombol ? di header */
   const [tutorialTerbuka, setTutorialTerbuka] = useState(false);
@@ -230,6 +232,15 @@ export default function HomePage() {
                   }
                   aria-label={item.judul}
                   title={item.judul}
+                  onClick={(e) => {
+                    // fitur butuh internet + sedang offline → tahan, munculkan popup
+                    if (
+                      item.onlineOnly &&
+                      !mintaOnline(`${item.judul} butuh internet. Sambungkan dulu, ya!`)
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
                   className="w-11 h-11 rounded-full flex items-center justify-center no-underline bg-surface border-2 border-border hover:border-primary hover:-translate-y-0.5 active:scale-95 transition-[transform,border-color] duration-150"
                 >
                   {item.gambar ? (

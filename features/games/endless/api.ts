@@ -11,6 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
+import { tulisSinkronNanti } from "@/lib/tulis-offline";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
 
 /* Mode Tanpa Batas (level 10 tiap minigame berlevel) — papan rekor sendiri,
@@ -38,12 +39,15 @@ export async function simpanHasilEndless(
   poinTambah: number
 ): Promise<{ pecahRekor: boolean; skorTerbaik: number }> {
   const db = getDb();
-  await updateDoc(doc(db, "users", profil.userId), {
-    poin: increment(poinTambah),
-    level: hitungLevel(profil.poin + poinTambah), // D10: 150 ⭐/level
-  });
+  await tulisSinkronNanti(() =>
+    updateDoc(doc(db, "users", profil.userId), {
+      poin: increment(poinTambah),
+      level: hitungLevel(profil.poin + poinTambah), // D10: 150 ⭐/level
+    })
+  );
 
   const ref = doc(db, "rekorEndless", `${game}_${profil.userId}`);
+  // getDoc offline membaca dari cache (persistence) — rekor lama tetap terbaca
   const snap = await getDoc(ref);
   const skorLama = snap.exists() ? (snap.data() as RekorEndless).skor : 0;
   if (skor > skorLama) {
@@ -55,7 +59,7 @@ export async function simpanHasilEndless(
       skor,
       dicapaiPada: Date.now(),
     };
-    await setDoc(ref, rekor);
+    await tulisSinkronNanti(() => setDoc(ref, rekor));
     return { pecahRekor: skorLama > 0 || skor > 0, skorTerbaik: skor };
   }
   return { pecahRekor: false, skorTerbaik: skorLama };

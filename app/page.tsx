@@ -10,6 +10,7 @@ import Footer from "@/components/ui/Footer";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/features/auth/AuthProvider";
+import { useOnline } from "@/features/offline/OnlineContext";
 import { rutePofil } from "@/features/auth/api";
 import type { Role } from "@/features/auth/types";
 
@@ -25,6 +26,7 @@ const PERAN: { id: Role; label: string; emoji: string; deskripsi: string }[] = [
 export default function LandingPage() {
   const router = useRouter();
   const { profil, loading } = useAuth();
+  const { mintaOnline } = useOnline();
   const [pilihan, setPilihan] = useState<Role | null>(null);
 
   return (
@@ -108,7 +110,12 @@ export default function LandingPage() {
           <Button
             size="lg"
             disabled={!pilihan}
-            onClick={() => router.push(`/masuk?peran=${pilihan}`)}
+            onClick={() => {
+              // masuk/daftar butuh internet (login Google) — tahan saat offline
+              if (!mintaOnline("Masuk ke Anakara butuh internet. Sambungkan dulu, ya!"))
+                return;
+              router.push(`/masuk?peran=${pilihan}`);
+            }}
           >
             Lanjut
           </Button>

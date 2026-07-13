@@ -85,10 +85,13 @@ export interface MenuLain {
   gambar?: string;
   href: string;
   status: "aktif" | "segera";
+  /** butuh internet: data live dari Firestore → saat offline munculkan popup.
+      Koleksi Kartu offline-friendly (kartu = data statis + koleksi profil cache). */
+  onlineOnly?: boolean;
 }
 
 export const MENU_LAIN: MenuLain[] = [
-  { id: "kelas", judul: "Kelasku", emoji: "🏫", href: "/kelas", status: "aktif" },
-  { id: "leaderboard", judul: "Leaderboard", emoji: "🏆", gambar: "/assets/icons/icon-leaderboard.png", href: "/leaderboard", status: "aktif" },
+  { id: "kelas", judul: "Kelasku", emoji: "🏫", href: "/kelas", status: "aktif", onlineOnly: true },
+  { id: "leaderboard", judul: "Leaderboard", emoji: "🏆", gambar: "/assets/icons/icon-leaderboard.png", href: "/leaderboard", status: "aktif", onlineOnly: true },
   { id: "koleksi", judul: "Koleksi Kartu", emoji: "🃏", gambar: "/assets/icons/icon-koleksi.png", href: "/koleksi", status: "aktif" },
 ];

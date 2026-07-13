@@ -10,6 +10,7 @@ import {
   where,
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
+import { tulisSinkronNanti } from "@/lib/tulis-offline";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
 import { LEVEL_ENDLESS, type Soal } from "./config";
 
@@ -25,11 +26,13 @@ export async function simpanHasilKuis(
       ? Math.min(terbukaSekarang + 1, LEVEL_ENDLESS)
       : terbukaSekarang;
 
-  await updateDoc(doc(getDb(), "users", profil.userId), {
-    poin: increment(hasil.poinTambah),
-    level: hitungLevel(profil.poin + hasil.poinTambah), // D10: 150 ⭐/level
-    "progress.kuis.levelTerbuka": terbukaBaru,
-  });
+  await tulisSinkronNanti(() =>
+    updateDoc(doc(getDb(), "users", profil.userId), {
+      poin: increment(hasil.poinTambah),
+      level: hitungLevel(profil.poin + hasil.poinTambah), // D10: 150 ⭐/level
+      "progress.kuis.levelTerbuka": terbukaBaru,
+    })
+  );
 }
 
 /* Soal buatan guru kelas siswa (Phase 10, D11: khusus Kuis) — digabung ke

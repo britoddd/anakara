@@ -179,9 +179,15 @@
 html {
   background: var(--bg);
   color-scheme: light;
+  /* tinggi banner offline (IndikatorOffline) — 0 saat online, >0 saat offline
+     supaya isi halaman turun & tak tertutup banner (di-set via data-offline). */
+  --tinggi-banner-offline: 0px;
 }
 html[data-theme="dark"] {
   color-scheme: dark;
+}
+html[data-offline="true"] {
+  --tinggi-banner-offline: 40px;
 }
 
 body {
@@ -191,6 +197,8 @@ body {
   font-size: clamp(1rem, 0.93rem + 0.35vw, 1.125rem); /* badan ≥16px */
   line-height: 1.6;
   min-height: 100dvh;
+  /* isi halaman turun sebanyak tinggi banner offline (0 saat online) */
+  padding-top: var(--tinggi-banner-offline);
   /* stacking context: lapisan -z-10 (LatarDoodle) melukis DI ATAS
      background body, tapi tetap di belakang semua konten */
   isolation: isolate;

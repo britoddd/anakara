@@ -1,5 +1,6 @@
 import { arrayUnion, doc, increment, updateDoc } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
+import { tulisSinkronNanti } from "@/lib/tulis-offline";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
 import { POIN_DUPLIKAT, POIN_PER_BENAR_BATTLE } from "./config";
 
@@ -35,6 +36,10 @@ export async function simpanHasilBattle(
   };
   if (kartuBaru) perubahan.koleksi = arrayUnion(hasil.kartuId);
 
-  await updateDoc(doc(getDb(), "users", profil.userId), perubahan);
+  // ringkasan dihitung sinkron di atas → aman "sinkron nanti" saat offline
+  // (mode battle vs Robo dimainkan offline; hasil menyusul saat online)
+  await tulisSinkronNanti(() =>
+    updateDoc(doc(getDb(), "users", profil.userId), perubahan)
+  );
   return { poinTambah, kartuBaru, duplikat };
 }

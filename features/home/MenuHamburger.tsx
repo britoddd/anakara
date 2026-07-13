@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import GambarEmoji from "@/components/ui/GambarEmoji";
+import { useOnline } from "@/features/offline/OnlineContext";
 import { MENU_LAIN } from "./menu";
 
 interface MenuHamburgerProps {
@@ -31,6 +32,7 @@ export default function MenuHamburger({
 }: MenuHamburgerProps) {
   const [buka, setBuka] = useState(false);
   const bungkusRef = useRef<HTMLDivElement>(null);
+  const { mintaOnline } = useOnline();
 
   /* tutup saat sentuh di luar bungkus atau tekan Esc */
   useEffect(() => {
@@ -134,7 +136,17 @@ export default function MenuHamburger({
                   ? `/segera-hadir?fitur=${item.id}`
                   : item.href
               }
-              onClick={() => setBuka(false)}
+              onClick={(e) => {
+                // fitur butuh internet + sedang offline → tahan, munculkan popup
+                // (sama seperti satelit versi desktop di header Home)
+                if (
+                  item.onlineOnly &&
+                  !mintaOnline(`${item.judul} butuh internet. Sambungkan dulu, ya!`)
+                ) {
+                  e.preventDefault();
+                }
+                setBuka(false);
+              }}
               className={BARIS + " text-fg"}
             >
               <span

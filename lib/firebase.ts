@@ -1,6 +1,11 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
-import { getFirestore, type Firestore } from "firebase/firestore";
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  type Firestore,
+} from "firebase/firestore";
 
 /* Konfigurasi diambil dari .env.local (lihat .env.example).
    Nilai NEXT_PUBLIC_* memang publik oleh desain Firebase — keamanan data
@@ -31,8 +36,27 @@ export function getFirebaseAuth(): Auth {
   return getAuth(getFirebaseApp());
 }
 
+/* Firestore dengan cache persisten (IndexedDB) — fondasi mode offline:
+   - baca profil & data tetap jalan tanpa internet (dari cache perangkat);
+   - tulis (poin, progres, dsb.) diantre lokal & otomatis sinkron saat online.
+   initializeFirestore HANYA boleh dipanggil sekali per app → hasilnya di-cache.
+   persistentMultipleTabManager: aman kalau anak buka beberapa tab. Kalau
+   IndexedDB tak tersedia (mode privat/HP lama), jatuh ke Firestore in-memory
+   biasa supaya app tidak crash. */
+let dbCache: Firestore | null = null;
 export function getDb(): Firestore {
-  return getFirestore(getFirebaseApp());
+  if (dbCache) return dbCache;
+  try {
+    dbCache = initializeFirestore(getFirebaseApp(), {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+      }),
+    });
+  } catch {
+    // sudah terinisialisasi di tempat lain, atau IndexedDB gagal → default
+    dbCache = initializeFirestore(getFirebaseApp(), {});
+  }
+  return dbCache;
 }
 
 /* getRtdb() (Realtime Database, khusus Battle) ada di lib/firebase-rtdb.ts —
