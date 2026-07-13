@@ -1,5 +1,6 @@
 import { doc, increment, updateDoc } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
+import { tulisSinkronNanti } from "@/lib/tulis-offline";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
 import { BAB_LIST } from "./config";
 
@@ -16,9 +17,11 @@ export async function simpanHasilCerita(
     Math.min(hasil.bab + 1, BAB_LIST.length + 1)
   );
 
-  await updateDoc(doc(getDb(), "users", profil.userId), {
-    poin: increment(hasil.poinTambah),
-    level: hitungLevel(profil.poin + hasil.poinTambah), // D10: 150 ⭐/level
-    "progress.cerita.babTerbuka": terbukaBaru,
-  });
+  await tulisSinkronNanti(() =>
+    updateDoc(doc(getDb(), "users", profil.userId), {
+      poin: increment(hasil.poinTambah),
+      level: hitungLevel(profil.poin + hasil.poinTambah), // D10: 150 ⭐/level
+      "progress.cerita.babTerbuka": terbukaBaru,
+    })
+  );
 }
