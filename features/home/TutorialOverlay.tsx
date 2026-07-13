@@ -51,11 +51,17 @@ export default function TutorialOverlay({
   useEffect(() => {
     if (!open) return;
     const target = LANGKAH_TUTORIAL[langkah].target;
+    /* pilih elemen yang SEDANG terlihat: sebagian anchor punya dua versi
+       (mis. menu-lain ada di header desktop dan di tombol hamburger mobile),
+       hanya satu yang tampil per breakpoint. getClientRects kosong = display:none. */
     const el = target
-      ? document.querySelector<HTMLElement>(`[data-tutorial="${target}"]`)
+      ? Array.from(
+          document.querySelectorAll<HTMLElement>(`[data-tutorial="${target}"]`)
+        ).find((e) => e.getClientRects().length > 0) ?? null
       : null;
     if (!el) {
-      /* target tak ditemukan (atau langkah sambutan) → tanpa sorotan */
+      /* target tak ada / tak terlihat di breakpoint ini (atau langkah
+         sambutan) → kartu di tengah tanpa sorotan */
       setKotak(null);
       return;
     }

@@ -21,6 +21,7 @@ import {
   type UserProfile,
 } from "@/features/auth/types";
 import GameCard from "@/features/home/GameCard";
+import MenuHamburger from "@/features/home/MenuHamburger";
 import { MENU_GAME, MENU_LAIN } from "@/features/home/menu";
 import { bacaRiwayat } from "@/features/home/riwayat";
 import {
@@ -153,9 +154,11 @@ export default function HomePage() {
     <>
       {/* doodle samar di latar utama (restyle D12) */}
       <LatarDoodle />
-      {/* flex-wrap: di layar sempit klaster kanan turun ke baris kedua
-          (ml-auto menjaganya tetap rata kanan) alih-alih meluap keluar */}
-      <header className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 sm:px-6 py-4 max-w-6xl mx-auto w-full">
+      {/* Di layar sempit aksi kanan (?, satelit, keluar) melipat ke satu
+          tombol hamburger (MenuHamburger) → header tetap satu baris: chip
+          profil di kiri, poin + hamburger di kanan. flex-wrap tinggal jaring
+          pengaman kalau nama panggilan sangat panjang. */}
+      <header className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-2 px-4 sm:px-6 py-4 max-w-6xl mx-auto w-full">
         {/* chip profil: avatar + nama + badge level (konvensi §4.5) —
             tautan ke /profil untuk ubah nama panggilan & avatar */}
         <Link
@@ -186,15 +189,16 @@ export default function HomePage() {
         </Link>
 
         {/* tombol ? di kanan chip profil: buka lagi panduan kapan saja
-            (gaya sama dengan tombol Cara Main di lobi battle) */}
+            (gaya sama dengan tombol Cara Main di lobi battle). Di layar sempit
+            aksi ini pindah ke dalam menu hamburger (lihat MenuHamburger). */}
         <button
           onClick={() => setTutorialTerbuka(true)}
           aria-label="Lihat panduan bermain"
           title="Panduan"
           data-tutorial="bantuan"
           className={[
-            "shrink-0 w-11 h-11 rounded-full cursor-pointer",
-            "flex items-center justify-center font-display font-extrabold text-xl",
+            "hidden sm:flex shrink-0 w-11 h-11 rounded-full cursor-pointer",
+            "items-center justify-center font-display font-extrabold text-xl",
             "bg-accent text-on-accent shadow-[0_3px_0_var(--accent-edge)]",
             "transition-[transform,box-shadow,filter] duration-150 ease-out",
             "hover:brightness-95 active:translate-y-[3px] active:shadow-none",
@@ -210,55 +214,67 @@ export default function HomePage() {
           >
             ⭐ {profil.poin}
           </span>
-          {/* Leaderboard & Koleksi: tombol satelit bulat di samping poin
-              (gaya referensi/image.png) — tetap config-driven dari MENU_LAIN.
-              Dibungkus satu div agar panduan bisa menyorotnya sekaligus. */}
-          <div className="flex items-center gap-2" data-tutorial="menu-lain">
-            {MENU_LAIN.map((item) => (
-              <Link
-                key={item.id}
-                href={
-                  item.status === "segera"
-                    ? `/segera-hadir?fitur=${item.id}`
-                    : item.href
-                }
-                aria-label={item.judul}
-                title={item.judul}
-                onClick={(e) => {
-                  // fitur butuh internet + sedang offline → tahan, munculkan popup
-                  if (
-                    item.onlineOnly &&
-                    !mintaOnline(`${item.judul} butuh internet. Sambungkan dulu, ya!`)
-                  ) {
-                    e.preventDefault();
+          {/* Desktop (≥ sm): satelit MENU_LAIN + Keluar tampil berjajar.
+              Di layar sempit semuanya melipat ke MenuHamburger di bawah supaya
+              header tetap satu baris (bukan dua baris yang berdesakan). */}
+          <div className="hidden sm:flex items-center gap-2">
+            {/* Leaderboard & Koleksi: tombol satelit bulat di samping poin
+                (gaya referensi/image.png) — tetap config-driven dari MENU_LAIN.
+                Dibungkus satu div agar panduan bisa menyorotnya sekaligus. */}
+            <div className="flex items-center gap-2" data-tutorial="menu-lain">
+              {MENU_LAIN.map((item) => (
+                <Link
+                  key={item.id}
+                  href={
+                    item.status === "segera"
+                      ? `/segera-hadir?fitur=${item.id}`
+                      : item.href
                   }
-                }}
-                className="w-11 h-11 rounded-full flex items-center justify-center no-underline bg-surface border-2 border-border hover:border-primary hover:-translate-y-0.5 active:scale-95 transition-[transform,border-color] duration-150"
-              >
-                {item.gambar ? (
-                  <GambarEmoji
-                    src={item.gambar}
-                    emoji={item.emoji}
-                    className="w-7 h-7 object-contain"
-                    emojiClassName="text-xl"
-                  />
-                ) : (
-                  <span className="text-xl" aria-hidden="true">
-                    {item.emoji}
-                  </span>
-                )}
-              </Link>
-            ))}
+                  aria-label={item.judul}
+                  title={item.judul}
+                  onClick={(e) => {
+                    // fitur butuh internet + sedang offline → tahan, munculkan popup
+                    if (
+                      item.onlineOnly &&
+                      !mintaOnline(`${item.judul} butuh internet. Sambungkan dulu, ya!`)
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="w-11 h-11 rounded-full flex items-center justify-center no-underline bg-surface border-2 border-border hover:border-primary hover:-translate-y-0.5 active:scale-95 transition-[transform,border-color] duration-150"
+                >
+                  {item.gambar ? (
+                    <GambarEmoji
+                      src={item.gambar}
+                      emoji={item.emoji}
+                      className="w-7 h-7 object-contain"
+                      emojiClassName="text-xl"
+                    />
+                  ) : (
+                    <span className="text-xl" aria-hidden="true">
+                      {item.emoji}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+            {/* keluar lewat konfirmasi — jempol anak gampang salah pencet */}
+            <button
+              onClick={() => setModalKeluar(true)}
+              aria-label="Keluar dari akun"
+              title="Keluar"
+              className="w-11 h-11 rounded-full flex items-center justify-center text-xl bg-surface-2 border-2 border-border hover:border-danger active:translate-y-[2px] transition-colors duration-150"
+            >
+              🚪
+            </button>
           </div>
-          {/* keluar lewat konfirmasi — jempol anak gampang salah pencet */}
-          <button
-            onClick={() => setModalKeluar(true)}
-            aria-label="Keluar dari akun"
-            title="Keluar"
-            className="w-11 h-11 rounded-full flex items-center justify-center text-xl bg-surface-2 border-2 border-border hover:border-danger active:translate-y-[2px] transition-colors duration-150"
-          >
-            🚪
-          </button>
+
+          {/* Layar sempit: satu tombol hamburger melipat Panduan + MENU_LAIN
+              + Keluar jadi dropdown (komponen sendiri disembunyikan ≥ sm). */}
+          <MenuHamburger
+            onPanduan={() => setTutorialTerbuka(true)}
+            onKeluar={() => setModalKeluar(true)}
+          />
         </div>
       </header>
 
