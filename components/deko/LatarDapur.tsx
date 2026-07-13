@@ -88,8 +88,8 @@ export default function LatarDapur({ tetap = true }: { tetap?: boolean }) {
       <Squiggle className="hidden sm:block absolute left-[10%] top-[42%] w-24 text-band-pink -rotate-12" />
 
       {/* meja makan: taplak gingham + renda tepi */}
-      <div className="absolute inset-x-0 bottom-0 h-[30%] taplak-gingham" />
-      <div className="absolute inset-x-0 bottom-[30%] h-3.5 taplak-renda" />
+      <div className="absolute inset-x-0 bottom-0 h-[15%] taplak-gingham" />
+      <div className="absolute inset-x-0 bottom-[15%] h-3.5 taplak-renda" />
     </div>
   );
 }
