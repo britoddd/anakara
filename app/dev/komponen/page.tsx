@@ -15,6 +15,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
 import { DialogKeluar } from "@/components/ui/KonfirmasiKeluar";
+import DialogUlangLevel from "@/components/ui/KonfirmasiUlangLevel";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ProgressBar from "@/components/ui/ProgressBar";
@@ -44,6 +45,7 @@ const PIRING_TERISI: Record<Kelompok, Makanan[]> = {
 export default function KomponenPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [dialogKeluarOpen, setDialogKeluarOpen] = useState(false);
+  const [dialogUlangOpen, setDialogUlangOpen] = useState(false);
   const [progress, setProgress] = useState(60);
 
   // ?tema=light|dark memaksa tema — untuk screenshot headless (tema OS tak bisa
@@ -142,6 +144,28 @@ export default function KomponenPage() {
             pesan="Kuis masih berlangsung — kalau keluar, skor level ini tidak tersimpan."
             onBatal={() => setDialogKeluarOpen(false)}
             onKeluar={() => setDialogKeluarOpen(false)}
+          />
+        </section>
+
+        <section aria-labelledby="h-dialog-ulang" className="flex flex-col gap-4">
+          <h2 id="h-dialog-ulang" className="text-xl">
+            DialogUlangLevel — konfirmasi main ulang level yang sudah selesai
+          </h2>
+          <p className="text-muted">
+            Muncul saat anak memilih level yang sudah pernah diselesaikan di
+            layar pilih level (Kuis &amp; Isi Piringku). Mengulang tak menghapus
+            bintang, jadi &quot;Main Lagi&quot; jadi tombol utama.
+          </p>
+          <div>
+            <Button onClick={() => setDialogUlangOpen(true)}>
+              Coba Dialog Ulang Level
+            </Button>
+          </div>
+          <DialogUlangLevel
+            terbuka={dialogUlangOpen}
+            namaLevel="Level 3 · Piring Warna-warni"
+            onBatal={() => setDialogUlangOpen(false)}
+            onUlang={() => setDialogUlangOpen(false)}
           />
         </section>
 

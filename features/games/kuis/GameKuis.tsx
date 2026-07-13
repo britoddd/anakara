@@ -5,6 +5,7 @@ import BlobMata from "@/components/deko/BlobMata";
 import LatarKuis from "@/components/deko/LatarKuis";
 import Button from "@/components/ui/Button";
 import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
+import DialogUlangLevel from "@/components/ui/KonfirmasiUlangLevel";
 import TombolKembali from "@/components/ui/TombolKembali";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
@@ -57,6 +58,8 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   const [nyawa, setNyawa] = useState<number>(ENDLESS_KUIS.nyawa);
   const [rekor, setRekor] = useState<{ pecahRekor: boolean; skorTerbaik: number } | null>(null);
   const [statusSimpan, setStatusSimpan] = useState<"idle" | "proses" | "ok" | "gagal">("idle");
+  /* level (biasa) yang menunggu konfirmasi ulang — sudah pernah diselesaikan */
+  const [levelUlang, setLevelUlang] = useState<number | null>(null);
 
   const endless = level === LEVEL_ENDLESS;
   const soal = daftarSoal[index];
@@ -111,6 +114,13 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       setTimerSisa(soalBaru[0]?.durasiDetik ?? 15);
     }
     setFase("main");
+  }
+
+  /* dari layar pilih level: level yang sudah pernah diselesaikan
+     (lv < levelTerbuka) minta konfirmasi dulu; level baru langsung main */
+  function pilihLevel(lv: number) {
+    if (lv < profil.progress.kuis.levelTerbuka) setLevelUlang(lv);
+    else mulaiLevel(lv);
   }
 
   function kunciJawaban(idxOpsi: number | null) {
@@ -237,11 +247,13 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
               <button
                 key={lv}
                 disabled={terkunciLv}
-                onClick={() => mulaiLevel(lv)}
+                onClick={() => pilihLevel(lv)}
                 aria-label={
                   terkunciLv
                     ? `Level ${lv} terkunci. Selesaikan Level ${lv - 1} untuk membukanya`
-                    : `Main Kuis Level ${lv}`
+                    : lv < levelTerbuka
+                      ? `Main lagi Kuis Level ${lv} (sudah selesai)`
+                      : `Main Kuis Level ${lv}`
                 }
                 className={[
                   "flex flex-col items-center gap-1.5 p-5 rounded-xl bg-surface border-4 text-fg",
@@ -307,6 +319,16 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
           </section>
         )}
       </main>
+      <DialogUlangLevel
+        terbuka={levelUlang !== null}
+        namaLevel={`Level ${levelUlang}`}
+        onBatal={() => setLevelUlang(null)}
+        onUlang={() => {
+          const lv = levelUlang;
+          setLevelUlang(null);
+          if (lv !== null) mulaiLevel(lv);
+        }}
+      />
       </>
     );
   }
