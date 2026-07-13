@@ -461,6 +461,17 @@ public/assets/{mascot, avatars, food, icons, cards, backgrounds, stories, audio,
   yang disarankan (tidak memblokir — fallback emoji jalan): 16 ilustrasi makanan baru di
   `daftar-gambar.md`. Battle/Cerita/Video tidak berlevel (PvP/bab/feed) — di luar jalur ini.
 
+- ✅ **Panduan pemain baru — TutorialOverlay Home (2026-07-13)** — tur sorotan di `/home`:
+  layar diredupkan, elemen asli disorot bergantian lewat atribut `data-tutorial`
+  (sambutan Tayo → chip profil → ⭐ poin → menu lain → grid game → tombol ?), kartu Tayo
+  per langkah + titik progres + Lanjut/Sebelumnya/Lewati, Esc menutup, fokus terkunci di
+  kartu, hormat `prefers-reduced-motion`, sorotan mengikuti scroll/resize. Muncul otomatis
+  sekali per perangkat untuk pemain baru (localStorage `anakara-tutorial-home`, pola
+  riwayat); **tombol ? kuning di kanan chip profil** (gaya tombol Cara Main battle)
+  membukanya lagi kapan saja. Langkah config-driven di `features/home/tutorial.ts`;
+  komponen `features/home/TutorialOverlay.tsx`. Halaman uji tanpa login:
+  `/dev/tutorial` (`?langkah=1..6` → lompat langkah).
+
 Untuk asset gambar: user generate manual mengikuti `daftar-gambar.md` (atau aktifkan billing
 Gemini, lihat §8) — bisa berjalan paralel, tidak memblokir.
 
