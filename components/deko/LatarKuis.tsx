@@ -80,7 +80,7 @@ export default function LatarKuis({ tetap = true }: { tetap?: boolean }) {
       <Squiggle className="absolute right-[28%] top-[20%] w-20 text-band-pink rotate-6" />
 
       {/* meja belajar: buku tulis bergaris + lubang jilid spiral di tepinya */}
-      <div className="absolute inset-x-0 bottom-0 h-[34%] kertas-garis">
+      <div className="absolute inset-x-0 bottom-0 h-[24%] kertas-garis">
         <div className="absolute inset-x-0 top-1.5 h-4 kertas-lubang" />
       </div>
     </div>

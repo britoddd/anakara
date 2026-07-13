@@ -101,8 +101,8 @@ export default function LatarArena({ tetap = true }: { tetap?: boolean }) {
       <Squiggle className="hidden sm:block absolute left-[42%] top-[42%] w-24 text-band-green -rotate-6" />
 
       {/* lantai: matras arena garis diagonal warna dua tim + garis pembatas */}
-      <div className="absolute inset-x-0 bottom-0 h-[28%] lantai-arena" />
-      <div className="absolute inset-x-0 bottom-[28%] h-1.5 bg-border" />
+      <div className="absolute inset-x-0 bottom-0 h-[20%] lantai-arena" />
+      <div className="absolute inset-x-0 bottom-[20%] h-1.5 bg-border" />
     </div>
   );
 }
