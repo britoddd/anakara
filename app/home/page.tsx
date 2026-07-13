@@ -22,6 +22,11 @@ import {
 import GameCard from "@/features/home/GameCard";
 import { MENU_GAME, MENU_LAIN } from "@/features/home/menu";
 import { bacaRiwayat } from "@/features/home/riwayat";
+import {
+  sudahLihatTutorial,
+  tandaiTutorialSelesai,
+} from "@/features/home/tutorial";
+import TutorialOverlay from "@/features/home/TutorialOverlay";
 
 /* Home Dashboard siswa (Phase 2) — grid bento ala referensi/image.png
    (dashboard PAC-MAN): kartu unggulan besar ("Main lagi" dari riwayat
@@ -93,6 +98,8 @@ export default function HomePage() {
   const router = useRouter();
   const { user, profil, loading } = useAuth();
   const [modalKeluar, setModalKeluar] = useState(false);
+  /* panduan pemain baru — juga bisa dibuka lagi lewat tombol ? di header */
+  const [tutorialTerbuka, setTutorialTerbuka] = useState(false);
   /* key untuk memutar ulang animasi lompat Tayo saat disentuh */
   const [tayoKey, setTayoKey] = useState(0);
   /* dibaca sekali per kunjungan (lazy initializer): aman di server (→ []),
@@ -108,6 +115,18 @@ export default function HomePage() {
     if (!user || !profil) router.replace("/");
     else if (rutePofil(profil) !== "/home") router.replace(rutePofil(profil));
   }, [loading, user, profil, router]);
+
+  /* pemain baru (per perangkat, seperti riwayat) langsung disambut panduan;
+     setelah ditutup tak muncul lagi — sisanya lewat tombol ? */
+  useEffect(() => {
+    if (loading || !user || !profil || rutePofil(profil) !== "/home") return;
+    if (!sudahLihatTutorial()) setTutorialTerbuka(true);
+  }, [loading, user, profil]);
+
+  const tutupTutorial = () => {
+    tandaiTutorialSelesai();
+    setTutorialTerbuka(false);
+  };
 
   if (loading || !profil || rutePofil(profil) !== "/home")
     return <HomeSkeleton />;
@@ -140,6 +159,7 @@ export default function HomePage() {
         <Link
           href="/profil"
           aria-label="Buka profilku"
+          data-tutorial="profil"
           className="flex items-center gap-2 sm:gap-3 bg-surface border-2 border-border rounded-full pl-1.5 pr-4 py-1.5 no-underline text-fg hover:border-primary hover:-translate-y-0.5 active:scale-95 transition-[transform,border-color] duration-150"
         >
           <span
@@ -163,38 +183,62 @@ export default function HomePage() {
           </span>
         </Link>
 
+        {/* tombol ? di kanan chip profil: buka lagi panduan kapan saja
+            (gaya sama dengan tombol Cara Main di lobi battle) */}
+        <button
+          onClick={() => setTutorialTerbuka(true)}
+          aria-label="Lihat panduan bermain"
+          title="Panduan"
+          data-tutorial="bantuan"
+          className={[
+            "shrink-0 w-11 h-11 rounded-full cursor-pointer",
+            "flex items-center justify-center font-display font-extrabold text-xl",
+            "bg-accent text-on-accent shadow-[0_3px_0_var(--accent-edge)]",
+            "transition-[transform,box-shadow,filter] duration-150 ease-out",
+            "hover:brightness-95 active:translate-y-[3px] active:shadow-none",
+          ].join(" ")}
+        >
+          ?
+        </button>
+
         <div className="ml-auto flex items-center gap-2">
-          <span className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-2">
+          <span
+            data-tutorial="poin"
+            className="font-display font-bold bg-surface border-2 border-border rounded-full px-4 py-2"
+          >
             ⭐ {profil.poin}
           </span>
           {/* Leaderboard & Koleksi: tombol satelit bulat di samping poin
-              (gaya referensi/image.png) — tetap config-driven dari MENU_LAIN */}
-          {MENU_LAIN.map((item) => (
-            <Link
-              key={item.id}
-              href={
-                item.status === "segera"
-                  ? `/segera-hadir?fitur=${item.id}`
-                  : item.href
-              }
-              aria-label={item.judul}
-              title={item.judul}
-              className="w-11 h-11 rounded-full flex items-center justify-center no-underline bg-surface border-2 border-border hover:border-primary hover:-translate-y-0.5 active:scale-95 transition-[transform,border-color] duration-150"
-            >
-              {item.gambar ? (
-                <GambarEmoji
-                  src={item.gambar}
-                  emoji={item.emoji}
-                  className="w-7 h-7 object-contain"
-                  emojiClassName="text-xl"
-                />
-              ) : (
-                <span className="text-xl" aria-hidden="true">
-                  {item.emoji}
-                </span>
-              )}
-            </Link>
-          ))}
+              (gaya referensi/image.png) — tetap config-driven dari MENU_LAIN.
+              Dibungkus satu div agar panduan bisa menyorotnya sekaligus. */}
+          <div className="flex items-center gap-2" data-tutorial="menu-lain">
+            {MENU_LAIN.map((item) => (
+              <Link
+                key={item.id}
+                href={
+                  item.status === "segera"
+                    ? `/segera-hadir?fitur=${item.id}`
+                    : item.href
+                }
+                aria-label={item.judul}
+                title={item.judul}
+                className="w-11 h-11 rounded-full flex items-center justify-center no-underline bg-surface border-2 border-border hover:border-primary hover:-translate-y-0.5 active:scale-95 transition-[transform,border-color] duration-150"
+              >
+                {item.gambar ? (
+                  <GambarEmoji
+                    src={item.gambar}
+                    emoji={item.emoji}
+                    className="w-7 h-7 object-contain"
+                    emojiClassName="text-xl"
+                  />
+                ) : (
+                  <span className="text-xl" aria-hidden="true">
+                    {item.emoji}
+                  </span>
+                )}
+              </Link>
+            ))}
+          </div>
           {/* keluar lewat konfirmasi — jempol anak gampang salah pencet */}
           <button
             onClick={() => setModalKeluar(true)}
@@ -250,7 +294,7 @@ export default function HomePage() {
         </div>
 
         {/* grid bento kartu game — band hijau pastel (restyle THYNK §C) */}
-        <section aria-labelledby="judul-game">
+        <section aria-labelledby="judul-game" data-tutorial="game">
           <h2 id="judul-game" className="text-xl mb-3">
             Ayo Main! 🎮
           </h2>
@@ -311,6 +355,9 @@ export default function HomePage() {
           </Button>
         </div>
       </Modal>
+
+      {/* panduan pemain baru / tombol ? — sorotan mengikuti data-tutorial */}
+      <TutorialOverlay open={tutorialTerbuka} onClose={tutupTutorial} />
     </>
   );
 }
