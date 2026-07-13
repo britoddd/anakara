@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anakara — Offline</title>
+    <style>
+      :root {
+        --bg: #f5f8e7;
+        --surface: #ffffff;
+        --fg: #163a2c;
+        --muted: #52685b;
+        --border: #dce5cb;
+        --accent: #ffc93c;
+        --accent-edge: #d9a91c;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #12271b;
+          --surface: #1a3526;
+          --fg: #eaf6e8;
+          --muted: #a7bfac;
+          --border: #2f4a38;
+          --accent: #fbd24e;
+          --accent-edge: #c79f22;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        text-align: center;
+      }
+      .kartu {
+        max-width: 30rem;
+      }
+      .emoji {
+        font-size: 5rem;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin: 0.25rem 0 0.5rem;
+      }
+      p {
+        color: var(--muted);
+        font-weight: 700;
+        line-height: 1.5;
+        margin: 0 0 1.5rem;
+      }
+      a.tombol {
+        display: inline-block;
+        text-decoration: none;
+        font-weight: 800;
+        color: var(--fg);
+        background: var(--accent);
+        border: 2px solid var(--accent-edge);
+        border-radius: 999px;
+        padding: 0.75rem 1.75rem;
+        box-shadow: 0 3px 0 var(--accent-edge);
+      }
+      a.tombol:active {
+        transform: translateY(3px);
+        box-shadow: none;
+      }
+      small {
+        display: block;
+        margin-top: 1.25rem;
+        color: var(--muted);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="kartu">
+      <div class="emoji" aria-hidden="true">📴🐆</div>
+      <h1>Kamu sedang offline</h1>
+      <p>
+        Halaman ini belum tersimpan di perangkatmu. Sambungkan ke internet dulu,
+        atau kembali ke Beranda untuk main permainan yang bisa offline.
+      </p>
+      <a class="tombol" href="/home">Kembali ke Beranda</a>
+      <small>Cerita, Kuis, Isi Piringku &amp; 2 vs 2 lawan Robo tetap bisa dimainkan tanpa internet.</small>
+    </main>
+  </body>
+</html>

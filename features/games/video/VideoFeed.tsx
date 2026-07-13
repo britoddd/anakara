@@ -101,8 +101,11 @@ export default function VideoFeed({ profil }: { profil: UserProfile }) {
         ))}
       </div>
 
-      {/* bar atas mengambang */}
-      <div className="absolute top-0 inset-x-0 flex items-center justify-between p-4 bg-gradient-to-b from-black/70 to-transparent pointer-events-none">
+      {/* bar atas mengambang — turun sebanyak tinggi banner offline agar tak tertutup */}
+      <div
+        className="absolute inset-x-0 flex items-center justify-between p-4 bg-gradient-to-b from-black/70 to-transparent pointer-events-none"
+        style={{ top: "var(--tinggi-banner-offline, 0px)" }}
+      >
         <TombolKembali href="/home" label="Keluar dari video" overlay />
         <span className="text-white font-display font-bold [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
           Video Belajar 📺 {indexAktif + 1}/{DAFTAR_VIDEO.length}

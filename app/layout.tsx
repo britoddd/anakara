@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
 import AuthProvider from "@/features/auth/AuthProvider";
+import OnlineProvider from "@/features/offline/OnlineContext";
+import IndikatorOffline from "@/features/offline/IndikatorOffline";
+import PopupButuhInternet from "@/features/offline/PopupButuhInternet";
+import RegistrasiSW from "@/features/offline/RegistrasiSW";
 import "./globals.css";
 
 const baloo = Baloo_2({
@@ -30,6 +34,12 @@ export const metadata: Metadata = {
   title: judul,
   description: deskripsi,
   applicationName: "Anakara",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Anakara",
+    statusBarStyle: "default",
+  },
   openGraph: {
     type: "website",
     siteName: "Anakara",
@@ -84,7 +94,12 @@ export default function RootLayout({
         <a href="#konten-utama" className="skip-link">
           Langsung ke konten
         </a>
-        <AuthProvider>{children}</AuthProvider>
+        <OnlineProvider>
+          <IndikatorOffline />
+          <AuthProvider>{children}</AuthProvider>
+          <PopupButuhInternet />
+        </OnlineProvider>
+        <RegistrasiSW />
       </body>
     </html>
   );
