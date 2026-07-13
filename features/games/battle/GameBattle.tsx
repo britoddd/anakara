@@ -54,6 +54,8 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   const [galat, setGalat] = useState<string | null>(null);
   const [sisaCari, setSisaCari] = useState(BATAS_CARI_DETIK);
   const [bantuanTerbuka, setBantuanTerbuka] = useState(false);
+  /* umpan balik "Tersalin!" sesaat setelah kode disalin ke clipboard */
+  const [tersalin, setTersalin] = useState(false);
   /* sesi belum selesai yang bisa dilanjutkan (keluar tak sengaja) */
   const [sesiLanjut, setSesiLanjut] = useState<{ ruangId: string; kodeTim: string } | null>(null);
 
@@ -223,6 +225,19 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
       setFase("lobi");
     });
 
+  /* salin kode tim ke clipboard supaya mudah dibagikan ke teman. Gagal senyap
+     bila API tak tersedia (konteks non-secure / HP lama) — kode tetap terlihat. */
+  async function salinKode() {
+    if (!kodeTim || !navigator.clipboard) return;
+    try {
+      await navigator.clipboard.writeText(kodeTim);
+      setTersalin(true);
+      window.setTimeout(() => setTersalin(false), 2000);
+    } catch {
+      /* diabaikan */
+    }
+  }
+
   function mainLagi() {
     hapusSesiBattle();
     ruangIdRef.current = null;
@@ -267,6 +282,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   if (fase === "tim" && kodeTim) {
     if (!tim) return <LoadingSpinner label="Membuka ruang tim…" />;
     const mencari = tim.status === "mencari";
+    const timLengkap = jumlahAnggota >= 2;
     return (
       <>
       <LatarArena />
@@ -282,56 +298,110 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
         labelBatal="Tetap di Tim"
         onKeluar={keluar}
       />
-      <main id="konten-utama" className="max-w-xl mx-auto px-6 py-10 text-center">
-        <h1 className="text-3xl mb-2">Ruang Tim ⚔️</h1>
-        <p className="text-muted font-bold mb-6">
-          Ajak temanmu masuk dengan kode ini:
-        </p>
+      <main id="konten-utama" className="max-w-xl mx-auto px-6 py-10">
+        <h1 className="text-3xl text-center mb-6">Ruang Tim ⚔️</h1>
 
-        <p
-          className="font-display font-extrabold text-5xl tracking-[0.3em] bg-surface border-4 border-primary rounded-lg inline-block px-8 py-4 mb-8"
-          aria-label={`Kode tim: ${kodeTim.split("").join(" ")}`}
+        {/* ── Sorotan 1: kartu kode undangan (bisa disalin sekali ketuk) ── */}
+        <section
+          aria-label="Kode undangan tim"
+          className="relative bg-surface border-4 border-primary rounded-lg px-6 py-6 mb-6 text-center overflow-hidden shadow-[0_6px_0_var(--primary-active)]"
         >
-          {kodeTim}
-        </p>
+          <span className="block font-display font-extrabold uppercase tracking-[0.2em] text-sm text-primary mb-1">
+            Kode Tim
+          </span>
+          <p
+            className="font-display font-extrabold text-5xl sm:text-6xl tracking-[0.28em] leading-none mb-4"
+            aria-label={`Kode tim: ${kodeTim.split("").join(" ")}`}
+          >
+            {kodeTim}
+          </p>
+          <p className="text-muted font-bold text-sm mb-4">
+            Ajak temanmu masuk dengan kode ini
+          </p>
+          <Button variant={tersalin ? "success" : "accent"} onClick={() => void salinKode()}>
+            {tersalin ? "✅ Tersalin!" : "📋 Salin Kode"}
+          </Button>
+        </section>
 
-        <ul className="flex justify-center gap-4 mb-8 list-none" aria-label="Anggota tim">
-          {Object.entries(tim.anggota ?? {}).map(([id, a]) => {
-            const av = getAvatar(a.avatar ?? "");
-            return (
-              <li key={id} className="flex flex-col items-center gap-2 w-28">
-                <span className="w-16 h-16 rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center text-3xl">
-                  {a.bot ? (
-                    <span aria-hidden="true">🤖</span>
-                  ) : av ? (
-                    <GambarEmoji src={av.gambar} emoji={av.emoji} className="w-full h-full object-cover" />
-                  ) : (
-                    <span aria-hidden="true">🙂</span>
-                  )}
+        {/* ── Sorotan 2: panel tim (identitas kubu biru) + status kesiapan ── */}
+        <section
+          aria-label="Anggota tim"
+          className="bg-surface border-2 border-border rounded-lg overflow-hidden mb-6 shadow-[0_2px_8px_rgba(16,32,43,0.06)]"
+        >
+          <div className="flex items-center justify-between gap-3 bg-band-blue px-4 py-3 border-b-2 border-border">
+            <span className="font-display font-extrabold text-lg flex items-center gap-2">
+              <span aria-hidden="true">🛡️</span> Timmu
+            </span>
+            <span
+              className={[
+                "inline-flex items-center gap-1 rounded-full px-3 py-1",
+                "text-sm font-display font-extrabold border-2 bg-surface",
+                timLengkap ? "text-success border-success" : "text-muted border-border",
+              ].join(" ")}
+            >
+              {timLengkap ? "Siap Tanding! 💪" : `${jumlahAnggota}/2 pemain`}
+            </span>
+          </div>
+
+          <ul className="grid grid-cols-2 gap-3 p-4 list-none">
+            {Object.entries(tim.anggota ?? {}).map(([id, a]) => {
+              const av = getAvatar(a.avatar ?? "");
+              const ketua = id === tim.ketua;
+              return (
+                <li
+                  key={id}
+                  className="flex flex-col items-center gap-2 rounded-md bg-surface-2 border-2 border-border px-3 py-4"
+                >
+                  <span className="relative">
+                    <span className="w-20 h-20 rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center text-4xl">
+                      {a.bot ? (
+                        <span aria-hidden="true">🤖</span>
+                      ) : av ? (
+                        <GambarEmoji src={av.gambar} emoji={av.emoji} className="w-full h-full object-cover" />
+                      ) : (
+                        <span aria-hidden="true">🙂</span>
+                      )}
+                    </span>
+                    {ketua && (
+                      <span
+                        className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-accent border-2 border-surface flex items-center justify-center text-sm"
+                        title="Ketua tim"
+                        aria-hidden="true"
+                      >
+                        👑
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-display font-extrabold text-sm leading-tight text-center">
+                    {a.nama}
+                  </span>
+                  {id === uid ? (
+                    <span className="rounded-full bg-primary text-on-primary text-xs font-bold px-2 py-0.5">
+                      Kamu
+                    </span>
+                  ) : ketua ? (
+                    <span className="text-xs font-bold text-muted">Ketua tim</span>
+                  ) : null}
+                </li>
+              );
+            })}
+            {jumlahAnggota < 2 && (
+              <li className="flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border px-3 py-4 min-h-[9rem]">
+                <span
+                  className="w-20 h-20 rounded-full bg-surface-2 border-2 border-dashed border-border flex items-center justify-center text-3xl text-muted motion-safe:animate-pulse"
+                  aria-hidden="true"
+                >
+                  ?
                 </span>
-                <span className="font-bold text-sm leading-tight">
-                  {a.nama}
-                  {id === uid ? " (kamu)" : ""}
-                  {id === tim.ketua ? " 👑" : ""}
-                </span>
+                <span className="font-bold text-sm text-muted text-center">Menunggu teman…</span>
               </li>
-            );
-          })}
-          {jumlahAnggota < 2 && (
-            <li className="flex flex-col items-center gap-2 w-28">
-              <span
-                className="w-16 h-16 rounded-full bg-surface-2 border-2 border-dashed border-border flex items-center justify-center text-2xl text-muted"
-                aria-hidden="true"
-              >
-                ?
-              </span>
-              <span className="font-bold text-sm text-muted">Menunggu teman…</span>
-            </li>
-          )}
-        </ul>
+            )}
+          </ul>
+        </section>
 
+        {/* ── Sorotan 3: aksi utama (cari lawan / isi Robo / status) ── */}
         {mencari ? (
-          <div>
+          <div className="text-center">
             <LoadingSpinner label={`Mencari tim lawan… ${sisaCari} detik`} />
             <p className="text-sm font-bold text-muted mb-4">
               Kalau tidak ada tim lain, kalian akan melawan Tim Robo 🤖
@@ -344,18 +414,18 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
           </div>
         ) : akuKetua ? (
           <div className="flex flex-col items-center gap-3">
-            <Button size="lg" onClick={cariLawan} disabled={sibuk || jumlahAnggota < 2}>
+            <Button size="lg" fullWidth onClick={cariLawan} disabled={sibuk || jumlahAnggota < 2}>
               Cari Lawan ⚔️
             </Button>
             {jumlahAnggota < 2 && (
-              <div className="flex flex-col items-center gap-2">
-                <p className="text-sm font-bold text-muted">
+              <div className="flex flex-col items-center gap-2 w-full">
+                <p className="text-sm font-bold text-muted text-center">
                   Tunggu 1 teman lagi masuk dengan kode di atas, atau…
                 </p>
-                <Button variant="accent" onClick={tambahBot} disabled={sibuk}>
+                <Button variant="accent" fullWidth onClick={tambahBot} disabled={sibuk}>
                   🤖 Main dengan Robo
                 </Button>
-                <p className="text-xs font-bold text-muted">
+                <p className="text-xs font-bold text-muted text-center">
                   Robo Milo akan mengisi timmu supaya bisa langsung tanding.
                 </p>
               </div>
@@ -365,7 +435,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
             </Button>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-3 text-center">
             <p className="font-bold">Menunggu ketua tim menekan “Cari Lawan”…</p>
             <Button variant="ghost" onClick={keluar} disabled={sibuk}>
               Keluar Tim
@@ -374,7 +444,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
         )}
 
         {galat && (
-          <p role="alert" className="mt-4 text-danger font-bold">
+          <p role="alert" className="mt-4 text-danger font-bold text-center">
             ⚠️ {galat}
           </p>
         )}
