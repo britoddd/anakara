@@ -7,8 +7,10 @@ import { SEMUA_SOAL, type Soal } from "@/features/games/kuis/config";
 export const JUMLAH_SOAL_BATTLE = 5;
 export const POIN_PER_BENAR_BATTLE = 5;
 export const POIN_DUPLIKAT = 25; // D2: kartu duplikat otomatis jadi poin
-/** lama menunggu tim lawan sungguhan sebelum fallback bot (D7) */
-export const BATAS_CARI_DETIK = 15;
+/** lama menunggu tim lawan sungguhan sebelum fallback bot (D7).
+    Sengaja panjang: utamakan lawan pemain sungguhan (PvP) — bot hanya jaring
+    pengaman kalau benar-benar tak ada tim lain yang mengantre. */
+export const BATAS_CARI_DETIK = 45;
 /** sesi tersimpan hanya bisa dilanjutkan selama ruang lebih muda dari ini */
 export const BATAS_LANJUT_RUANG_MENIT = 30;
 

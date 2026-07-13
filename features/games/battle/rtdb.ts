@@ -202,13 +202,21 @@ export async function cobaKlaimLawan(kodeKu: string): Promise<string | null> {
   return hasil.committed ? kodeLawan : null;
 }
 
+/** Keluar dari antrean. Return true HANYA bila kami memang masih mengantre dan
+    berhasil menghapus entri sendiri. Bila entri sudah tidak ada (tim lawan
+    sungguhan sudah mengklaim kami lewat cobaKlaimLawan), return false — supaya
+    pemanggil tidak keliru membuat ruang bot padahal match PvP sudah terbentuk. */
 export async function keluarAntrean(kode: string): Promise<boolean> {
   // transaction supaya tidak balapan dengan ketua lain yang sedang mengklaim kami
+  let masihMengantre = false;
   const hasil = await runTransaction(
     ref(getRtdb(), `battle/antrean/${kode}`),
-    (entri) => (entri ? null : entri)
+    (entri) => {
+      masihMengantre = entri != null;
+      return null; // apa pun kondisinya, pastikan entri terhapus
+    }
   );
-  return hasil.committed;
+  return hasil.committed && masihMengantre;
 }
 
 /* ---------- ruang battle ---------- */

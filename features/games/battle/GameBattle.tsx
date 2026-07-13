@@ -35,7 +35,8 @@ import type { TimBattle } from "./types";
    lobi → "Main" (quick match: buat tim + rekan bot D8 + langsung antre) atau
    Buat Tim / Gabung Tim → ruang tim (kode 4 huruf). Di ruang tim, ketua bisa
    "Main dengan Robo" (isi slot kosong dengan bot D8) lalu tekan "Cari Lawan"
-   → antrean RTDB; 15 dtk tak ada lawan → tim bot (D7) → arena (ArenaBattle).
+   → antrean RTDB; utamakan lawan pemain sungguhan, baru fallback tim bot (D7)
+   bila BATAS_CARI_DETIK habis tanpa lawan → arena (ArenaBattle).
    Ketua tim = pembuat & penggerak matchmaking. */
 
 type Fase = "lobi" | "gabung" | "tim";
@@ -143,7 +144,7 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
       setSisaCari(Math.max(0, sisa));
     }, 500);
 
-    // D7: 15 detik tak ada tim lawan → lawan bot
+    // D7: fallback bot hanya bila BATAS_CARI_DETIK habis tanpa lawan pemain
     const batasWaktu = setTimeout(async () => {
       if (!aktif || !kodeTim) return;
       const masihDiAntrean = await keluarAntrean(kodeTim);
@@ -176,8 +177,8 @@ export default function GameBattle({ profil }: { profil: UserProfile }) {
   }
 
   /* Quick match: buat tim + rekan bot otomatis (D8) lalu LANGSUNG antre lawan.
-     Kalau nanti ada tim sungguhan di antrean → lawan pemain; kalau tidak
-     (15 dtk, D7) → lawan tim bot. Bot hanya mengisi slot rekan yang kosong. */
+     Utamakan lawan pemain sungguhan; baru fallback tim bot bila BATAS_CARI_DETIK
+     habis tanpa lawan (D7). Bot hanya mengisi slot rekan yang kosong. */
   const mainCepat = () =>
     aksi(async () => {
       const kode = await buatTim(profil, true);
