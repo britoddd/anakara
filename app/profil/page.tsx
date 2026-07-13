@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -73,6 +74,8 @@ export default function ProfilPage() {
 
   return (
     <main id="konten-utama" className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
+      {/* doodle samar di latar utama — seragam dengan Home (restyle D12) */}
+      <LatarDoodle />
       {/* header band biru pastel — seragam dengan Leaderboard */}
       <div className="relative rounded-xl bg-band-blue p-4 sm:p-5 mb-6 overflow-hidden">
         <div className="flex items-center gap-3">
