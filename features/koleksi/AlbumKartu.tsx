@@ -11,7 +11,8 @@ import {
 } from "@/features/games/battle/config";
 
 /* Album Koleksi Kartu (Phase 8, keputusan D2): grid 24 kartu ber-rarity.
-   Belum didapat = silhouette "?" redup (bikin penasaran, konvensi mockup);
+   Belum didapat: biasa & langka = pratinjau abu-abu isi kartu (art + nama),
+   legenda = silhouette "?" redup (jaga misteri kartu spesial);
    klik kartu yang dimiliki → detail besar (gambar, nama, rarity, deskripsi).
    Presentasional murni (koleksi via prop) supaya bisa diuji di /dev/phase8. */
 
@@ -73,8 +74,8 @@ export default function AlbumKartu({ koleksi }: { koleksi: string[] }) {
                     </span>
                   </span>
                 </button>
-              ) : (
-                /* silhouette: belum didapat — status lewat simbol ?, bukan warna saja */
+              ) : kartu.rarity === "legenda" ? (
+                /* legenda tetap misteri penuh (?): jaga rasa penasaran & kesan istimewa */
                 <span
                   aria-label={`Kartu ${RARITY_INFO[kartu.rarity].label} — belum didapat`}
                   className="flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-border bg-surface-2 px-1 py-3 min-h-[8.25rem] opacity-70 grayscale"
@@ -83,6 +84,29 @@ export default function AlbumKartu({ koleksi }: { koleksi: string[] }) {
                     ❔
                   </span>
                   <span className="font-display font-extrabold text-xs text-muted">???</span>
+                  <span className="text-[10px] font-bold text-muted">
+                    {RARITY_INFO[kartu.rarity].label} 🔒
+                  </span>
+                </span>
+              ) : (
+                /* biasa & langka: pratinjau abu-abu isi kartu (bukan sekadar "?")
+                   supaya anak tahu kartu apa yang diburu — tetap terkunci (dashed + 🔒) */
+                <span
+                  aria-label={`${kartu.nama} — kartu ${RARITY_INFO[kartu.rarity].label}, belum didapat`}
+                  className="flex flex-col items-center gap-1 rounded-lg border-2 border-dashed border-border bg-surface-2 px-1 py-3 min-h-[8.25rem]"
+                >
+                  {/* jendela art digrayscale + diredupkan: jelas "belum dimiliki",
+                      tapi bentuk kartunya tetap dikenali (pratinjau isi) */}
+                  <span className="text-4xl h-12 w-[calc(100%-8px)] bg-white rounded-md flex items-center justify-center overflow-hidden grayscale opacity-60">
+                    <GambarEmoji
+                      src={kartu.gambar}
+                      emoji={kartu.emoji}
+                      className="max-h-12"
+                    />
+                  </span>
+                  <span className="font-display font-extrabold text-xs text-center leading-tight px-1 text-muted">
+                    {kartu.nama}
+                  </span>
                   <span className="text-[10px] font-bold text-muted">
                     {RARITY_INFO[kartu.rarity].label} 🔒
                   </span>
