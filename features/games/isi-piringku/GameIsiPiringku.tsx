@@ -15,6 +15,7 @@ import BlobMata from "@/components/deko/BlobMata";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
+import DialogUlangLevel from "@/components/ui/KonfirmasiUlangLevel";
 import TombolKembali from "@/components/ui/TombolKembali";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import ProgressBar from "@/components/ui/ProgressBar";
@@ -624,6 +625,13 @@ function PilihLevel({
   uidKu: string;
 }) {
   const endlessTerbuka = levelTerbuka >= ENDLESS_IP.level;
+  /* level yang sudah pernah diselesaikan (c.level < levelTerbuka) minta
+     konfirmasi ulang dulu; level baru langsung main */
+  const [levelUlang, setLevelUlang] = useState<LevelConfig | null>(null);
+  function pilih(c: LevelConfig) {
+    if (c.level < levelTerbuka) setLevelUlang(c);
+    else onPilih(c);
+  }
   return (
     <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between mb-8">
@@ -641,11 +649,13 @@ function PilihLevel({
             <button
               key={c.level}
               disabled={terkunci}
-              onClick={() => onPilih(c)}
+              onClick={() => pilih(c)}
               aria-label={
                 terkunci
                   ? `${c.nama} terkunci. Selesaikan Level ${c.level - 1} untuk membukanya`
-                  : `Main ${c.nama}`
+                  : c.level < levelTerbuka
+                    ? `Main lagi ${c.nama} (sudah selesai)`
+                    : `Main ${c.nama}`
               }
               className={[
                 "flex flex-col items-center gap-1.5 p-5 rounded-xl bg-surface border-4 text-fg",
@@ -715,6 +725,17 @@ function PilihLevel({
           <PapanRekorEndless game="isi-piringku" uidKu={uidKu} />
         </section>
       )}
+
+      <DialogUlangLevel
+        terbuka={levelUlang !== null}
+        namaLevel={levelUlang ? `Level ${levelUlang.level} · ${levelUlang.nama}` : ""}
+        onBatal={() => setLevelUlang(null)}
+        onUlang={() => {
+          const c = levelUlang;
+          setLevelUlang(null);
+          if (c) onPilih(c);
+        }}
+      />
     </main>
   );
 }
