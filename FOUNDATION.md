@@ -336,6 +336,7 @@ public/assets/{mascot, avatars, food, icons, cards, backgrounds, stories, audio,
 | `arsip/prompt-clarifications.md` | Koreksi & keputusan atas referensi — **diarsipkan**. |
 | `referensi/` | Mockup Figma + sticker Tayo (sumber visual). |
 | **`daftar-gambar.md`** | **Manifest ±105 gambar** untuk digenerate manual oleh user (prioritas P0/P1/P2, prompt siap-copy). |
+| **`daftar-video.md`** | **Prompt produksi 8 video** section Video Belajar (narasi id + storyboard per-shot 9:16). |
 | **`catatan-restyle-thynk.md`** | Rencana restyle art style D12 (referensi THYNK di Behance) — ✅ dieksekusi 2026-07-08. |
 | **`data/`** | **Konten aplikasi siap-impor** (makanan, soal, kartu, cerita, video) + `data/README.md`. |
 | `scripts/` | CLI generate asset (Gemini) + diagnostik `list-models.mjs` + `.env` (API key). |
