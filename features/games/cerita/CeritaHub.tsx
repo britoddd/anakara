@@ -104,7 +104,7 @@ export default function CeritaHub({ profil, onBaca }: CeritaHubProps) {
                     <GambarEmoji
                       src={bab.cover}
                       emoji="🐆🧺🐰"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover object-bottom"
                       emojiClassName="text-5xl tracking-widest"
                     />
                     {selesaiDibaca && (

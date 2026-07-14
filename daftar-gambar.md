@@ -277,20 +277,23 @@ Semua pakai **GAYA-CERITA** + lampirkan `SHEET` & `SCENE`.
 
 | ✔ | File | Subjek (scene) |
 |---|---|---|
-| [ ] | `cover.png` | Tayo and Momo having a picnic in a sunny forest clearing with a woven basket, title-free cover composition |
-| [ ] | `hal-01.png` | Bright morning sky, Tayo happily setting off for a picnic carrying an empty basket |
-| [ ] | `hal-02.png` | Tayo meets Momo the bunny on a forest path, both waving excitedly |
-| [ ] | `hal-03.png` | Tayo opens the picnic basket and it is empty, both looking curious |
-| [ ] | `hal-04.png` | Tayo and Momo thinking hard about which foods to bring, a thought bubble with food silhouettes |
-| [ ] | `hal-05.png` | The basket now full with rice, chicken, apples and a water bottle, both cheering |
-| [ ] | `hal-06.png` | Tayo and Momo eating together under a big shady tree |
-| [ ] | `hal-07.png` | Tayo and Momo playing catch with a ball in a sunny meadow |
-| [ ] | `hal-08.png` | Tayo happily sweating after playing, wondering what to drink, small question sparkles |
-| [ ] | `hal-09.png` | Tayo drinking a glass of fresh water, early sunset colors |
-| [ ] | `hal-10.png` | Tayo and Momo walking home at sunset waving goodbye, warm happy ending |
+| [x] | `cover.png` | Tayo and Momo having a picnic in a sunny forest clearing with a woven basket, title-free cover composition |
+| [x] | `hal-01.png` | Bright morning sky, Tayo happily setting off for a picnic carrying an empty basket |
+| [x] | `hal-02.png` | Tayo meets Momo the bunny on a forest path, both waving excitedly |
+| [x] | `hal-03.png` | Tayo opens the picnic basket and it is empty, both looking curious |
+| [x] | `hal-04.png` | Tayo and Momo thinking hard about which foods to bring, a thought bubble with food silhouettes |
+| [x] | `hal-05.png` | The basket now full with rice, chicken, apples and a water bottle, both cheering |
+| [x] | `hal-06.png` | Tayo and Momo eating together under a big shady tree |
+| [x] | `hal-07.png` | Tayo and Momo playing catch with a ball in a sunny meadow |
+| [x] | `hal-08.png` | Tayo happily sweating after playing, wondering what to drink, small question sparkles |
+| [x] | `hal-09.png` | Tayo drinking a glass of fresh water, early sunset colors |
+| [x] | `hal-10.png` | Tayo and Momo walking home at sunset waving goodbye, warm happy ending |
 
 ### Thumbnail video (8) — folder `public/assets/videos/thumb/` — sinkron dengan `data/video.json`
 Pakai **GAYA-CERITA** (tanpa Momo bila tak disebut); lampirkan `SHEET` untuk yang ada Tayo.
+
+> 🎬 **Video bergeraknya** (`.mp4`) punya prompt produksi terpisah: **[`daftar-video.md`](daftar-video.md)**
+> — narasi Bahasa Indonesia + storyboard per-shot 9:16 untuk ke-8 video.
 
 | ✔ | File | Subjek |
 |---|---|---|

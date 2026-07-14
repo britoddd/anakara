@@ -235,7 +235,7 @@ export default function BacaCerita({
             <GambarEmoji
               src={halaman.gambar}
               emoji={EMOJI_SCENE_BAB1[halaman.no] ?? "🐆"}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover object-bottom"
               emojiClassName="text-6xl sm:text-7xl tracking-widest"
             />
           </div>
