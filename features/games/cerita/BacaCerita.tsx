@@ -228,8 +228,17 @@ export default function BacaCerita({
           ].join(" ")}
         >
           {/* ilustrasi (fallback: band hijau flat + awan + emoji scene sampai
-             asset P2 ada — restyle THYNK §E; awan tertutup otomatis oleh img) */}
-          <div className="relative aspect-[16/9] sm:aspect-[16/8] bg-band-green flex items-center justify-center">
+             asset P2 ada — restyle THYNK §E; awan tertutup otomatis oleh img).
+             Halaman pertanyaan lebih pendek → beri ruang untuk pilihan agar
+             seluruh halaman muat tanpa scroll. */}
+          <div
+            className={[
+              "relative bg-band-green flex items-center justify-center",
+              halaman.tipe === "pertanyaan"
+                ? "aspect-[16/6] sm:aspect-[16/5]"
+                : "aspect-[16/9] sm:aspect-[16/8]",
+            ].join(" ")}
+          >
             <AwanPikiran className="absolute top-3 right-5 w-16 text-white/90" />
             <AwanPikiran className="absolute top-6 left-6 w-10 text-white/70" />
             <GambarEmoji
@@ -240,17 +249,17 @@ export default function BacaCerita({
             />
           </div>
 
-          <div className="p-5 sm:p-7">
+          <div className={halaman.tipe === "pertanyaan" ? "p-4 sm:p-5" : "p-5 sm:p-7"}>
             {halaman.tipe === "narasi" ? (
               <p className="text-lg sm:text-xl font-bold leading-relaxed text-center max-w-[52ch] mx-auto">
                 {halaman.teks}
               </p>
             ) : (
               <div>
-                <p className="text-lg sm:text-xl font-bold leading-relaxed text-center mb-5">
+                <p className="text-base sm:text-lg font-bold leading-snug text-center mb-3 sm:mb-4">
                   🤔 {halaman.pertanyaan}
                 </p>
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {halaman.opsi.map((opsi, i) => {
                     const benar = benarDiHalaman[index] && i === halaman.kunciIndex;
                     const salah = salahDicoba.includes(i);
@@ -262,7 +271,7 @@ export default function BacaCerita({
                         onClick={() => jawab(i)}
                         aria-label={`Jawaban: ${opsi}${benar ? " (benar)" : salah ? " (kurang tepat)" : ""}`}
                         className={[
-                          "relative flex flex-col items-center gap-1.5 p-4 rounded-lg border-4 text-fg",
+                          "relative flex flex-col items-center gap-1 p-2.5 sm:p-3 rounded-lg border-4 text-fg",
                           "transition-[transform,border-color,background-color] duration-150",
                           benar
                             ? "bg-success/15 border-success"
@@ -273,7 +282,7 @@ export default function BacaCerita({
                                 : "bg-surface border-border hover:border-primary hover:-translate-y-1 cursor-pointer",
                         ].join(" ")}
                       >
-                        <span className="text-3xl" aria-hidden="true">
+                        <span className="text-2xl sm:text-3xl" aria-hidden="true">
                           {halaman.opsiEmoji[i]}
                         </span>
                         <span className="font-bold leading-tight">{opsi}</span>
@@ -292,7 +301,7 @@ export default function BacaCerita({
                 <p
                   role="status"
                   aria-live="assertive"
-                  className="text-center font-bold mt-4 min-h-[1.6em]"
+                  className="text-center font-bold mt-3 min-h-[1.6em]"
                 >
                   {feedback}
                 </p>
