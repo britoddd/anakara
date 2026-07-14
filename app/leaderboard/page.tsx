@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AwanPikiran from "@/components/deko/AwanPikiran";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import Button from "@/components/ui/Button";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import TombolKembali from "@/components/ui/TombolKembali";
@@ -49,6 +50,8 @@ export default function LeaderboardPage() {
 
   return (
     <main id="konten-utama" className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       {/* header band biru pastel (restyle THYNK §C) */}
       <div className="relative rounded-xl bg-band-blue p-4 sm:p-5 mb-5 overflow-hidden">
         <AwanPikiran className="absolute -right-1 -top-2 w-16 text-white/70" />

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AwanPikiran from "@/components/deko/AwanPikiran";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import Button from "@/components/ui/Button";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import TombolKembali from "@/components/ui/TombolKembali";
@@ -26,6 +27,8 @@ export default function CeritaHub({ profil, onBaca }: CeritaHubProps) {
       id="konten-utama"
       className="max-w-5xl mx-auto px-4 sm:px-6 py-6 lg:grid lg:grid-cols-[220px_1fr] lg:gap-8"
     >
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       {/* ---------- sidebar sub-mode ---------- */}
       <aside aria-label="Sub-mode cerita" className="mb-6 lg:mb-0">
         <div className="flex items-center gap-3 mb-4">

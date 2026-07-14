@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import Button from "@/components/ui/Button";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/features/auth/AuthProvider";
@@ -58,6 +59,8 @@ export default function BuatProfilPage() {
 
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-6 py-12 text-center">
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       <h1 className="text-3xl mb-2">Buat profilmu!</h1>
       <p className="text-lg text-muted mb-8">
         Pilih nama panggilan dan avatar kerenmu, ya!
