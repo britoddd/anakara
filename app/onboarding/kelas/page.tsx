@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -47,6 +48,8 @@ export default function JoinKelasPage() {
 
   return (
     <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       <p className="text-5xl mb-4" aria-hidden="true">
         🏫
       </p>

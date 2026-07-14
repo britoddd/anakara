@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import TepiGelombang from "@/components/deko/TepiGelombang";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -25,6 +26,8 @@ export default function GuruPage() {
 
   return (
     <>
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       {/* header band biru pastel (restyle THYNK §C) */}
       <div className="bg-band-blue">
         <header className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 max-w-5xl mx-auto w-full">

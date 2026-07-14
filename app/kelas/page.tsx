@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import Squiggle from "@/components/deko/Squiggle";
 import Button from "@/components/ui/Button";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -45,6 +46,8 @@ export default function KelasPage() {
 
   return (
     <main id="konten-utama" className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       {/* header band hijau pastel (restyle THYNK §C) */}
       <div className="relative rounded-xl bg-band-green p-4 sm:p-5 mb-6 overflow-hidden">
         <Squiggle className="absolute -right-2 -top-1 w-20 text-white/60 rotate-12" />

@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import Button from "@/components/ui/Button";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { MENU_GAME, MENU_LAIN } from "@/features/home/menu";
@@ -18,6 +19,8 @@ function IsiSegeraHadir() {
 
   return (
     <main id="konten-utama" className="max-w-xl mx-auto px-6 py-20 text-center">
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       <p className="text-6xl mb-6" aria-hidden="true">
         🐆💤
       </p>

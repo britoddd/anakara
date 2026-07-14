@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import AwanPikiran from "@/components/deko/AwanPikiran";
+import LatarDoodle from "@/components/deko/LatarDoodle";
 import TepiGelombang from "@/components/deko/TepiGelombang";
 import Button from "@/components/ui/Button";
 import TombolKembali from "@/components/ui/TombolKembali";
@@ -159,6 +160,8 @@ function GoogleLogo() {
 export default function MasukPage() {
   return (
     <>
+      {/* doodle samar di latar — seragam dengan Home & Profil (restyle D12) */}
+      <LatarDoodle />
       {/* Banner dekoratif playful (mockup 4) — pembawa teks tetap di bawah */}
       <div
         aria-hidden="true"
