@@ -42,7 +42,9 @@
       "feedbackBenar": "Yeay, pintar! Nasi memberi tenaga, ayam membuat kuat, apel penuh vitamin!",
       "feedbackSalah": "Hmm, itu kurang bergizi. Yuk pilih lagi yang membuat tubuh kuat!",
       "gambar": "/assets/stories/bab1/hal-04.png",
-      "audio": "/assets/audio/bab1/hal-04.mp3"
+      "audio": "/assets/audio/bab1/hal-04.mp3",
+      "audioBenar": "/assets/audio/bab1/hal-04-benar.mp3",
+      "audioSalah": "/assets/audio/bab1/hal-04-salah.mp3"
     },
     {
       "no": 5,
@@ -75,7 +77,9 @@
       "feedbackBenar": "Betul! Air putih paling segar dan sehat untuk tubuh.",
       "feedbackSalah": "Wah, itu terlalu manis. Yuk pilih yang paling menyehatkan!",
       "gambar": "/assets/stories/bab1/hal-08.png",
-      "audio": "/assets/audio/bab1/hal-08.mp3"
+      "audio": "/assets/audio/bab1/hal-08.mp3",
+      "audioBenar": "/assets/audio/bab1/hal-08-benar.mp3",
+      "audioSalah": "/assets/audio/bab1/hal-08-salah.mp3"
     },
     {
       "no": 9,

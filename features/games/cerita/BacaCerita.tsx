@@ -98,9 +98,11 @@ export default function BacaCerita({
     if (i === halaman.kunciIndex) {
       setBenarDiHalaman((b) => ({ ...b, [index]: true }));
       setFeedback(`🐆✨ ${halaman.feedbackBenar} +${POIN_PER_PERTANYAAN} ⭐`);
+      if (suaraAktif) putarNarasi(halaman.audioBenar, halaman.feedbackBenar);
     } else {
       setSalahDicoba((s) => (s.includes(i) ? s : [...s, i]));
       setFeedback(`🐆💛 ${halaman.feedbackSalah}`);
+      if (suaraAktif) putarNarasi(halaman.audioSalah, halaman.feedbackSalah);
     }
   }
 
