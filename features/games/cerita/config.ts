@@ -24,6 +24,10 @@ export interface HalamanPertanyaan {
   feedbackSalah: string;
   gambar: string;
   audio: string;
+  /* narasi feedback (opsional): diputar saat anak menjawab; kalau file tak ada,
+     putarNarasi() otomatis jatuh ke TTS membacakan feedbackBenar/feedbackSalah */
+  audioBenar?: string;
+  audioSalah?: string;
 }
 
 export type HalamanCerita = HalamanNarasi | HalamanPertanyaan;
