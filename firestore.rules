@@ -84,5 +84,17 @@ service cloud.firestore {
       allow create: if request.auth != null
         && request.resource.data.userId == request.auth.uid;
     }
+
+    // Tantangan Harian Kuis: satu dokumen per siswa (id = uid) berisi tanggal
+    // terakhir main, beruntun (streak), & rekap ringan. Hanya pemiliknya yang
+    // boleh membaca & menulis; id dokumen wajib = uid dan field userId wajib
+    // cocok (anti menulis atas nama siswa lain). Poin ⭐-nya tetap lewat
+    // users/{uid} yang aturannya sudah ada di atas.
+    match /kuisHarian/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.userId == userId;
+    }
   }
 }
