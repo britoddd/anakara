@@ -19,7 +19,7 @@ const kartuSampai = (n: number) =>
 const infoUji: InfoKelas = {
   kode: "ABC23",
   namaKelas: "Kelas 1A",
-  namaGuru: "Bu Rina",
+  guru: ["Bu Rina", "Pak Doni"],
   pengumuman: [
     {
       id: "p1",
@@ -50,7 +50,7 @@ const infoUji: InfoKelas = {
 const infoKosong: InfoKelas = {
   kode: "KOSON",
   namaKelas: "Kelas Baru",
-  namaGuru: null,
+  guru: [],
   pengumuman: [],
   teman: [],
 };

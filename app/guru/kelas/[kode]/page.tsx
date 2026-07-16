@@ -11,21 +11,26 @@ import type { UserProfile } from "@/features/auth/types";
 import {
   ambilKelas,
   ambilLogKuisKelas,
+  ambilPengajarKelas,
   ambilPengumuman,
   ambilSiswaKelas,
   buatPengumuman,
   hapusPengumuman,
+  keluarKelasSebagaiGuru,
+  keluarkanGuru,
   keluarkanSiswa,
   resetProgresSiswa,
   type KelasGuru,
   type LogKuis,
+  type PengajarKelas,
   type Pengumuman,
 } from "@/features/guru/api";
 import KelolaKelas from "@/features/guru/KelolaKelas";
 
 /* Halaman kelola satu kelas (Teacher Dashboard) — dibuka dari "⚙️ Kelola Kelas"
-   di dashboard. Guru bisa: pengumuman kelas, keluarkan siswa, reset progres.
-   Hanya guru PEMILIK kelas yang boleh membuka (dicek via guruId + rules §). */
+   di dashboard. Guru bisa: kelola roster pengajar, pengumuman kelas, keluarkan
+   siswa, reset progres. Setiap guru kelas (pemilik ATAU pengajar tambahan)
+   boleh membuka (dicek via guruIds + rules §). */
 
 export default function KelolaKelasPage() {
   const router = useRouter();
@@ -38,6 +43,7 @@ export default function KelolaKelasPage() {
   const [siswa, setSiswa] = useState<UserProfile[]>([]);
   const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
   const [logKuis, setLogKuis] = useState<Record<string, LogKuis[]>>({});
+  const [pengajar, setPengajar] = useState<PengajarKelas[]>([]);
   const [galat, setGalat] = useState(false);
   const [siswaSibuk, setSiswaSibuk] = useState<string | null>(null);
 
@@ -52,18 +58,20 @@ export default function KelolaKelasPage() {
     setGalat(false);
     try {
       const k = await ambilKelas(kode);
-      if (!k || k.guruId !== profil.userId) {
+      if (!k || !k.guruIds.includes(profil.userId)) {
         setKelas(null);
         return;
       }
       setKelas(k);
-      const [s, p, log] = await Promise.all([
+      const [s, p, log, guru] = await Promise.all([
         ambilSiswaKelas(kode),
         ambilPengumuman(kode),
         ambilLogKuisKelas(kode),
+        ambilPengajarKelas(kode),
       ]);
       setSiswa(s);
       setPengumuman(p);
+      setPengajar(guru);
       /* kelompokkan riwayat per siswa (by userId); urutan terbaru-di-atas
          dari ambilLogKuisKelas dipertahankan */
       const perSiswa: Record<string, LogKuis[]> = {};
@@ -130,6 +138,32 @@ export default function KelolaKelasPage() {
     }
   }
 
+  async function keluarkanPengajar(g: PengajarKelas) {
+    if (!window.confirm(`Keluarkan ${g.nama} dari pengajar kelas ini?`)) return;
+    try {
+      await keluarkanGuru(kode, g.userId);
+      await muat();
+    } catch {
+      setGalat(true);
+    }
+  }
+
+  async function keluarSendiri() {
+    if (!profil) return;
+    if (
+      !window.confirm(
+        "Keluar dari kelas ini? Kamu tak lagi mengelolanya, tapi bisa bergabung lagi dengan kodenya."
+      )
+    )
+      return;
+    try {
+      await keluarKelasSebagaiGuru(profil.userId, kode);
+      router.replace("/guru");
+    } catch {
+      setGalat(true);
+    }
+  }
+
   if (loading || !profil || profil.role !== "guru") return <LoadingSpinner />;
 
   return (
@@ -177,10 +211,14 @@ export default function KelolaKelasPage() {
             siswa={siswa}
             pengumuman={pengumuman}
             logKuis={logKuis}
+            pengajar={pengajar}
+            uidKu={profil.userId}
             onBuatPengumuman={kirimPengumuman}
             onHapusPengumuman={hapusPeng}
             onKeluarkan={keluarkan}
             onResetProgres={reset}
+            onKeluarkanGuru={keluarkanPengajar}
+            onKeluarSendiri={keluarSendiri}
             siswaSibuk={siswaSibuk}
           />
         )}

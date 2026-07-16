@@ -133,17 +133,19 @@ export async function simpanHasilHarian(
 }
 
 /* Soal buatan guru kelas siswa (Phase 10, D11: khusus Kuis) — digabung ke
-   pool soal anakara. Gagal/kelas tanpa guru → [] (kuis tetap jalan). */
+   pool soal anakara. Satu kelas bisa punya beberapa guru: soal SEMUA pengajar
+   ikut (query `in` guruIds). Gagal/kelas tanpa guru → [] (kuis tetap jalan). */
 export async function ambilSoalGuruKelas(kelasId: string | null): Promise<Soal[]> {
   if (!kelasId) return [];
   const db = getDb();
   const kelasSnap = await getDoc(doc(db, "kelas", kelasId));
-  const guruId = kelasSnap.exists()
-    ? (kelasSnap.data() as { guruId?: string }).guruId
-    : undefined;
-  if (!guruId) return [];
+  if (!kelasSnap.exists()) return [];
+  const data = kelasSnap.data() as { guruId?: string; guruIds?: string[] };
+  const guruIds = data.guruIds ?? (data.guruId ? [data.guruId] : []);
+  if (guruIds.length === 0) return [];
   const snap = await getDocs(
-    query(collection(db, "soalGuru"), where("guruId", "==", guruId), limit(200))
+    // `in` maks 30 nilai — jumlah pengajar per kelas jauh di bawah itu
+    query(collection(db, "soalGuru"), where("guruId", "in", guruIds.slice(0, 30)), limit(200))
   );
   return snap.docs.map((d) => ({ ...(d.data() as Omit<Soal, "id">), id: d.id }));
 }

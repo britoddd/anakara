@@ -5,7 +5,7 @@ import { buatProfilBaru } from "@/features/auth/types";
 import { TabelSiswa } from "@/features/guru/DashboardGuru";
 import FormSoal from "@/features/guru/FormSoal";
 import KelolaKelas from "@/features/guru/KelolaKelas";
-import type { LogKuis, Pengumuman } from "@/features/guru/api";
+import type { LogKuis, PengajarKelas, Pengumuman } from "@/features/guru/api";
 
 /* Halaman uji dev untuk komponen Phase 10 tanpa login (seperti /dev/komponen).
    Bukan bagian produk — jangan ditautkan dari halaman guru/siswa. */
@@ -101,21 +101,30 @@ const LOG_UJI: Record<string, LogKuis[]> = {
   ],
 };
 
+const PENGAJAR_UJI: PengajarKelas[] = [
+  { userId: "guru-uji", nama: "Bu Rina", pemilik: true },
+  { userId: "guru-2", nama: "Pak Doni", pemilik: false },
+];
+
 export default function DevGuruPage() {
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-6 py-8 flex flex-col gap-12">
       <section>
-        <h1 className="text-2xl mb-4">Uji: Kelola Kelas ⚙️</h1>
+        <h1 className="text-2xl mb-4">Uji: Kelola Kelas ⚙️ (sbg. pemilik)</h1>
         <KelolaKelas
           namaKelas="Kelas 1A SDN Melati"
           kode="ABC23"
           siswa={SISWA_UJI}
           pengumuman={PENGUMUMAN_UJI}
           logKuis={LOG_UJI}
+          pengajar={PENGAJAR_UJI}
+          uidKu="guru-uji"
           onBuatPengumuman={async () => {}}
           onHapusPengumuman={() => {}}
           onKeluarkan={() => {}}
           onResetProgres={() => {}}
+          onKeluarkanGuru={() => {}}
+          onKeluarSendiri={() => {}}
         />
       </section>
       <section>

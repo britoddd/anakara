@@ -8,7 +8,7 @@ import { getAvatar } from "@/features/auth/avatars";
 import { ATURAN } from "@/features/games/kuis/config";
 import type { UserProfile } from "@/features/auth/types";
 import { TabelSiswa } from "./DashboardGuru";
-import { PENGUMUMAN_MAKS, type LogKuis, type Pengumuman } from "./api";
+import { PENGUMUMAN_MAKS, type LogKuis, type PengajarKelas, type Pengumuman } from "./api";
 
 /* Halaman kelola satu kelas (Teacher Dashboard) — menggantikan expand "Lihat
    Siswa" di dashboard dengan halaman khusus /guru/kelas/[kode]. Presentasional:
@@ -21,10 +21,18 @@ interface KelolaKelasProps {
   pengumuman: Pengumuman[];
   /** riwayat jawaban Kuis per siswa (by userId), terbaru di atas */
   logKuis: Record<string, LogKuis[]>;
+  /** roster pengajar kelas (pemilik di depan); kosongkan untuk sembunyikan panel */
+  pengajar?: PengajarKelas[];
+  /** uid guru yang sedang membuka — menentukan siapa "kamu" & hak kelola roster */
+  uidKu?: string;
   onBuatPengumuman: (teks: string) => Promise<void>;
   onHapusPengumuman: (p: Pengumuman) => void;
   onKeluarkan: (s: UserProfile) => void;
   onResetProgres: (s: UserProfile) => void;
+  /** pemilik mengeluarkan pengajar tambahan dari roster */
+  onKeluarkanGuru?: (g: PengajarKelas) => void;
+  /** pengajar tambahan keluar dari kelas ini sendiri */
+  onKeluarSendiri?: () => void;
   /** siswa yang aksinya sedang diproses (tombol nonaktif) */
   siswaSibuk?: string | null;
 }
@@ -54,14 +62,28 @@ export default function KelolaKelas({
   siswa,
   pengumuman,
   logKuis,
+  pengajar,
+  uidKu,
   onBuatPengumuman,
   onHapusPengumuman,
   onKeluarkan,
   onResetProgres,
+  onKeluarkanGuru,
+  onKeluarSendiri,
   siswaSibuk = null,
 }: KelolaKelasProps) {
   return (
     <div className="flex flex-col gap-8">
+      {pengajar && (
+        <PanelPengajar
+          pengajar={pengajar}
+          kode={kode}
+          uidKu={uidKu}
+          onKeluarkanGuru={onKeluarkanGuru}
+          onKeluarSendiri={onKeluarSendiri}
+        />
+      )}
+
       <PanelPengumuman
         pengumuman={pengumuman}
         onBuat={onBuatPengumuman}
@@ -249,6 +271,79 @@ function KartuPercobaan({ log }: { log: LogKuis }) {
         ))}
       </ol>
     </details>
+  );
+}
+
+function PanelPengajar({
+  pengajar,
+  kode,
+  uidKu,
+  onKeluarkanGuru,
+  onKeluarSendiri,
+}: {
+  pengajar: PengajarKelas[];
+  kode: string;
+  uidKu?: string;
+  onKeluarkanGuru?: (g: PengajarKelas) => void;
+  onKeluarSendiri?: () => void;
+}) {
+  const akuPemilik = pengajar.some((g) => g.userId === uidKu && g.pemilik);
+
+  return (
+    <section aria-labelledby="judul-pengajar">
+      <h2 id="judul-pengajar" className="text-xl mb-1">
+        Pengajar Kelas 🧑‍🏫 ({pengajar.length})
+      </h2>
+      <p className="text-muted font-bold text-sm mb-3">
+        Satu kelas bisa diajar beberapa guru. Bagikan kode <b>{kode}</b> ke guru
+        lain — mereka masuk lewat “Gabung sebagai pengajar” di dashboard untuk
+        mengajar kelas ini bersama.
+      </p>
+      <Card>
+        <ul className="flex flex-col gap-2 list-none">
+          {pengajar.map((g) => {
+            const aku = g.userId === uidKu;
+            return (
+              <li
+                key={g.userId}
+                className="flex items-center gap-3 font-bold border-b border-border last:border-b-0 pb-2 last:pb-0"
+              >
+                <span
+                  className="w-9 h-9 shrink-0 rounded-full bg-band-blue border-2 border-border flex items-center justify-center text-lg"
+                  aria-hidden="true"
+                >
+                  🧑‍🏫
+                </span>
+                <span className="flex-1 min-w-0">
+                  {g.nama}
+                  {aku && <span className="text-muted"> (kamu)</span>}
+                </span>
+                {g.pemilik ? (
+                  <span className="bg-primary text-on-primary text-xs font-extrabold rounded-full px-2.5 py-1 whitespace-nowrap">
+                    Wali kelas
+                  </span>
+                ) : (
+                  <span className="bg-surface-2 border border-border text-xs font-extrabold rounded-full px-2.5 py-1 whitespace-nowrap">
+                    Pengajar
+                  </span>
+                )}
+                {/* pemilik boleh mengeluarkan pengajar lain; pengajar lain boleh keluar sendiri */}
+                {!g.pemilik && akuPemilik && onKeluarkanGuru && (
+                  <Button size="sm" variant="danger" onClick={() => onKeluarkanGuru(g)}>
+                    Keluarkan
+                  </Button>
+                )}
+                {!g.pemilik && aku && onKeluarSendiri && (
+                  <Button size="sm" variant="ghost" onClick={onKeluarSendiri}>
+                    🚪 Keluar
+                  </Button>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
+    </section>
   );
 }
 
