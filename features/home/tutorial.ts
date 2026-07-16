@@ -29,6 +29,13 @@ export const LANGKAH_TUTORIAL: LangkahTutorial[] = [
     emoji: "😺",
   },
   {
+    target: "profil",
+    judul: "Terang atau gelap?",
+    teks: "Mau layar terang atau gelap? Ketuk profilmu, lalu geser ke bagian Tampilan dan ketuk tombol 🌙 / ☀️ untuk ganti warna.",
+    gambar: "/assets/mascot/tayo-happy.png",
+    emoji: "🌗",
+  },
+  {
     target: "poin",
     judul: "Bintang poinmu",
     teks: "Setiap selesai bermain kamu dapat bintang. Kumpulkan biar levelmu naik!",

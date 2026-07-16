@@ -9,17 +9,21 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import GameCard from "@/features/home/GameCard";
 import { MENU_GAME, MENU_LAIN } from "@/features/home/menu";
 import TutorialOverlay from "@/features/home/TutorialOverlay";
+import { LANGKAH_TUTORIAL } from "@/features/home/tutorial";
 
 /* Halaman uji dev untuk panduan pemain baru (TutorialOverlay) tanpa login —
    tiruan statis header + grid Home dengan atribut data-tutorial yang sama
    (profil, bantuan, poin, menu-lain, game). Bukan bagian produk — jangan
    ditautkan dari halaman siswa. Panduan langsung terbuka saat halaman dimuat;
-   tombol di bawah membukanya lagi. ?langkah=1..6 → lompat ke langkah itu.
+   tombol di bawah membukanya lagi. ?langkah=1..7 → lompat ke langkah itu.
    Paksa tema: lewat /dev/tema?set=...&ke=. */
 
 function IsiDevTutorial() {
   const params = useSearchParams();
-  const langkah = Math.min(Math.max(Number(params.get("langkah") ?? 1) || 1, 1), 6);
+  const langkah = Math.min(
+    Math.max(Number(params.get("langkah") ?? 1) || 1, 1),
+    LANGKAH_TUTORIAL.length
+  );
   const [terbuka, setTerbuka] = useState(true);
 
   return (
