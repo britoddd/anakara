@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
 import AuthProvider from "@/features/auth/AuthProvider";
+import PopupPengumuman from "@/features/kelas/PopupPengumuman";
 import OnlineProvider from "@/features/offline/OnlineContext";
 import IndikatorOffline from "@/features/offline/IndikatorOffline";
 import PopupButuhInternet from "@/features/offline/PopupButuhInternet";
@@ -96,7 +97,12 @@ export default function RootLayout({
         </a>
         <OnlineProvider>
           <IndikatorOffline />
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+            {/* notifikasi pengumuman guru — muncul di halaman mana pun setelah
+                login, bertahan sampai anak menekan tombol tutup */}
+            <PopupPengumuman />
+          </AuthProvider>
           <PopupButuhInternet />
         </OnlineProvider>
         <RegistrasiSW />
