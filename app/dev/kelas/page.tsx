@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Button from "@/components/ui/Button";
+import DialogPengumuman from "@/features/kelas/DialogPengumuman";
 import type { InfoKelas } from "@/features/kelas/api";
 import RuangKelas from "@/features/kelas/RuangKelas";
 
@@ -56,8 +59,29 @@ const infoKosong: InfoKelas = {
 };
 
 export default function DevKelasPage() {
+  const [popupTerbuka, setPopupTerbuka] = useState(false);
+
+  // ?popup=1 membuka notifikasi otomatis — untuk screenshot headless
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("popup") === "1") {
+      setPopupTerbuka(true);
+    }
+  }, []);
+
   return (
     <main id="konten-utama" className="max-w-2xl mx-auto px-6 py-8 flex flex-col gap-12">
+      <section>
+        <h1 className="text-2xl mb-5">Uji: Notifikasi Pengumuman Guru 📣</h1>
+        <Button onClick={() => setPopupTerbuka(true)}>
+          Buka notifikasi pengumuman
+        </Button>
+        {popupTerbuka && (
+          <DialogPengumuman
+            pengumuman={infoUji.pengumuman}
+            onTutup={() => setPopupTerbuka(false)}
+          />
+        )}
+      </section>
       <section>
         <h1 className="text-2xl mb-5">Uji: Ruang Kelas 🏫</h1>
         <RuangKelas info={infoUji} uidKu="dev-uji" />
