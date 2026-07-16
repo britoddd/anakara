@@ -37,6 +37,29 @@ export default function RuangKelas({
 
   return (
     <div className="flex flex-col gap-6">
+      {/* pengumuman guru — muncul paling atas supaya tak terlewat */}
+      {info.pengumuman.length > 0 && (
+        <section aria-labelledby="judul-pengumuman">
+          <h2 id="judul-pengumuman" className="text-xl mb-3">
+            Pengumuman dari Guru 📣
+          </h2>
+          <ul className="flex flex-col gap-3 list-none">
+            {info.pengumuman.map((p) => (
+              <li key={p.id}>
+                <Card className="flex items-start gap-3 p-4 border-accent">
+                  <span className="text-2xl shrink-0" aria-hidden="true">
+                    📌
+                  </span>
+                  <p className="font-bold whitespace-pre-wrap break-words min-w-0">
+                    {p.teks}
+                  </p>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* wali kelas — kontak utama anak di aplikasi */}
       <section aria-labelledby="judul-guru">
         <h2 id="judul-guru" className="text-xl mb-3">
