@@ -8,8 +8,8 @@
       "kategori": "Makanan Sehat",
       "durasiDetik": 60,
       "thumbnail": "/assets/videos/thumb/vid-01.png",
-      "url": "/assets/videos/vid-01.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/tayo%20makan.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-02",
@@ -17,8 +17,8 @@
       "kategori": "Makanan Sehat",
       "durasiDetik": 75,
       "thumbnail": "/assets/videos/thumb/vid-02.png",
-      "url": "/assets/videos/vid-02.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/isi%20piring%20sehat.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-03",
@@ -26,8 +26,8 @@
       "kategori": "Kebiasaan Baik",
       "durasiDetik": 45,
       "thumbnail": "/assets/videos/thumb/vid-03.png",
-      "url": "/assets/videos/vid-03.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/mencuci%20tangan.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-04",
@@ -35,8 +35,8 @@
       "kategori": "Makanan Sehat",
       "durasiDetik": 60,
       "thumbnail": "/assets/videos/thumb/vid-04.png",
-      "url": "/assets/videos/vid-04.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/wortel.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-05",
@@ -53,8 +53,8 @@
       "kategori": "Kebiasaan Baik",
       "durasiDetik": 60,
       "thumbnail": "/assets/videos/thumb/vid-06.png",
-      "url": "/assets/videos/vid-06.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/minuman%20sehat.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-07",
@@ -62,8 +62,8 @@
       "kategori": "Kebiasaan Baik",
       "durasiDetik": 45,
       "thumbnail": "/assets/videos/thumb/vid-07.png",
-      "url": "/assets/videos/vid-07.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/menyikat%20gigi.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-08",
@@ -71,8 +71,8 @@
       "kategori": "Kebiasaan Baik",
       "durasiDetik": 60,
       "thumbnail": "/assets/videos/thumb/vid-08.png",
-      "url": "/assets/videos/vid-08.mp4",
-      "status": "placeholder"
+      "url": "/assets/videos/tidur%20awal.mp4",
+      "status": "tersedia"
     },
     {
       "id": "vid-09",
