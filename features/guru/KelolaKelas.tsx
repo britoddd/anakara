@@ -9,6 +9,7 @@ import { ATURAN } from "@/features/games/kuis/config";
 import type { UserProfile } from "@/features/auth/types";
 import { TabelSiswa } from "./DashboardGuru";
 import { PENGUMUMAN_MAKS, type LogKuis, type PengajarKelas, type Pengumuman } from "./api";
+import { rangkumSiswa } from "./rangkumanSiswa";
 
 /* Halaman kelola satu kelas (Teacher Dashboard) — menggantikan expand "Lihat
    Siswa" di dashboard dengan halaman khusus /guru/kelas/[kode]. Presentasional:
@@ -135,8 +136,83 @@ export default function KelolaKelas({
         )}
       </section>
 
+      <RangkumanPemahaman siswa={siswa} logKuis={logKuis} />
+
       <RiwayatKuis siswa={siswa} logKuis={logKuis} />
     </div>
+  );
+}
+
+/* Avatar bulat kecil dipakai di beberapa daftar per-siswa di halaman ini. */
+function AvatarSiswa({ siswa }: { siswa: UserProfile }) {
+  const av = getAvatar(siswa.avatar ?? "");
+  return (
+    <span
+      className="w-8 h-8 shrink-0 rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center text-sm"
+      aria-hidden="true"
+    >
+      {av ? (
+        <GambarEmoji
+          src={av.gambar}
+          emoji={av.emoji}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        "🙂"
+      )}
+    </span>
+  );
+}
+
+/* Rangkuman pemahaman per siswa — satu paragraf "AI-like" dirakit on-device
+   dari riwayat Kuis (features/guru/rangkumanSiswa). Hanya siswa yang sudah
+   punya riwayat yang muncul (yang lain belum ada yang bisa dirangkum). */
+function RangkumanPemahaman({
+  siswa,
+  logKuis,
+}: {
+  siswa: UserProfile[];
+  logKuis: Record<string, LogKuis[]>;
+}) {
+  const kartu = siswa
+    .map((s) => ({ siswa: s, rangkuman: rangkumSiswa(s.nama, logKuis[s.userId] ?? []) }))
+    .filter((k) => k.rangkuman !== null);
+
+  return (
+    <section aria-labelledby="judul-rangkuman">
+      <h2 id="judul-rangkuman" className="text-xl mb-1">
+        Rangkuman Pemahaman Siswa 🧠
+      </h2>
+      <p className="text-muted font-bold text-sm mb-3">
+        Ringkasan otomatis dari jawaban Kuis tiap siswa — menyoroti materi yang
+        sudah dikuasai dan yang masih perlu latihan. Dibuat di perangkat dari
+        data yang ada, bukan penilaian resmi.
+      </p>
+
+      {kartu.length === 0 ? (
+        <Card>
+          <p className="text-muted font-bold text-center py-4">
+            Rangkuman muncul di sini setelah siswa memainkan Kuis Asik. 🎮
+          </p>
+        </Card>
+      ) : (
+        <ul className="flex flex-col gap-3 list-none">
+          {kartu.map(({ siswa: s, rangkuman }) => (
+            <li key={s.userId}>
+              <Card className="flex items-start gap-3">
+                <AvatarSiswa siswa={s} />
+                <div className="min-w-0 flex-1">
+                  <p className="font-display font-extrabold">{s.nama}</p>
+                  <p className="font-bold text-fg/90 leading-snug mt-0.5">
+                    {rangkuman!.teks}
+                  </p>
+                </div>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 
@@ -171,26 +247,12 @@ function RiwayatKuis({
         <ul className="flex flex-col gap-3 list-none">
           {denganLog.map((s) => {
             const log = logKuis[s.userId] ?? [];
-            const av = getAvatar(s.avatar ?? "");
             return (
               <li key={s.userId}>
                 <Card className="p-0 overflow-hidden">
                   <details className="group">
                     <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer select-none font-bold list-none">
-                      <span
-                        className="w-8 h-8 shrink-0 rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center text-sm"
-                        aria-hidden="true"
-                      >
-                        {av ? (
-                          <GambarEmoji
-                            src={av.gambar}
-                            emoji={av.emoji}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          "🙂"
-                        )}
-                      </span>
+                      <AvatarSiswa siswa={s} />
                       <span className="flex-1 min-w-0">{s.nama}</span>
                       <span className="text-sm text-muted whitespace-nowrap">
                         {log.length} percobaan
