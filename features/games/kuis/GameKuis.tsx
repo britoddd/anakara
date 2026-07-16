@@ -17,17 +17,32 @@ import {
   ATURAN,
   ENDLESS_KUIS,
   JUMLAH_SOAL,
+  JUMLAH_SOAL_HARIAN,
   LEVEL_ENDLESS,
   LEVEL_MAKS,
   POIN_PER_BENAR,
+  POIN_PER_BENAR_HARIAN,
+  bonusBeruntun,
   durasiSoalEndless,
   hitungBintangKuis,
+  labelKesulitan,
+  levelKesulitanAnak,
+  soalHarian,
   soalUntukEndless,
   soalUntukLevel,
+  tanggalHariIni,
+  tanggalRamah,
+  type KuisHarian,
   type LogSoalKuis,
   type Soal,
 } from "./config";
-import { ambilSoalGuruKelas, catatLogKuis, simpanHasilKuis } from "./api";
+import {
+  ambilSoalGuruKelas,
+  ambilStatusHarian,
+  catatLogKuis,
+  simpanHasilHarian,
+  simpanHasilKuis,
+} from "./api";
 
 /* Kuis Asik (Phase 5, mockup MacBook Air - 6).
    D4: TIDAK ada tombol "Sebelumnya" (mockup di-override) — jawaban terkunci
@@ -65,6 +80,21 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   /* level (biasa) yang menunggu konfirmasi ulang — sudah pernah diselesaikan */
   const [levelUlang, setLevelUlang] = useState<number | null>(null);
 
+  /* Tantangan Harian (daily): mode main + status beruntun siswa.
+     modeHarian aktif = sesi tantangan hari ini (soal campur, tanpa syarat lulus). */
+  const [modeHarian, setModeHarian] = useState(false);
+  const [statusHarian, setStatusHarian] = useState<KuisHarian | null>(null);
+  const [harianDimuat, setHarianDimuat] = useState(false);
+  const [hasilHarian, setHasilHarian] = useState<{
+    beruntun: number;
+    beruntunTerbaik: number;
+    poinTambah: number;
+    sudahHariIni: boolean;
+  } | null>(null);
+  const hariIni = tanggalHariIni();
+  const lvKesulitan = levelKesulitanAnak(profil.progress.kuis.levelTerbuka);
+  const sudahHarian = statusHarian?.tanggalTerakhir === hariIni;
+
   const endless = level === LEVEL_ENDLESS;
   const soal = daftarSoal[index];
   const benarTotal = riwayat.filter((r) => r === "benar").length;
@@ -84,6 +114,24 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
     };
   }, [profil.kelasId]);
 
+  /* status Tantangan Harian (beruntun + apakah sudah selesai hari ini) —
+     gagal baca dianggap "belum selesai" supaya tetap bisa main saat offline */
+  useEffect(() => {
+    let aktif = true;
+    ambilStatusHarian(profil.userId)
+      .then((s) => {
+        if (!aktif) return;
+        setStatusHarian(s);
+        setHarianDimuat(true);
+      })
+      .catch(() => {
+        if (aktif) setHarianDimuat(true);
+      });
+    return () => {
+      aktif = false;
+    };
+  }, [profil.userId]);
+
   /* antrean soal Mode Tanpa Batas — habis → diisi ulang (putaran baru) */
   const antreanRef = useRef<{ daftar: Soal[]; pos: number }>({ daftar: [], pos: 0 });
   function soalEndlessBerikut(): Soal {
@@ -97,6 +145,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
 
   function mulaiLevel(lv: number) {
     poinAwalRef.current = profil.poin;
+    setModeHarian(false);
     setLevel(lv);
     setIndex(0);
     setPilihan(null);
@@ -119,6 +168,29 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       setPilihanRiwayat(Array(soalBaru.length).fill(null));
       setTimerSisa(soalBaru[0]?.durasiDetik ?? 15);
     }
+    setFase("main");
+  }
+
+  /* mulai sesi Tantangan Harian: soal deterministik hari ini, kesulitan
+     menyesuaikan level anak. Reuse layar main level biasa (fixed list, tanpa
+     nyawa) — bedanya penyelesaian & layar hasilnya (lihat selesaiHarian). */
+  function mulaiHarian() {
+    if (sudahHarian) return; // sudah selesai hari ini — kartu mestinya nonaktif
+    poinAwalRef.current = profil.poin;
+    setModeHarian(true);
+    setLevel(lvKesulitan); // untuk default durasi & tampilan sekunder
+    setIndex(0);
+    setPilihan(null);
+    setTerkunci(false);
+    setWaktuHabis(false);
+    setRekor(null);
+    setHasilHarian(null);
+    setStatusSimpan("idle");
+    const soalBaru = soalHarian(lvKesulitan, hariIni, profil.userId, soalGuru);
+    setDaftarSoal(soalBaru);
+    setRiwayat(Array(soalBaru.length).fill(null));
+    setPilihanRiwayat(Array(soalBaru.length).fill(null));
+    setTimerSisa(soalBaru[0]?.durasiDetik ?? 15);
     setFase("main");
   }
 
@@ -206,6 +278,34 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   const selesaiEndlessRef = useRef(selesaiEndless);
   selesaiEndlessRef.current = selesaiEndless;
 
+  /* akhir Tantangan Harian: catat penyelesaian + beruntun, tambah poin.
+     Tak mengubah levelTerbuka (murni latihan harian). Idempoten via api —
+     kalau entah bagaimana sudah selesai hari ini, poinTambah = 0. */
+  const selesaiHarian = async (riwayatAkhir: HasilSoal[]) => {
+    const benar = riwayatAkhir.filter((r) => r === "benar").length;
+    setFase("hasil");
+    setStatusSimpan("proses");
+    try {
+      const hasil = await simpanHasilHarian(profil, benar, hariIni);
+      setHasilHarian(hasil);
+      // segarkan kartu "sudah selesai" bila nanti kembali ke layar pilih
+      setStatusHarian((s) => ({
+        userId: profil.userId,
+        tanggalTerakhir: hariIni,
+        beruntun: hasil.beruntun,
+        beruntunTerbaik: hasil.beruntunTerbaik,
+        totalSelesai: (s?.totalSelesai ?? 0) + (hasil.sudahHariIni ? 0 : 1),
+        benarTerakhir: benar,
+      }));
+      await refreshProfil();
+      setStatusSimpan("ok");
+    } catch {
+      setStatusSimpan("gagal");
+    }
+  };
+  const selesaiHarianRef = useRef(selesaiHarian);
+  selesaiHarianRef.current = selesaiHarian;
+
   /* setelah jawaban terkunci: tampilkan feedback sebentar → otomatis lanjut (D4).
      Efek dijalankan ulang saat `terkunci` berubah, jadi riwayat/nyawa di
      closure ini sudah nilai SETELAH jawaban. */
@@ -232,6 +332,8 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
         setTerkunci(false);
         setWaktuHabis(false);
         setTimerSisa(daftarSoal[index + 1].durasiDetik);
+      } else if (modeHarian) {
+        void selesaiHarianRef.current(riwayat);
       } else {
         void selesaiLevelRef.current(riwayat, pilihanRiwayat);
       }
@@ -262,10 +364,79 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       <main id="konten-utama" className="max-w-4xl mx-auto px-6 py-12">
         <TombolKembali href="/home" label="Kembali ke Home" />
         <h1 className="text-3xl text-center mb-2 mt-4">Kuis Asik! ❓</h1>
-        <p className="text-lg text-muted text-center mb-10 max-w-[55ch] mx-auto">
+        <p className="text-lg text-muted text-center mb-8 max-w-[55ch] mx-auto">
           Jawab {JUMLAH_SOAL} soal, tiap soal punya waktu 15 detik. Jawabanmu
           terkunci begitu dipilih — pilih dengan teliti, ya!
         </p>
+
+        {/* ---------- Tantangan Harian: bagian yang berganti tiap hari,
+            kesulitannya menyesuaikan level anak (D-harian) ---------- */}
+        <section aria-labelledby="judul-harian" className="mb-10">
+          {!harianDimuat ? (
+            <div className="w-full p-6 rounded-2xl bg-surface border-4 border-border text-center text-muted font-bold motion-safe:animate-pulse">
+              Memuat Tantangan Harian…
+            </div>
+          ) : sudahHarian ? (
+            <div className="w-full flex flex-col sm:flex-row items-center gap-3 sm:gap-5 p-6 rounded-2xl bg-surface border-4 border-success text-fg">
+              <span className="text-5xl" aria-hidden="true">✅</span>
+              <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+                <h2 id="judul-harian" className="font-display font-extrabold text-xl">
+                  Tantangan Harian selesai! 🎉
+                </h2>
+                <p className="text-sm text-muted">
+                  {statusHarian && statusHarian.beruntun > 0
+                    ? `🔥 ${statusHarian.beruntun} hari beruntun · `
+                    : ""}
+                  Kembali besok untuk tantangan baru!
+                </p>
+                {statusHarian && (
+                  <p className="text-sm text-muted mt-0.5">
+                    Hasil terakhir: {statusHarian.benarTerakhir}/{JUMLAH_SOAL_HARIAN} benar
+                  </p>
+                )}
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={mulaiHarian}
+              aria-label={`Main Tantangan Harian hari ini — ${JUMLAH_SOAL_HARIAN} soal, tingkat ${labelKesulitan(
+                lvKesulitan
+              )}`}
+              className={[
+                "w-full flex flex-col sm:flex-row items-center gap-3 sm:gap-5 p-6 rounded-2xl",
+                "bg-surface border-4 border-accent text-fg cursor-pointer",
+                "transition-[transform,border-color] duration-150 hover:border-primary hover:-translate-y-1",
+              ].join(" ")}
+            >
+              <span className="text-5xl motion-safe:animate-bounce" aria-hidden="true">
+                📅
+              </span>
+              <span className="flex flex-col items-center sm:items-start text-center sm:text-left flex-1">
+                <span className="flex flex-wrap items-center justify-center gap-2">
+                  <span id="judul-harian" className="font-display font-extrabold text-xl">
+                    Tantangan Harian
+                  </span>
+                  <span className="text-[0.7rem] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-accent/20 text-accent">
+                    Baru tiap hari
+                  </span>
+                </span>
+                <span className="text-sm text-muted">
+                  {tanggalRamah(hariIni)} · {JUMLAH_SOAL_HARIAN} soal · tingkat{" "}
+                  {labelKesulitan(lvKesulitan)}
+                </span>
+                {statusHarian && statusHarian.beruntun > 0 && (
+                  <span className="text-sm font-bold text-accent mt-0.5">
+                    🔥 {statusHarian.beruntun} hari beruntun — jangan sampai putus!
+                  </span>
+                )}
+              </span>
+              <span className="hidden sm:inline text-2xl text-primary" aria-hidden="true">
+                ▶
+              </span>
+            </button>
+          )}
+        </section>
+
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3">
           {Array.from({ length: LEVEL_MAKS }, (_, i) => i + 1).map((lv) => {
             const terkunciLv = lv > levelTerbuka;
@@ -357,6 +528,78 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
         }}
       />
       </>
+    );
+  }
+
+  /* ---------- layar hasil: Tantangan Harian ---------- */
+  if (fase === "hasil" && modeHarian) {
+    const poinDapat = hasilHarian?.poinTambah ?? 0;
+    const bonus = hasilHarian ? bonusBeruntun(hasilHarian.beruntun) : 0;
+    const poinBenar = poinDapat - bonus;
+    const beruntun = hasilHarian?.beruntun ?? 0;
+    const rekorBeruntun =
+      hasilHarian != null && beruntun > 1 && beruntun === hasilHarian.beruntunTerbaik;
+    const naikLevel =
+      hitungLevel(poinAwalRef.current + poinDapat) > hitungLevel(poinAwalRef.current);
+    return (
+      <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        <span className="relative inline-block mb-4" aria-hidden="true">
+          <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
+          <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
+          <span className="w-28 h-28 text-6xl rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center motion-safe:animate-bounce">
+            <GambarEmoji
+              src="/assets/mascot/tayo-happy.png"
+              emoji="🐆📅"
+              className="w-full h-full object-cover"
+            />
+          </span>
+        </span>
+        <h1 className="text-3xl mb-2">Tantangan hari ini selesai! 🎉</h1>
+        <p className="text-lg text-muted mb-6">
+          Kamu menjawab {benarTotal} dari {daftarSoal.length} soal dengan benar. Mantap!
+        </p>
+
+        {beruntun > 0 && (
+          <p className="text-2xl font-display font-extrabold text-accent mb-4">
+            🔥 {beruntun} hari beruntun
+            {rekorBeruntun && <span className="block text-base text-success">Rekor beruntun baru!</span>}
+          </p>
+        )}
+
+        <Card className="mb-6">
+          <p className="font-display font-extrabold text-2xl mb-1">
+            {benarTotal} / {daftarSoal.length} benar
+          </p>
+          <p className="font-bold text-lg">+ ⭐ {poinDapat} poin</p>
+          {bonus > 0 && (
+            <p className="text-sm text-muted">
+              ⭐ {poinBenar} jawaban + ⭐ {bonus} bonus beruntun
+            </p>
+          )}
+          {naikLevel && (
+            <p className="font-bold text-success mt-1">
+              🎉 Kamu naik ke Lv {hitungLevel(poinAwalRef.current + poinDapat)}!
+            </p>
+          )}
+          <p className="text-sm text-muted mt-2" role="status">
+            {statusSimpan === "proses" && "Menyimpan progres…"}
+            {statusSimpan === "ok" && "✓ Progres tersimpan — sampai jumpa besok!"}
+            {statusSimpan === "gagal" &&
+              "⚠️ Progres belum tersimpan (cek koneksi) — poin sesi ini mungkin hilang."}
+          </p>
+        </Card>
+
+        <p className="text-muted mb-6">
+          Tantangan baru menunggumu besok. Datang lagi, ya! 🌤️
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button onClick={() => setFase("pilih")}>Pilih Level Lain</Button>
+          <Button variant="ghost" onClick={() => (window.location.href = "/home")}>
+            🏠 Home
+          </Button>
+        </div>
+      </main>
     );
   }
 
@@ -523,7 +766,12 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
           pesan="Kuis masih berlangsung — kalau keluar, skor level ini tidak tersimpan."
         />
         <h1 className="text-base sm:text-lg font-display font-extrabold text-muted">
-          Kuis Asik · {endless ? "Tanpa Batas ♾️" : `Level ${level}`}
+          Kuis Asik ·{" "}
+          {modeHarian
+            ? "Tantangan Harian 📅"
+            : endless
+              ? "Tanpa Batas ♾️"
+              : `Level ${level}`}
         </h1>
         {endless && (
           <span
@@ -689,9 +937,13 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       <p className="text-center text-sm text-muted mt-4">
         {endless
           ? "Soal terus berlanjut selama nyawamu masih ada. Semangat!"
-          : `Soal berlanjut otomatis setelah dijawab. Skor sementara: ⭐ ${
-              benarTotal * POIN_PER_BENAR
-            }`}
+          : modeHarian
+            ? `Tantangan hari ini — kerjakan sampai selesai! Skor sementara: ⭐ ${
+                benarTotal * POIN_PER_BENAR_HARIAN
+              }`
+            : `Soal berlanjut otomatis setelah dijawab. Skor sementara: ⭐ ${
+                benarTotal * POIN_PER_BENAR
+              }`}
       </p>
     </main>
   );
