@@ -8,7 +8,9 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
+  type QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import type { UserProfile } from "@/features/auth/types";
@@ -56,6 +58,13 @@ export async function hapusKelas(kode: string): Promise<void> {
   await deleteDoc(doc(getDb(), "kelas", kode));
 }
 
+/** Ambil satu kelas — dipakai halaman kelola (verifikasi pemilik + judul). */
+export async function ambilKelas(kode: string): Promise<KelasGuru | null> {
+  const snap = await getDoc(doc(getDb(), "kelas", kode));
+  if (!snap.exists()) return null;
+  return { kode: snap.id, ...(snap.data() as { nama: string; guruId: string }) };
+}
+
 export async function ambilKelasGuru(guruId: string): Promise<KelasGuru[]> {
   const snap = await getDocs(
     query(collection(getDb(), "kelas"), where("guruId", "==", guruId), limit(50))
@@ -74,6 +83,85 @@ export async function ambilSiswaKelas(kode: string): Promise<UserProfile[]> {
     .map((d) => d.data() as UserProfile)
     .filter((p) => p.role === "siswa")
     .sort((a, b) => b.poin - a.poin || a.nama.localeCompare(b.nama));
+}
+
+/* ---------- kontrol siswa (rules: guru pemilik kelas boleh mengubah) ---------- */
+
+/** Keluarkan siswa dari kelas: kosongkan kelasId (siswa diarahkan join ulang,
+    D5). Rules mengizinkan karena guru = pemilik kelas siswa saat ini. */
+export async function keluarkanSiswa(userId: string): Promise<void> {
+  await updateDoc(doc(getDb(), "users", userId), { kelasId: null });
+}
+
+/** Reset progres siswa ke awal (poin, level, kemajuan game, koleksi kartu) —
+    padanan buatProfilBaru §6. Kelas & identitas (nama/avatar) tidak disentuh. */
+export async function resetProgresSiswa(userId: string): Promise<void> {
+  await updateDoc(doc(getDb(), "users", userId), {
+    poin: 0,
+    level: 1,
+    progress: {
+      kuis: { levelTerbuka: 1 },
+      cerita: { babTerbuka: 1 },
+      isiPiringku: { levelTerbuka: 1 },
+    },
+    koleksi: [],
+  });
+}
+
+/* ---------- pengumuman kelas ---------- */
+
+export interface Pengumuman {
+  id: string;
+  kelasId: string;
+  guruId: string;
+  teks: string;
+  /** waktu dibuat (epoch ms); 0 bila serverTimestamp belum tersinkron */
+  dibuat: number;
+}
+
+export const PENGUMUMAN_MAKS = 280;
+
+function bacaPengumuman(d: QueryDocumentSnapshot): Pengumuman {
+  const data = d.data() as {
+    kelasId: string;
+    guruId: string;
+    teks: string;
+    dibuat?: { toMillis?: () => number };
+  };
+  return {
+    id: d.id,
+    kelasId: data.kelasId,
+    guruId: data.guruId,
+    teks: data.teks,
+    dibuat: data.dibuat?.toMillis?.() ?? 0,
+  };
+}
+
+/** Pengumuman sebuah kelas, terbaru di atas. Satu klausa where + sortir klien
+    (tanpa composite index) — konsisten dengan query lain di sini. */
+export async function ambilPengumuman(kelasId: string): Promise<Pengumuman[]> {
+  const snap = await getDocs(
+    query(collection(getDb(), "pengumuman"), where("kelasId", "==", kelasId), limit(50))
+  );
+  return snap.docs.map(bacaPengumuman).sort((a, b) => b.dibuat - a.dibuat);
+}
+
+export async function buatPengumuman(
+  guruId: string,
+  kelasId: string,
+  teks: string
+): Promise<void> {
+  const ref = doc(collection(getDb(), "pengumuman"));
+  await setDoc(ref, {
+    kelasId,
+    guruId,
+    teks: teks.trim().slice(0, PENGUMUMAN_MAKS),
+    dibuat: serverTimestamp(),
+  });
+}
+
+export async function hapusPengumuman(id: string): Promise<void> {
+  await deleteDoc(doc(getDb(), "pengumuman", id));
 }
 
 /* ---------- bank soal guru ---------- */

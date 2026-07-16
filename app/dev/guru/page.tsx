@@ -4,6 +4,8 @@ import Card from "@/components/ui/Card";
 import { buatProfilBaru } from "@/features/auth/types";
 import { TabelSiswa } from "@/features/guru/DashboardGuru";
 import FormSoal from "@/features/guru/FormSoal";
+import KelolaKelas from "@/features/guru/KelolaKelas";
+import type { Pengumuman } from "@/features/guru/api";
 
 /* Halaman uji dev untuk komponen Phase 10 tanpa login (seperti /dev/komponen).
    Bukan bagian produk — jangan ditautkan dari halaman guru/siswa. */
@@ -37,11 +39,41 @@ const SISWA_UJI = [
   siswaUji("Dodi", "avatar-07", 95, 1, 1, 0),
 ];
 
+const PENGUMUMAN_UJI: Pengumuman[] = [
+  {
+    id: "p1",
+    kelasId: "ABC23",
+    guruId: "guru-uji",
+    teks: "Jangan lupa main Kuis Asik sampai level 3 ya, minggu ini! 🌟",
+    dibuat: Date.now() - 3600_000,
+  },
+  {
+    id: "p2",
+    kelasId: "ABC23",
+    guruId: "guru-uji",
+    teks: "Besok kita belajar tentang Isi Piringku. Sampai jumpa! 🍽️",
+    dibuat: Date.now() - 86_400_000,
+  },
+];
+
 export default function DevGuruPage() {
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-6 py-8 flex flex-col gap-12">
       <section>
-        <h1 className="text-2xl mb-4">Uji: Tabel Siswa 👥</h1>
+        <h1 className="text-2xl mb-4">Uji: Kelola Kelas ⚙️</h1>
+        <KelolaKelas
+          namaKelas="Kelas 1A SDN Melati"
+          kode="ABC23"
+          siswa={SISWA_UJI}
+          pengumuman={PENGUMUMAN_UJI}
+          onBuatPengumuman={async () => {}}
+          onHapusPengumuman={() => {}}
+          onKeluarkan={() => {}}
+          onResetProgres={() => {}}
+        />
+      </section>
+      <section>
+        <h2 className="text-2xl mb-4">Uji: Tabel Siswa 👥 (baca)</h2>
         <Card>
           <TabelSiswa siswa={SISWA_UJI} />
         </Card>

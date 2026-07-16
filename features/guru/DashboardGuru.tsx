@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
@@ -10,7 +11,6 @@ import { hitungLevel, type UserProfile } from "@/features/auth/types";
 import { SEMUA_KARTU } from "@/features/games/battle/config";
 import {
   ambilKelasGuru,
-  ambilSiswaKelas,
   ambilSoalGuru,
   buatKelas,
   hapusKelas,
@@ -78,7 +78,6 @@ function BagianKelas({ guruId }: { guruId: string }) {
   const [namaBaru, setNamaBaru] = useState("");
   const [sibuk, setSibuk] = useState(false);
   const [galat, setGalat] = useState<string | null>(null);
-  const [kelasAktif, setKelasAktif] = useState<string | null>(null);
   const [tersalin, setTersalin] = useState<string | null>(null);
 
   const muat = useCallback(() => {
@@ -114,7 +113,6 @@ function BagianKelas({ guruId }: { guruId: string }) {
     setSibuk(true);
     try {
       await hapusKelas(kode);
-      if (kelasAktif === kode) setKelasAktif(null);
       muat();
     } catch {
       setGalat("Gagal menghapus kelas.");
@@ -191,17 +189,16 @@ function BagianKelas({ guruId }: { guruId: string }) {
                   <Button variant="ghost" onClick={() => salin(k.kode)}>
                     {tersalin === k.kode ? "✓ Tersalin" : "📋 Salin"}
                   </Button>
-                  <Button
-                    variant={kelasAktif === k.kode ? "primary" : "ghost"}
-                    onClick={() => setKelasAktif(kelasAktif === k.kode ? null : k.kode)}
+                  <Link
+                    href={`/guru/kelas/${k.kode}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-full min-h-[48px] px-6 text-base font-display font-bold select-none no-underline bg-primary text-on-primary shadow-[0_4px_0_var(--primary-active)] hover:bg-primary-hover active:translate-y-[3px] active:shadow-none transition-[transform,box-shadow,background-color] duration-150 ease-out"
                   >
-                    {kelasAktif === k.kode ? "Tutup Daftar" : "👥 Lihat Siswa"}
-                  </Button>
+                    ⚙️ Kelola Kelas
+                  </Link>
                   <Button variant="danger" onClick={() => hapus(k.kode)} disabled={sibuk}>
                     Hapus
                   </Button>
                 </div>
-                {kelasAktif === k.kode && <DaftarSiswa kode={k.kode} />}
               </Card>
             </li>
           ))}
@@ -211,40 +208,16 @@ function BagianKelas({ guruId }: { guruId: string }) {
   );
 }
 
-function DaftarSiswa({ kode }: { kode: string }) {
-  const [siswa, setSiswa] = useState<UserProfile[] | null>(null);
-  const [galat, setGalat] = useState(false);
-
-  useEffect(() => {
-    let aktif = true;
-    setSiswa(null);
-    ambilSiswaKelas(kode)
-      .then((s) => aktif && setSiswa(s))
-      .catch(() => aktif && setGalat(true));
-    return () => {
-      aktif = false;
-    };
-  }, [kode]);
-
-  if (galat)
-    return (
-      <p role="alert" className="text-danger font-bold mt-4">
-        ⚠️ Gagal memuat daftar siswa.
-      </p>
-    );
-  if (siswa === null) return <LoadingSpinner size="sm" label="Memuat siswa…" />;
-  if (siswa.length === 0)
-    return (
-      <p className="text-muted font-bold mt-4">
-        Belum ada siswa yang join. Bagikan kode di atas! 📣
-      </p>
-    );
-
-  return <TabelSiswa siswa={siswa} />;
-}
-
-/** Tabel progress ringkas — presentasional (dipakai juga /dev/guru). */
-export function TabelSiswa({ siswa }: { siswa: UserProfile[] }) {
+/** Tabel progress ringkas — presentasional (dipakai /dev/guru & halaman kelola).
+    `aksi` opsional: render tombol per-siswa (kolom paling kanan) di halaman
+    kelola; tanpa `aksi` tabel murni baca (dashboard/dev). */
+export function TabelSiswa({
+  siswa,
+  aksi,
+}: {
+  siswa: UserProfile[];
+  aksi?: (s: UserProfile) => ReactNode;
+}) {
   return (
     <div className="overflow-x-auto mt-4">
       <table className="w-full text-left border-collapse">
@@ -257,7 +230,8 @@ export function TabelSiswa({ siswa }: { siswa: UserProfile[] }) {
             <th className="py-2 px-3 font-extrabold">❓ Kuis</th>
             <th className="py-2 px-3 font-extrabold">🍽️ Piring</th>
             <th className="py-2 px-3 font-extrabold">📖 Cerita</th>
-            <th className="py-2 pl-3 font-extrabold">🃏 Kartu</th>
+            <th className="py-2 px-3 font-extrabold">🃏 Kartu</th>
+            {aksi && <th className="py-2 pl-3 font-extrabold">Aksi</th>}
           </tr>
         </thead>
         <tbody>
@@ -289,9 +263,10 @@ export function TabelSiswa({ siswa }: { siswa: UserProfile[] }) {
                 <td className="py-2 px-3">Level {s.progress.kuis.levelTerbuka}</td>
                 <td className="py-2 px-3">Level {s.progress.isiPiringku.levelTerbuka}</td>
                 <td className="py-2 px-3">Bab {s.progress.cerita.babTerbuka}</td>
-                <td className="py-2 pl-3">
+                <td className="py-2 px-3">
                   {s.koleksi.length}/{SEMUA_KARTU.length}
                 </td>
+                {aksi && <td className="py-2 pl-3">{aksi(s)}</td>}
               </tr>
             );
           })}

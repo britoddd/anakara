@@ -4,12 +4,40 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // True bila user login = guru pemilik kelas `kode` (dipakai kontrol siswa
+    // & pengumuman). kode harus string valid (siswa tanpa kelas → false).
+    function guruPemilikKelas(kode) {
+      return request.auth != null
+        && kode is string
+        && exists(/databases/$(database)/documents/kelas/$(kode))
+        && get(/databases/$(database)/documents/kelas/$(kode)).data.guruId == request.auth.uid;
+    }
+
     // Profil user: SEMUA user login boleh membaca (Leaderboard Phase 8 —
     // profil hanya berisi nama depan + avatar kartun, privasi tetap aman);
     // menulis hanya pemiliknya.
     match /users/{userId} {
       allow read: if request.auth != null;
       allow write: if request.auth != null && request.auth.uid == userId;
+
+      // Guru boleh mengelola SISWA di kelas miliknya (Teacher Dashboard):
+      // keluarkan (kelasId → null) atau reset progres. Dibatasi field tsb
+      // saja supaya guru tak bisa mengubah identitas/role siswa.
+      allow update: if resource.data.role == "siswa"
+        && guruPemilikKelas(resource.data.kelasId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(["kelasId", "progress", "poin", "level", "koleksi"]);
+    }
+
+    // Pengumuman kelas (Teacher Dashboard): semua user login boleh membaca
+    // (siswa melihatnya di Kelasku); guru hanya membuat/menghapus pengumuman
+    // untuk kelas MILIKNYA sendiri.
+    match /pengumuman/{pengumumanId} {
+      allow read: if request.auth != null;
+      allow create: if request.resource.data.guruId == request.auth.uid
+        && guruPemilikKelas(request.resource.data.kelasId);
+      allow delete: if request.auth != null
+        && resource.data.guruId == request.auth.uid;
     }
 
     // Kode kelas: semua user login boleh membaca (validasi join siswa +

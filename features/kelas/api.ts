@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
+import { ambilPengumuman, type Pengumuman } from "@/features/guru/api";
 
 /* Halaman Kelasku: info kelas milik siswa — wali kelas + daftar teman sekelas.
    Rules sudah mengizinkan: users & kelas terbaca semua user login (Phase 8/10).
@@ -33,6 +34,8 @@ export interface InfoKelas {
   namaGuru: string | null;
   /** teman sekelas (termasuk diri sendiri), urut abjad — ranking urusan Leaderboard */
   teman: TemanKelas[];
+  /** pengumuman dari guru (Teacher Dashboard), terbaru di atas */
+  pengumuman: Pengumuman[];
 }
 
 export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
@@ -41,9 +44,10 @@ export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
   if (!kelasSnap.exists()) return null;
   const { nama, guruId } = kelasSnap.data() as { nama?: string; guruId?: string };
 
-  const [guruSnap, siswaSnap] = await Promise.all([
+  const [guruSnap, siswaSnap, pengumuman] = await Promise.all([
     guruId ? getDoc(doc(db, "users", guruId)) : Promise.resolve(null),
     getDocs(query(collection(db, "users"), where("kelasId", "==", kode), limit(300))),
+    ambilPengumuman(kode),
   ]);
 
   const teman = siswaSnap.docs
@@ -65,6 +69,7 @@ export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
     namaKelas: nama ?? kode,
     namaGuru: guruSnap?.exists() ? (guruSnap.data() as UserProfile).nama : null,
     teman,
+    pengumuman,
   };
 }
 

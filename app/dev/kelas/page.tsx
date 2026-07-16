@@ -20,6 +20,22 @@ const infoUji: InfoKelas = {
   kode: "ABC23",
   namaKelas: "Kelas 1A",
   namaGuru: "Bu Rina",
+  pengumuman: [
+    {
+      id: "p1",
+      kelasId: "ABC23",
+      guruId: "guru-uji",
+      teks: "Jangan lupa main Kuis Asik sampai level 3 ya, minggu ini! 🌟",
+      dibuat: Date.now() - 3600_000,
+    },
+    {
+      id: "p2",
+      kelasId: "ABC23",
+      guruId: "guru-uji",
+      teks: "Besok kita belajar tentang Isi Piringku. Sampai jumpa! 🍽️",
+      dibuat: Date.now() - 86_400_000,
+    },
+  ],
   teman: [
     { userId: "u2", nama: "Bima", avatar: "avatar-01", level: 4, poin: 455, progress: prog(3, 1, 3), koleksi: kartuSampai(18) },
     { userId: "u3", nama: "Citra", avatar: "avatar-06", level: 3, poin: 390, progress: prog(2, 1, 3), koleksi: kartuSampai(12) },
@@ -35,6 +51,7 @@ const infoKosong: InfoKelas = {
   kode: "KOSON",
   namaKelas: "Kelas Baru",
   namaGuru: null,
+  pengumuman: [],
   teman: [],
 };
 
