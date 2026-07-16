@@ -31,6 +31,9 @@ export interface LogSoalKuis {
   jawabanSiswa: string;
   /** teks opsi kunci (jawaban benar) */
   jawabanBenar: string;
+  /** kategori/materi soal (mis. "gizi") — dipakai rangkuman guru per materi.
+      Opsional demi kompat log lama; log lama dipetakan ulang dari teks soal. */
+  kategori?: string;
 }
 
 const data = dataSoal as unknown as {
