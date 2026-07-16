@@ -56,46 +56,91 @@ const PENGUMUMAN_UJI: Pengumuman[] = [
   },
 ];
 
+/* Satu detail soal untuk data uji: `benar` diturunkan dari cocok/tidaknya
+   jawaban siswa dengan kunci. `kategori` dipakai Rangkuman Pemahaman per materi
+   (untuk soal nyata, GameKuis mengisinya otomatis). */
+const d = (
+  pertanyaan: string,
+  kategori: string,
+  jawabanBenar: string,
+  jawabanSiswa: string = jawabanBenar
+): LogKuis["detail"][number] => ({
+  pertanyaan,
+  benar: jawabanSiswa === jawabanBenar,
+  jawabanSiswa,
+  jawabanBenar,
+  kategori,
+});
+
 const LOG_UJI: Record<string, LogKuis[]> = {
+  // Salsa: kuat Makanan Sehat, lemah Gizi, Kebiasaan Baik bagus (2 percobaan)
   "uji-Salsa": [
     {
       id: "log-1",
       userId: "uji-Salsa",
       level: 2,
-      benar: 8,
-      total: 10,
+      benar: 5,
+      total: 8,
       dibuat: Date.now() - 3600_000,
       detail: [
-        { pertanyaan: "Buah kaya vitamin C?", benar: true, jawabanSiswa: "Jeruk", jawabanBenar: "Jeruk" },
-        { pertanyaan: "Sarapan sehat itu…", benar: false, jawabanSiswa: "Permen", jawabanBenar: "Bubur" },
-        { pertanyaan: "Minum air putih berapa gelas?", benar: true, jawabanSiswa: "8 gelas", jawabanBenar: "8 gelas" },
-        { pertanyaan: "Sumber protein?", benar: false, jawabanSiswa: "(waktu habis)", jawabanBenar: "Telur" },
+        d("Manakah camilan paling sehat?", "makanan-sehat", "Buah"),
+        d("Buah kaya vitamin C?", "makanan-sehat", "Jeruk"),
+        d("Menu makan siang bergizi seimbang?", "makanan-sehat", "Nasi, ayam, sayur"),
+        d("Zat gizi sumber tenaga utama?", "gizi", "Karbohidrat", "Vitamin"),
+        d("Vitamin untuk kesehatan mata?", "gizi", "Vitamin A", "Vitamin C"),
+        d("Contoh sumber protein?", "gizi", "Telur", "(waktu habis)"),
+        d("Kapan sebaiknya menyikat gigi?", "kebiasaan-baik", "Pagi & malam"),
+        d("Berapa gelas air putih sehari?", "kebiasaan-baik", "8 gelas"),
       ],
     },
     {
       id: "log-2",
       userId: "uji-Salsa",
       level: 1,
-      benar: 10,
-      total: 10,
+      benar: 4,
+      total: 5,
       dibuat: Date.now() - 90_000_000,
       detail: [
-        { pertanyaan: "Warna sayur bayam?", benar: true, jawabanSiswa: "Hijau", jawabanBenar: "Hijau" },
-        { pertanyaan: "Susu baik untuk?", benar: true, jawabanSiswa: "Tulang", jawabanBenar: "Tulang" },
+        d("Sarapan sehat sebaiknya…", "makanan-sehat", "Bergizi seimbang"),
+        d("Minuman paling sehat?", "makanan-sehat", "Air putih"),
+        d("Mengapa tubuh butuh sayur?", "gizi", "Sumber vitamin & serat"),
+        d("Sebelum makan sebaiknya…", "kebiasaan-baik", "Cuci tangan"),
+        d("Kapan waktu baik berolahraga?", "olahraga", "Pagi hari", "Malam hari"),
       ],
     },
   ],
+  // Bima: satu percobaan — hanya Kebiasaan Baik yang cukup data untuk disebut
   "uji-Bima": [
     {
       id: "log-3",
       userId: "uji-Bima",
       level: 1,
-      benar: 5,
-      total: 10,
+      benar: 4,
+      total: 6,
       dibuat: Date.now() - 7200_000,
       detail: [
-        { pertanyaan: "Buah kaya vitamin C?", benar: false, jawabanSiswa: "Apel", jawabanBenar: "Jeruk" },
-        { pertanyaan: "Warna sayur bayam?", benar: true, jawabanSiswa: "Hijau", jawabanBenar: "Hijau" },
+        d("Cuci tangan sebaiknya pakai…", "kebiasaan-baik", "Sabun & air"),
+        d("Sebelum tidur sebaiknya…", "kebiasaan-baik", "Sikat gigi"),
+        d("Setelah bermain sebaiknya…", "kebiasaan-baik", "Cuci tangan"),
+        d("Buah kaya vitamin C?", "makanan-sehat", "Jeruk", "Apel"),
+        d("Contoh makanan bergizi?", "makanan-sehat", "Ikan"),
+        d("Vitamin dari sinar matahari pagi?", "gizi", "Vitamin D", "Vitamin C"),
+      ],
+    },
+  ],
+  // Citra: data masih sedikit — tak ada materi capai ambang → kalimat keseluruhan
+  "uji-Citra": [
+    {
+      id: "log-4",
+      userId: "uji-Citra",
+      level: 1,
+      benar: 2,
+      total: 3,
+      dibuat: Date.now() - 5400_000,
+      detail: [
+        d("Minuman paling sehat?", "makanan-sehat", "Air putih"),
+        d("Contoh sumber protein?", "gizi", "Telur"),
+        d("Rajin berolahraga membuat tubuh…", "olahraga", "Sehat & kuat", "Lelah"),
       ],
     },
   ],

@@ -237,6 +237,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       jawabanSiswa:
         pilihanAkhir[i] == null ? "(waktu habis)" : s.opsi[pilihanAkhir[i]!] ?? "(?)",
       jawabanBenar: s.opsi[s.kunciIndex] ?? "(?)",
+      kategori: s.kategori, // untuk rangkuman pemahaman per materi (guru)
     }));
     void catatLogKuis(profil, level, detail).catch(() => {});
 
