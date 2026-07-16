@@ -104,3 +104,152 @@ export function soalUntukLevel(level: number, tambahan: Soal[] = []): Soal[] {
 export function soalUntukEndless(tambahan: Soal[] = []): Soal[] {
   return acakSoal([...SEMUA_SOAL, ...tambahan]).sort((a, b) => a.level - b.level);
 }
+
+/* ============================================================================
+   Tantangan Harian (daily challenge) — bagian Kuis yang berganti tiap hari &
+   kesulitannya menyesuaikan progres tiap anak. Set soalnya DETERMINISTIK per
+   (tanggal, anak, level): sama sepanjang hari, ganti otomatis tengah malam,
+   dan tidak menyentuh syarat-lulus/levelTerbuka — murni latihan harian + poin.
+   ========================================================================== */
+
+/** Soal per tantangan harian — ringkas (sekali sehari), bukan 10 seperti level. */
+export const JUMLAH_SOAL_HARIAN = 5;
+
+/** Poin per jawaban benar di tantangan harian (setara level biasa). */
+export const POIN_PER_BENAR_HARIAN = 10;
+
+/** Bonus poin penjaga "beruntun" (streak) — makin panjang makin besar, dibatasi
+    agar sehari tantangan tak jauh melampaui satu level biasa (maks +25). */
+export function bonusBeruntun(beruntun: number): number {
+  return Math.min(Math.max(0, beruntun), 5) * 5; // 0..25
+}
+
+/** Status Tantangan Harian seorang siswa (dokumen `kuisHarian/{uid}`). */
+export interface KuisHarian {
+  userId: string;
+  /** tanggal terakhir menyelesaikan tantangan — "YYYY-MM-DD" (waktu lokal) */
+  tanggalTerakhir: string;
+  /** jumlah hari berturut-turut menyelesaikan tantangan */
+  beruntun: number;
+  /** beruntun terpanjang yang pernah dicapai */
+  beruntunTerbaik: number;
+  /** total tantangan harian yang pernah diselesaikan */
+  totalSelesai: number;
+  /** jumlah benar tantangan terakhir (untuk tampilan) */
+  benarTerakhir: number;
+}
+
+/** Tanggal lokal "YYYY-MM-DD" — kunci harian; berganti tengah malam waktu anak. */
+export function tanggalHariIni(d: Date = new Date()): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const t = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${t}`;
+}
+
+/** Tanggal kemarin (format sama) — untuk mengecek beruntun masih nyambung. */
+export function tanggalKemarin(hariIni: string): string {
+  const [y, m, t] = hariIni.split("-").map(Number);
+  return tanggalHariIni(new Date(y, m - 1, t - 1));
+}
+
+const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const NAMA_BULAN = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+];
+
+/** Tanggal ramah-baca Indonesia, mis. "Kamis, 16 Juli". */
+export function tanggalRamah(hariIni: string): string {
+  const [y, m, t] = hariIni.split("-").map(Number);
+  const d = new Date(y, m - 1, t);
+  return `${NAMA_HARI[d.getDay()]}, ${t} ${NAMA_BULAN[m - 1]}`;
+}
+
+/** Level kesulitan soal yang cocok untuk siswa: mengikuti progres Kuis-nya
+    (levelTerbuka), dibatasi 1..LEVEL_MAKS. Naik level → tantangan besok naik. */
+export function levelKesulitanAnak(levelTerbuka: number): number {
+  return Math.min(Math.max(1, levelTerbuka), LEVEL_MAKS);
+}
+
+/** Label kesulitan ramah-anak dari level soal. */
+export function labelKesulitan(lv: number): string {
+  if (lv <= 3) return "Mudah";
+  if (lv <= 6) return "Sedang";
+  return "Seru";
+}
+
+/* RNG deterministik: hash string (FNV-1a) → benih generator mulberry32, supaya
+   set soal harian SAMA sepanjang hari tapi beda tiap tanggal & tiap anak. */
+function benihDariString(str: string): number {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function mulberry32(a: number): () => number {
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function acakDenganRng<T>(arr: T[], rng: () => number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/** Susun soal Tantangan Harian: deterministik per (tanggal, anak, level), campur
+    beberapa level di sekitar level anak supaya adaptif — 1 pemanasan (level di
+    bawah), inti di levelnya, 1 tantangan (level di atas). `tambahan` = soal guru
+    kelas. Selalu mengembalikan JUMLAH_SOAL_HARIAN soal (di-backfill bila kurang). */
+export function soalHarian(
+  levelAnak: number,
+  tanggal: string,
+  userId: string,
+  tambahan: Soal[] = []
+): Soal[] {
+  const lv = levelKesulitanAnak(levelAnak);
+  const rng = mulberry32(benihDariString(`${tanggal}|${userId}|${lv}`));
+  const semua = [...SEMUA_SOAL, ...tambahan];
+  const dariLevel = (n: number) => acakDenganRng(semua.filter((s) => s.level === n), rng);
+
+  const bawah = Math.max(1, lv - 1);
+  const atas = Math.min(LEVEL_MAKS, lv + 1);
+  const rencana: Array<[number, number]> = [
+    [bawah, 1],
+    [lv, JUMLAH_SOAL_HARIAN - 2],
+    [atas, 1],
+  ];
+
+  const dipilih: Soal[] = [];
+  const terpakai = new Set<string>();
+  const ambil = (kandidat: Soal[], jml: number) => {
+    for (const s of kandidat) {
+      if (jml <= 0 || dipilih.length >= JUMLAH_SOAL_HARIAN) break;
+      if (terpakai.has(s.id)) continue;
+      dipilih.push(s);
+      terpakai.add(s.id);
+      jml--;
+    }
+  };
+  for (const [n, jml] of rencana) ambil(dariLevel(n), jml);
+
+  // backfill kalau ada band yang kurang soal — dari seluruh rentang bawah..atas
+  if (dipilih.length < JUMLAH_SOAL_HARIAN) {
+    ambil(
+      acakDenganRng(semua.filter((s) => s.level >= bawah && s.level <= atas), rng),
+      JUMLAH_SOAL_HARIAN - dipilih.length
+    );
+  }
+  // acak urutan akhir supaya posisi pemanasan/tantangan tak selalu di tempat sama
+  return acakDenganRng(dipilih, rng);
+}

@@ -13,7 +13,15 @@ import {
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
-import { LEVEL_ENDLESS, type LogSoalKuis, type Soal } from "./config";
+import {
+  LEVEL_ENDLESS,
+  POIN_PER_BENAR_HARIAN,
+  bonusBeruntun,
+  tanggalKemarin,
+  type KuisHarian,
+  type LogSoalKuis,
+  type Soal,
+} from "./config";
 
 /* Simpan hasil kuis ke store progress terpusat users/{uid} (kontrak §6 / Phase 9). */
 export async function simpanHasilKuis(
@@ -55,6 +63,70 @@ export async function catatLogKuis(
     detail,
     dibuat: serverTimestamp(),
   });
+}
+
+/* Ambil status Tantangan Harian siswa (dokumen kuisHarian/{uid}). null =
+   belum pernah main ATAU gagal baca — dua-duanya diperlakukan "belum selesai
+   hari ini" oleh pemanggil, jadi tantangan tetap bisa dimainkan saat offline. */
+export async function ambilStatusHarian(userId: string): Promise<KuisHarian | null> {
+  try {
+    const snap = await getDoc(doc(getDb(), "kuisHarian", userId));
+    return snap.exists() ? (snap.data() as KuisHarian) : null;
+  } catch {
+    return null;
+  }
+}
+
+/* Simpan hasil Tantangan Harian: catat penyelesaian + beruntun ke
+   kuisHarian/{uid}, lalu tambah poin ⭐ ke profil. IDEMPOTEN untuk hari yang
+   sama — bila sudah tercatat hari ini, poin & beruntun tak ditambah lagi
+   (anti main berulang untuk poin). Dokumen harian ditulis LEBIH DULU (gerbang
+   anti-ulang); bila penambahan poin gagal setelahnya, tantangan tetap terkunci
+   hari ini — lebih baik daripada poin ganda. */
+export async function simpanHasilHarian(
+  profil: UserProfile,
+  benar: number,
+  tanggal: string
+): Promise<{
+  beruntun: number;
+  beruntunTerbaik: number;
+  poinTambah: number;
+  sudahHariIni: boolean;
+}> {
+  const db = getDb();
+  const ref = doc(db, "kuisHarian", profil.userId);
+  const snap = await getDoc(ref);
+  const lama = snap.exists() ? (snap.data() as KuisHarian) : null;
+
+  if (lama && lama.tanggalTerakhir === tanggal) {
+    return {
+      beruntun: lama.beruntun,
+      beruntunTerbaik: lama.beruntunTerbaik,
+      poinTambah: 0,
+      sudahHariIni: true,
+    };
+  }
+
+  const beruntun =
+    lama && lama.tanggalTerakhir === tanggalKemarin(tanggal) ? lama.beruntun + 1 : 1;
+  const beruntunTerbaik = Math.max(beruntun, lama?.beruntunTerbaik ?? 0);
+  const poinTambah = benar * POIN_PER_BENAR_HARIAN + bonusBeruntun(beruntun);
+
+  const data: KuisHarian = {
+    userId: profil.userId,
+    tanggalTerakhir: tanggal,
+    beruntun,
+    beruntunTerbaik,
+    totalSelesai: (lama?.totalSelesai ?? 0) + 1,
+    benarTerakhir: benar,
+  };
+  await setDoc(ref, { ...data, diperbarui: serverTimestamp() });
+  await updateDoc(doc(db, "users", profil.userId), {
+    poin: increment(poinTambah),
+    level: hitungLevel(profil.poin + poinTambah), // D10: 150 ⭐/level
+  });
+
+  return { beruntun, beruntunTerbaik, poinTambah, sudahHariIni: false };
 }
 
 /* Soal buatan guru kelas siswa (Phase 10, D11: khusus Kuis) — digabung ke
