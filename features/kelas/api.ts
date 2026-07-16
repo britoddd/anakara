@@ -30,8 +30,9 @@ const PROGRESS_DEFAULT: UserProfile["progress"] = {
 export interface InfoKelas {
   kode: string;
   namaKelas: string;
-  /** nama wali kelas dari users/{guruId}; null bila profil guru tak ditemukan */
-  namaGuru: string | null;
+  /** nama pengajar kelas dari users/{uid}, wali kelas (pemilik) di urutan
+      pertama; kosong bila tak ada profil guru yang ditemukan */
+  guru: string[];
   /** teman sekelas (termasuk diri sendiri), urut abjad — ranking urusan Leaderboard */
   teman: TemanKelas[];
   /** pengumuman dari guru (Teacher Dashboard), terbaru di atas */
@@ -42,10 +43,17 @@ export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
   const db = getDb();
   const kelasSnap = await getDoc(doc(db, "kelas", kode));
   if (!kelasSnap.exists()) return null;
-  const { nama, guruId } = kelasSnap.data() as { nama?: string; guruId?: string };
+  const { nama, guruId, guruIds } = kelasSnap.data() as {
+    nama?: string;
+    guruId?: string;
+    guruIds?: string[];
+  };
+  // Dokumen lama (tanpa guruIds) → [guruId]. Wali kelas (pemilik) di depan.
+  const idGuru = guruIds ?? (guruId ? [guruId] : []);
+  const idUrut = [...idGuru].sort((a, b) => (a === guruId ? -1 : b === guruId ? 1 : 0));
 
-  const [guruSnap, siswaSnap, pengumuman] = await Promise.all([
-    guruId ? getDoc(doc(db, "users", guruId)) : Promise.resolve(null),
+  const [guruSnaps, siswaSnap, pengumuman] = await Promise.all([
+    Promise.all(idUrut.map((id) => getDoc(doc(db, "users", id)))),
     getDocs(query(collection(db, "users"), where("kelasId", "==", kode), limit(300))),
     ambilPengumuman(kode),
   ]);
@@ -67,7 +75,9 @@ export async function ambilInfoKelas(kode: string): Promise<InfoKelas | null> {
   return {
     kode,
     namaKelas: nama ?? kode,
-    namaGuru: guruSnap?.exists() ? (guruSnap.data() as UserProfile).nama : null,
+    guru: guruSnaps
+      .filter((s) => s.exists())
+      .map((s) => (s.data() as UserProfile).nama),
     teman,
     pengumuman,
   };

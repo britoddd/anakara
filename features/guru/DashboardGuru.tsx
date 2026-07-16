@@ -13,8 +13,10 @@ import {
   ambilKelasGuru,
   ambilSoalGuru,
   buatKelas,
+  gabungKelasSebagaiGuru,
   hapusKelas,
   hapusSoal,
+  keluarKelasSebagaiGuru,
   simpanSoal,
   type KelasGuru,
   type SoalGuru,
@@ -76,6 +78,7 @@ export default function DashboardGuru({ profil }: { profil: UserProfile }) {
 function BagianKelas({ guruId }: { guruId: string }) {
   const [daftar, setDaftar] = useState<KelasGuru[] | null>(null);
   const [namaBaru, setNamaBaru] = useState("");
+  const [kodeGabung, setKodeGabung] = useState("");
   const [sibuk, setSibuk] = useState(false);
   const [galat, setGalat] = useState<string | null>(null);
   const [tersalin, setTersalin] = useState<string | null>(null);
@@ -108,6 +111,25 @@ function BagianKelas({ guruId }: { guruId: string }) {
     }
   }
 
+  async function gabungKelas(e: React.FormEvent) {
+    e.preventDefault();
+    setSibuk(true);
+    setGalat(null);
+    try {
+      const hasil = await gabungKelasSebagaiGuru(guruId, kodeGabung);
+      if (!hasil.ok) {
+        setGalat(hasil.pesan);
+        return;
+      }
+      setKodeGabung("");
+      muat();
+    } catch {
+      setGalat("Gagal bergabung ke kelas. Coba lagi, ya.");
+    } finally {
+      setSibuk(false);
+    }
+  }
+
   async function hapus(kode: string) {
     if (!window.confirm(`Hapus kelas ${kode}? Siswa tidak lagi bisa join dengan kode ini.`)) return;
     setSibuk(true);
@@ -116,6 +138,20 @@ function BagianKelas({ guruId }: { guruId: string }) {
       muat();
     } catch {
       setGalat("Gagal menghapus kelas.");
+    } finally {
+      setSibuk(false);
+    }
+  }
+
+  async function keluar(kode: string) {
+    if (!window.confirm(`Keluar dari kelas ${kode}? Kamu bisa bergabung lagi dengan kodenya.`))
+      return;
+    setSibuk(true);
+    try {
+      await keluarKelasSebagaiGuru(guruId, kode);
+      muat();
+    } catch {
+      setGalat("Gagal keluar dari kelas.");
     } finally {
       setSibuk(false);
     }
@@ -154,7 +190,35 @@ function BagianKelas({ guruId }: { guruId: string }) {
         </form>
         <p className="text-sm text-muted font-bold mt-2">
           Sistem membuat kode unik 5 huruf — bagikan ke siswa untuk join saat
-          onboarding.
+          onboarding, atau ke guru lain untuk mengajar bersama.
+        </p>
+      </Card>
+
+      {/* gabung sebagai pengajar tambahan (kelas guru lain) */}
+      <Card className="mb-6">
+        <form onSubmit={gabungKelas} className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1">
+            <label htmlFor="kode-gabung" className="font-bold block mb-1">
+              Gabung sebagai pengajar
+            </label>
+            <input
+              id="kode-gabung"
+              value={kodeGabung}
+              onChange={(e) => setKodeGabung(e.target.value.toUpperCase())}
+              maxLength={5}
+              placeholder="Masukkan kode kelas (5 huruf)"
+              className="w-full bg-surface border-2 border-border rounded-md px-3 py-2.5 font-bold tracking-[0.15em] text-fg focus:border-primary outline-none"
+            />
+          </div>
+          <div className="sm:self-end">
+            <Button type="submit" variant="accent" disabled={sibuk}>
+              🤝 Gabung
+            </Button>
+          </div>
+        </form>
+        <p className="text-sm text-muted font-bold mt-2">
+          Punya kode kelas dari guru lain? Masukkan di sini untuk ikut mengajar
+          kelas itu bersama-sama.
         </p>
       </Card>
 
@@ -172,36 +236,58 @@ function BagianKelas({ guruId }: { guruId: string }) {
         </p>
       ) : (
         <ul className="flex flex-col gap-4 list-none">
-          {daftar.map((k) => (
-            <li key={k.kode}>
-              <Card>
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex-1 min-w-40">
-                    <h3 className="font-display font-extrabold text-lg">{k.nama}</h3>
-                    <p className="text-sm text-muted font-bold">Kode kelas:</p>
+          {daftar.map((k) => {
+            const akuPemilik = k.guruId === guruId;
+            const jumlahGuru = k.guruIds.length;
+            return (
+              <li key={k.kode}>
+                <Card>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex-1 min-w-40">
+                      <h3 className="font-display font-extrabold text-lg">{k.nama}</h3>
+                      <p className="text-sm text-muted font-bold flex flex-wrap items-center gap-2">
+                        <span>Kode kelas:</span>
+                        {!akuPemilik && (
+                          <span className="bg-accent/15 text-fg border border-accent rounded-full px-2 py-0.5 text-xs font-extrabold">
+                            🤝 Mengajar bersama
+                          </span>
+                        )}
+                        {jumlahGuru > 1 && (
+                          <span className="bg-surface-2 border border-border rounded-full px-2 py-0.5 text-xs font-extrabold">
+                            🧑‍🏫 {jumlahGuru} guru
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <span
+                      className="font-display font-extrabold text-2xl tracking-[0.25em] bg-surface-2 border-2 border-primary rounded-md px-4 py-2"
+                      aria-label={`Kode kelas ${k.kode.split("").join(" ")}`}
+                    >
+                      {k.kode}
+                    </span>
+                    <Button variant="ghost" onClick={() => salin(k.kode)}>
+                      {tersalin === k.kode ? "✓ Tersalin" : "📋 Salin"}
+                    </Button>
+                    <Link
+                      href={`/guru/kelas/${k.kode}`}
+                      className="inline-flex items-center justify-center gap-2 rounded-full min-h-[48px] px-6 text-base font-display font-bold select-none no-underline bg-primary text-on-primary shadow-[0_4px_0_var(--primary-active)] hover:bg-primary-hover active:translate-y-[3px] active:shadow-none transition-[transform,box-shadow,background-color] duration-150 ease-out"
+                    >
+                      ⚙️ Kelola Kelas
+                    </Link>
+                    {akuPemilik ? (
+                      <Button variant="danger" onClick={() => hapus(k.kode)} disabled={sibuk}>
+                        Hapus
+                      </Button>
+                    ) : (
+                      <Button variant="ghost" onClick={() => keluar(k.kode)} disabled={sibuk}>
+                        🚪 Keluar
+                      </Button>
+                    )}
                   </div>
-                  <span
-                    className="font-display font-extrabold text-2xl tracking-[0.25em] bg-surface-2 border-2 border-primary rounded-md px-4 py-2"
-                    aria-label={`Kode kelas ${k.kode.split("").join(" ")}`}
-                  >
-                    {k.kode}
-                  </span>
-                  <Button variant="ghost" onClick={() => salin(k.kode)}>
-                    {tersalin === k.kode ? "✓ Tersalin" : "📋 Salin"}
-                  </Button>
-                  <Link
-                    href={`/guru/kelas/${k.kode}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-full min-h-[48px] px-6 text-base font-display font-bold select-none no-underline bg-primary text-on-primary shadow-[0_4px_0_var(--primary-active)] hover:bg-primary-hover active:translate-y-[3px] active:shadow-none transition-[transform,box-shadow,background-color] duration-150 ease-out"
-                  >
-                    ⚙️ Kelola Kelas
-                  </Link>
-                  <Button variant="danger" onClick={() => hapus(k.kode)} disabled={sibuk}>
-                    Hapus
-                  </Button>
-                </div>
-              </Card>
-            </li>
-          ))}
+                </Card>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

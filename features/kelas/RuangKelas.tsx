@@ -60,27 +60,26 @@ export default function RuangKelas({
         </section>
       )}
 
-      {/* wali kelas — kontak utama anak di aplikasi */}
+      {/* guru kelas — kontak utama anak di aplikasi; bisa lebih dari satu,
+          wali kelas (pemilik) di urutan pertama */}
       <section aria-labelledby="judul-guru">
         <h2 id="judul-guru" className="text-xl mb-3">
           Bapak/Ibu Guru 🧑‍🏫
         </h2>
-        <Card className="flex items-center gap-4 p-4 sm:p-5">
-          <span
-            className="w-14 h-14 shrink-0 rounded-full bg-band-blue border-2 border-border flex items-center justify-center text-3xl"
-            aria-hidden="true"
-          >
-            🧑‍🏫
-          </span>
-          <div className="min-w-0">
-            <p className="font-display font-extrabold text-lg truncate">
-              {info.namaGuru ?? "Bapak/Ibu Guru"}
-            </p>
-            <p className="text-sm text-muted font-bold">
-              Wali kelas · {info.namaKelas}
-            </p>
-          </div>
-        </Card>
+        {info.guru.length === 0 ? (
+          <KartuGuru nama="Bapak/Ibu Guru" peran={`Wali kelas · ${info.namaKelas}`} />
+        ) : (
+          <ul className="flex flex-col gap-3 list-none">
+            {info.guru.map((nama, i) => (
+              <li key={`${nama}-${i}`}>
+                <KartuGuru
+                  nama={nama}
+                  peran={`${i === 0 ? "Wali kelas" : "Guru pendamping"} · ${info.namaKelas}`}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       {/* kekuatan kelas — statistik gabungan, bukan ranking perorangan */}
@@ -158,6 +157,23 @@ export default function RuangKelas({
         )}
       </section>
     </div>
+  );
+}
+
+function KartuGuru({ nama, peran }: { nama: string; peran: string }) {
+  return (
+    <Card className="flex items-center gap-4 p-4 sm:p-5">
+      <span
+        className="w-14 h-14 shrink-0 rounded-full bg-band-blue border-2 border-border flex items-center justify-center text-3xl"
+        aria-hidden="true"
+      >
+        🧑‍🏫
+      </span>
+      <div className="min-w-0">
+        <p className="font-display font-extrabold text-lg truncate">{nama}</p>
+        <p className="text-sm text-muted font-bold">{peran}</p>
+      </div>
+    </Card>
   );
 }
 
