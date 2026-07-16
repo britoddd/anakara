@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import GambarEmoji from "@/components/ui/GambarEmoji";
+import { getAvatar } from "@/features/auth/avatars";
+import { ATURAN } from "@/features/games/kuis/config";
 import type { UserProfile } from "@/features/auth/types";
 import { TabelSiswa } from "./DashboardGuru";
-import { PENGUMUMAN_MAKS, type Pengumuman } from "./api";
+import { PENGUMUMAN_MAKS, type LogKuis, type Pengumuman } from "./api";
 
 /* Halaman kelola satu kelas (Teacher Dashboard) — menggantikan expand "Lihat
    Siswa" di dashboard dengan halaman khusus /guru/kelas/[kode]. Presentasional:
@@ -16,6 +19,8 @@ interface KelolaKelasProps {
   kode: string;
   siswa: UserProfile[];
   pengumuman: Pengumuman[];
+  /** riwayat jawaban Kuis per siswa (by userId), terbaru di atas */
+  logKuis: Record<string, LogKuis[]>;
   onBuatPengumuman: (teks: string) => Promise<void>;
   onHapusPengumuman: (p: Pengumuman) => void;
   onKeluarkan: (s: UserProfile) => void;
@@ -33,11 +38,22 @@ function tanggalRingkas(ms: number): string {
   });
 }
 
+function tanggalWaktu(ms: number): string {
+  if (!ms) return "Baru saja";
+  return new Date(ms).toLocaleString("id-ID", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export default function KelolaKelas({
   namaKelas,
   kode,
   siswa,
   pengumuman,
+  logKuis,
   onBuatPengumuman,
   onHapusPengumuman,
   onKeluarkan,
@@ -96,7 +112,143 @@ export default function KelolaKelas({
           </Card>
         )}
       </section>
+
+      <RiwayatKuis siswa={siswa} logKuis={logKuis} />
     </div>
+  );
+}
+
+function RiwayatKuis({
+  siswa,
+  logKuis,
+}: {
+  siswa: UserProfile[];
+  logKuis: Record<string, LogKuis[]>;
+}) {
+  /* hanya tampilkan siswa yang punya riwayat; siswa aktif diprioritaskan */
+  const denganLog = siswa.filter((s) => (logKuis[s.userId]?.length ?? 0) > 0);
+
+  return (
+    <section aria-labelledby="judul-riwayat-kuis">
+      <h2 id="judul-riwayat-kuis" className="text-xl mb-1">
+        Riwayat Jawaban Kuis 📋
+      </h2>
+      <p className="text-muted font-bold text-sm mb-3">
+        Tiap kali siswa menyelesaikan satu level Kuis Asik, jawaban benar &amp;
+        salahnya tercatat di sini — buka untuk lihat soal per soal.
+      </p>
+
+      {denganLog.length === 0 ? (
+        <Card>
+          <p className="text-muted font-bold text-center py-4">
+            Belum ada yang menyelesaikan level Kuis. Riwayat muncul di sini setelah
+            siswa bermain. 🎮
+          </p>
+        </Card>
+      ) : (
+        <ul className="flex flex-col gap-3 list-none">
+          {denganLog.map((s) => {
+            const log = logKuis[s.userId] ?? [];
+            const av = getAvatar(s.avatar ?? "");
+            return (
+              <li key={s.userId}>
+                <Card className="p-0 overflow-hidden">
+                  <details className="group">
+                    <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer select-none font-bold list-none">
+                      <span
+                        className="w-8 h-8 shrink-0 rounded-full bg-white border-2 border-border overflow-hidden flex items-center justify-center text-sm"
+                        aria-hidden="true"
+                      >
+                        {av ? (
+                          <GambarEmoji
+                            src={av.gambar}
+                            emoji={av.emoji}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          "🙂"
+                        )}
+                      </span>
+                      <span className="flex-1 min-w-0">{s.nama}</span>
+                      <span className="text-sm text-muted whitespace-nowrap">
+                        {log.length} percobaan
+                      </span>
+                      <span
+                        className="text-muted transition-transform group-open:rotate-90"
+                        aria-hidden="true"
+                      >
+                        ▶
+                      </span>
+                    </summary>
+                    <ul className="flex flex-col gap-2 px-4 pb-4 list-none border-t border-border pt-3">
+                      {log.map((l) => (
+                        <li key={l.id}>
+                          <KartuPercobaan log={l} />
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </Card>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function KartuPercobaan({ log }: { log: LogKuis }) {
+  const minLulus = ATURAN[log.level]?.syaratLulus.minBenar ?? Math.ceil(log.total * 0.6);
+  const lulus = log.benar >= minLulus;
+  return (
+    <details className="rounded-lg border-2 border-border bg-surface-2">
+      <summary className="flex flex-wrap items-center gap-2 px-3 py-2 cursor-pointer select-none font-bold list-none">
+        <span className="bg-primary text-on-primary text-xs font-extrabold rounded-full px-2.5 py-1">
+          Level {log.level}
+        </span>
+        <span
+          className={[
+            "text-sm font-extrabold",
+            lulus ? "text-success" : "text-danger",
+          ].join(" ")}
+        >
+          {log.benar}/{log.total} benar
+        </span>
+        <span className="text-xs text-muted ml-auto whitespace-nowrap">
+          {tanggalWaktu(log.dibuat)}
+        </span>
+      </summary>
+      <ol className="flex flex-col gap-1.5 px-3 pb-3 pt-1 list-none">
+        {log.detail.map((d, i) => (
+          <li
+            key={i}
+            className="flex items-start gap-2 text-sm border-t border-border pt-1.5 first:border-t-0"
+          >
+            <span
+              aria-hidden="true"
+              className={d.benar ? "text-success" : "text-danger"}
+            >
+              {d.benar ? "✓" : "✗"}
+            </span>
+            <span className="min-w-0">
+              <span className="font-bold">{d.pertanyaan}</span>{" "}
+              <span className="text-muted">
+                — jawab: <b className={d.benar ? "text-success" : "text-danger"}>
+                  {d.jawabanSiswa}
+                </b>
+                {!d.benar && (
+                  <>
+                    {" "}
+                    (benar: <b className="text-success">{d.jawabanBenar}</b>)
+                  </>
+                )}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </details>
   );
 }
 

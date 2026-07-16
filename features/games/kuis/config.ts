@@ -20,6 +20,19 @@ export interface AturanLevel {
   syaratLulus: { minBenar: number };
 }
 
+/* Log jawaban Kuis (Phase 10+): satu entri per soal dalam sebuah percobaan
+   level, disimpan ke koleksi `logKuis` agar guru bisa memantau jawaban
+   benar/salah tiap siswa (self-contained — teks disimpan langsung supaya tak
+   perlu join ke soal, yang bisa saja sudah dihapus/diedit guru). */
+export interface LogSoalKuis {
+  pertanyaan: string;
+  benar: boolean;
+  /** teks opsi yang dipilih siswa; "(waktu habis)" bila tak sempat menjawab */
+  jawabanSiswa: string;
+  /** teks opsi kunci (jawaban benar) */
+  jawabanBenar: string;
+}
+
 const data = dataSoal as unknown as {
   soal: Soal[];
   aturanLevel: Record<string, AturanLevel>;

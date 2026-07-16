@@ -24,9 +24,10 @@ import {
   hitungBintangKuis,
   soalUntukEndless,
   soalUntukLevel,
+  type LogSoalKuis,
   type Soal,
 } from "./config";
-import { ambilSoalGuruKelas, simpanHasilKuis } from "./api";
+import { ambilSoalGuruKelas, catatLogKuis, simpanHasilKuis } from "./api";
 
 /* Kuis Asik (Phase 5, mockup MacBook Air - 6).
    D4: TIDAK ada tombol "Sebelumnya" (mockup di-override) — jawaban terkunci
@@ -51,6 +52,9 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   const [daftarSoal, setDaftarSoal] = useState<Soal[]>([]);
   const [index, setIndex] = useState(0);
   const [riwayat, setRiwayat] = useState<HasilSoal[]>([]);
+  /* opsi yang dipilih tiap soal (sejajar `riwayat`) — untuk log jawaban guru;
+     null = waktu habis / belum dijawab */
+  const [pilihanRiwayat, setPilihanRiwayat] = useState<(number | null)[]>([]);
   const [pilihan, setPilihan] = useState<number | null>(null);
   const [terkunci, setTerkunci] = useState(false);
   const [waktuHabis, setWaktuHabis] = useState(false);
@@ -105,12 +109,14 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       const pertama = antreanRef.current.daftar[antreanRef.current.pos++];
       setDaftarSoal([pertama]);
       setRiwayat([null]);
+      setPilihanRiwayat([null]);
       setNyawa(ENDLESS_KUIS.nyawa);
       setTimerSisa(durasiSoalEndless(pertama.durasiDetik, 0));
     } else {
       const soalBaru = soalUntukLevel(lv, soalGuru);
       setDaftarSoal(soalBaru);
       setRiwayat(Array(soalBaru.length).fill(null));
+      setPilihanRiwayat(Array(soalBaru.length).fill(null));
       setTimerSisa(soalBaru[0]?.durasiDetik ?? 15);
     }
     setFase("main");
@@ -135,13 +141,33 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       baru[index] = benar ? "benar" : "salah";
       return baru;
     });
+    setPilihanRiwayat((p) => {
+      const baru = [...p];
+      baru[index] = idxOpsi;
+      return baru;
+    });
   }
 
-  const selesaiLevel = async (riwayatAkhir: HasilSoal[]) => {
+  const selesaiLevel = async (
+    riwayatAkhir: HasilSoal[],
+    pilihanAkhir: (number | null)[]
+  ) => {
     const benar = riwayatAkhir.filter((r) => r === "benar").length;
     const lulus = benar >= ATURAN[level].syaratLulus.minBenar;
     setFase("hasil");
     setStatusSimpan("proses");
+
+    /* catat riwayat jawaban ke logKuis (dipantau guru) — fire-and-forget,
+       kegagalan diabaikan supaya penyimpanan poin di bawah tetap jalan */
+    const detail: LogSoalKuis[] = daftarSoal.map((s, i) => ({
+      pertanyaan: s.pertanyaan,
+      benar: riwayatAkhir[i] === "benar",
+      jawabanSiswa:
+        pilihanAkhir[i] == null ? "(waktu habis)" : s.opsi[pilihanAkhir[i]!] ?? "(?)",
+      jawabanBenar: s.opsi[s.kunciIndex] ?? "(?)",
+    }));
+    void catatLogKuis(profil, level, detail).catch(() => {});
+
     try {
       await simpanHasilKuis(profil, {
         level,
@@ -191,6 +217,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
           const berikut = soalEndlessBerikut();
           setDaftarSoal((d) => [...d, berikut]);
           setRiwayat((r) => [...r, null]);
+          setPilihanRiwayat((p) => [...p, null]);
           setIndex((i) => i + 1);
           setPilihan(null);
           setTerkunci(false);
@@ -206,7 +233,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
         setWaktuHabis(false);
         setTimerSisa(daftarSoal[index + 1].durasiDetik);
       } else {
-        void selesaiLevelRef.current(riwayat);
+        void selesaiLevelRef.current(riwayat, pilihanRiwayat);
       }
     }, JEDA_FEEDBACK_MS);
     return () => clearTimeout(id);

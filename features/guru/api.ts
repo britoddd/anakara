@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import type { UserProfile } from "@/features/auth/types";
-import type { Soal } from "@/features/games/kuis/config";
+import type { LogSoalKuis, Soal } from "@/features/games/kuis/config";
 
 /* API Teacher Dashboard (Phase 10).
    - kelas/{KODE}: { nama, guruId, dibuat } — kode 5 huruf à la Kahoot.
@@ -162,6 +162,50 @@ export async function buatPengumuman(
 
 export async function hapusPengumuman(id: string): Promise<void> {
   await deleteDoc(doc(getDb(), "pengumuman", id));
+}
+
+/* ---------- log jawaban kuis (riwayat benar/salah per level) ---------- */
+
+/** Satu percobaan level Kuis oleh seorang siswa (dibaca guru di Kelola Kelas). */
+export interface LogKuis {
+  id: string;
+  userId: string;
+  level: number;
+  benar: number;
+  total: number;
+  detail: LogSoalKuis[];
+  /** epoch ms saat percobaan selesai; 0 bila serverTimestamp belum tersinkron */
+  dibuat: number;
+}
+
+function bacaLogKuis(d: QueryDocumentSnapshot): LogKuis {
+  const data = d.data() as {
+    userId: string;
+    level: number;
+    benar: number;
+    total: number;
+    detail: LogSoalKuis[];
+    dibuat?: { toMillis?: () => number };
+  };
+  return {
+    id: d.id,
+    userId: data.userId,
+    level: data.level,
+    benar: data.benar,
+    total: data.total,
+    detail: data.detail ?? [],
+    dibuat: data.dibuat?.toMillis?.() ?? 0,
+  };
+}
+
+/** Riwayat jawaban Kuis semua siswa sebuah kelas (terbaru di atas). Satu klausa
+    where + sortir klien (tanpa composite index) — konsisten dengan query lain.
+    Halaman kelola mengelompokkannya per siswa (by userId). */
+export async function ambilLogKuisKelas(kelasId: string): Promise<LogKuis[]> {
+  const snap = await getDocs(
+    query(collection(getDb(), "logKuis"), where("kelasId", "==", kelasId), limit(500))
+  );
+  return snap.docs.map(bacaLogKuis).sort((a, b) => b.dibuat - a.dibuat);
 }
 
 /* ---------- bank soal guru ---------- */

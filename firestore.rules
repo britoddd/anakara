@@ -72,5 +72,17 @@ service cloud.firestore {
         && request.resource.data.userId == request.auth.uid
         && rekorId == request.resource.data.game + '_' + request.auth.uid;
     }
+
+    // Log jawaban Kuis (riwayat benar/salah per level): satu dokumen per
+    // percobaan level. Dibaca oleh siswa pemilik & guru pemilik kelasnya
+    // (Kelola Kelas → Riwayat Jawaban). Siswa hanya boleh menulis log atas
+    // namanya sendiri; log bersifat catatan (tak ada update/delete).
+    match /logKuis/{logId} {
+      allow read: if request.auth != null
+        && (resource.data.userId == request.auth.uid
+            || guruPemilikKelas(resource.data.kelasId));
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+    }
   }
 }
