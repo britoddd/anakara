@@ -10,6 +10,7 @@ import { useAuth } from "@/features/auth/AuthProvider";
 import type { UserProfile } from "@/features/auth/types";
 import {
   ambilKelas,
+  ambilLogKuisKelas,
   ambilPengumuman,
   ambilSiswaKelas,
   buatPengumuman,
@@ -17,6 +18,7 @@ import {
   keluarkanSiswa,
   resetProgresSiswa,
   type KelasGuru,
+  type LogKuis,
   type Pengumuman,
 } from "@/features/guru/api";
 import KelolaKelas from "@/features/guru/KelolaKelas";
@@ -35,6 +37,7 @@ export default function KelolaKelasPage() {
   const [kelas, setKelas] = useState<KelasGuru | null | undefined>(undefined);
   const [siswa, setSiswa] = useState<UserProfile[]>([]);
   const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
+  const [logKuis, setLogKuis] = useState<Record<string, LogKuis[]>>({});
   const [galat, setGalat] = useState(false);
   const [siswaSibuk, setSiswaSibuk] = useState<string | null>(null);
 
@@ -54,9 +57,18 @@ export default function KelolaKelasPage() {
         return;
       }
       setKelas(k);
-      const [s, p] = await Promise.all([ambilSiswaKelas(kode), ambilPengumuman(kode)]);
+      const [s, p, log] = await Promise.all([
+        ambilSiswaKelas(kode),
+        ambilPengumuman(kode),
+        ambilLogKuisKelas(kode),
+      ]);
       setSiswa(s);
       setPengumuman(p);
+      /* kelompokkan riwayat per siswa (by userId); urutan terbaru-di-atas
+         dari ambilLogKuisKelas dipertahankan */
+      const perSiswa: Record<string, LogKuis[]> = {};
+      for (const l of log) (perSiswa[l.userId] ??= []).push(l);
+      setLogKuis(perSiswa);
     } catch {
       setGalat(true);
     }
@@ -164,6 +176,7 @@ export default function KelolaKelasPage() {
             kode={kode}
             siswa={siswa}
             pengumuman={pengumuman}
+            logKuis={logKuis}
             onBuatPengumuman={kirimPengumuman}
             onHapusPengumuman={hapusPeng}
             onKeluarkan={keluarkan}

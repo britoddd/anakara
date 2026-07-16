@@ -6,12 +6,14 @@ import {
   increment,
   limit,
   query,
+  serverTimestamp,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
-import { LEVEL_ENDLESS, type Soal } from "./config";
+import { LEVEL_ENDLESS, type LogSoalKuis, type Soal } from "./config";
 
 /* Simpan hasil kuis ke store progress terpusat users/{uid} (kontrak §6 / Phase 9). */
 export async function simpanHasilKuis(
@@ -29,6 +31,29 @@ export async function simpanHasilKuis(
     poin: increment(hasil.poinTambah),
     level: hitungLevel(profil.poin + hasil.poinTambah), // D10: 150 ⭐/level
     "progress.kuis.levelTerbuka": terbukaBaru,
+  });
+}
+
+/* Catat satu percobaan level (biasa, 1..9) ke koleksi `logKuis` — riwayat
+   jawaban benar/salah per soal yang dibaca guru di Kelola Kelas. Dipanggil
+   fire-and-forget saat level selesai; siswa tanpa kelas tak dicatat (tak ada
+   guru yang memantau). Kegagalan diabaikan pemanggil supaya layar hasil tak
+   macet saat koneksi sekolah lambat (bandingkan simpanHasilKuis). */
+export async function catatLogKuis(
+  profil: UserProfile,
+  level: number,
+  detail: LogSoalKuis[]
+): Promise<void> {
+  if (!profil.kelasId) return;
+  const ref = doc(collection(getDb(), "logKuis"));
+  await setDoc(ref, {
+    userId: profil.userId,
+    kelasId: profil.kelasId,
+    level,
+    benar: detail.filter((d) => d.benar).length,
+    total: detail.length,
+    detail,
+    dibuat: serverTimestamp(),
   });
 }
 

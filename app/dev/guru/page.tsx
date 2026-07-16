@@ -5,7 +5,7 @@ import { buatProfilBaru } from "@/features/auth/types";
 import { TabelSiswa } from "@/features/guru/DashboardGuru";
 import FormSoal from "@/features/guru/FormSoal";
 import KelolaKelas from "@/features/guru/KelolaKelas";
-import type { Pengumuman } from "@/features/guru/api";
+import type { LogKuis, Pengumuman } from "@/features/guru/api";
 
 /* Halaman uji dev untuk komponen Phase 10 tanpa login (seperti /dev/komponen).
    Bukan bagian produk — jangan ditautkan dari halaman guru/siswa. */
@@ -56,6 +56,51 @@ const PENGUMUMAN_UJI: Pengumuman[] = [
   },
 ];
 
+const LOG_UJI: Record<string, LogKuis[]> = {
+  "uji-Salsa": [
+    {
+      id: "log-1",
+      userId: "uji-Salsa",
+      level: 2,
+      benar: 8,
+      total: 10,
+      dibuat: Date.now() - 3600_000,
+      detail: [
+        { pertanyaan: "Buah kaya vitamin C?", benar: true, jawabanSiswa: "Jeruk", jawabanBenar: "Jeruk" },
+        { pertanyaan: "Sarapan sehat itu…", benar: false, jawabanSiswa: "Permen", jawabanBenar: "Bubur" },
+        { pertanyaan: "Minum air putih berapa gelas?", benar: true, jawabanSiswa: "8 gelas", jawabanBenar: "8 gelas" },
+        { pertanyaan: "Sumber protein?", benar: false, jawabanSiswa: "(waktu habis)", jawabanBenar: "Telur" },
+      ],
+    },
+    {
+      id: "log-2",
+      userId: "uji-Salsa",
+      level: 1,
+      benar: 10,
+      total: 10,
+      dibuat: Date.now() - 90_000_000,
+      detail: [
+        { pertanyaan: "Warna sayur bayam?", benar: true, jawabanSiswa: "Hijau", jawabanBenar: "Hijau" },
+        { pertanyaan: "Susu baik untuk?", benar: true, jawabanSiswa: "Tulang", jawabanBenar: "Tulang" },
+      ],
+    },
+  ],
+  "uji-Bima": [
+    {
+      id: "log-3",
+      userId: "uji-Bima",
+      level: 1,
+      benar: 5,
+      total: 10,
+      dibuat: Date.now() - 7200_000,
+      detail: [
+        { pertanyaan: "Buah kaya vitamin C?", benar: false, jawabanSiswa: "Apel", jawabanBenar: "Jeruk" },
+        { pertanyaan: "Warna sayur bayam?", benar: true, jawabanSiswa: "Hijau", jawabanBenar: "Hijau" },
+      ],
+    },
+  ],
+};
+
 export default function DevGuruPage() {
   return (
     <main id="konten-utama" className="max-w-3xl mx-auto px-6 py-8 flex flex-col gap-12">
@@ -66,6 +111,7 @@ export default function DevGuruPage() {
           kode="ABC23"
           siswa={SISWA_UJI}
           pengumuman={PENGUMUMAN_UJI}
+          logKuis={LOG_UJI}
           onBuatPengumuman={async () => {}}
           onHapusPengumuman={() => {}}
           onKeluarkan={() => {}}
