@@ -142,32 +142,9 @@ export interface KuisHarian {
   benarTerakhir: number;
 }
 
-/** Tanggal lokal "YYYY-MM-DD" — kunci harian; berganti tengah malam waktu anak. */
-export function tanggalHariIni(d: Date = new Date()): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const t = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${t}`;
-}
-
-/** Tanggal kemarin (format sama) — untuk mengecek beruntun masih nyambung. */
-export function tanggalKemarin(hariIni: string): string {
-  const [y, m, t] = hariIni.split("-").map(Number);
-  return tanggalHariIni(new Date(y, m - 1, t - 1));
-}
-
-const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-const NAMA_BULAN = [
-  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
-];
-
-/** Tanggal ramah-baca Indonesia, mis. "Kamis, 16 Juli". */
-export function tanggalRamah(hariIni: string): string {
-  const [y, m, t] = hariIni.split("-").map(Number);
-  const d = new Date(y, m - 1, t);
-  return `${NAMA_HARI[d.getDay()]}, ${t} ${NAMA_BULAN[m - 1]}`;
-}
+/* Utilitas tanggal harian dipindah ke lib/tanggal.ts (dipakai bersama Home)
+   & di-ekspor ulang di sini demi kompatibilitas pemakai lama (GameKuis, api). */
+export { tanggalHariIni, tanggalKemarin, tanggalRamah } from "@/lib/tanggal";
 
 /** Level kesulitan soal yang cocok untuk siswa: mengikuti progres Kuis-nya
     (levelTerbuka), dibatasi 1..LEVEL_MAKS. Naik level → tantangan besok naik. */

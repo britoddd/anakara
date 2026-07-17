@@ -24,6 +24,8 @@ import GameCard from "@/features/home/GameCard";
 import MenuHamburger from "@/features/home/MenuHamburger";
 import { MENU_GAME, MENU_LAIN } from "@/features/home/menu";
 import { bacaRiwayat } from "@/features/home/riwayat";
+import { ambilStatusHarian } from "@/features/games/kuis/api";
+import { tanggalHariIni, beruntunMasihHidup } from "@/lib/tanggal";
 import {
   sudahLihatTutorial,
   tandaiTutorialSelesai,
@@ -112,12 +114,38 @@ export default function HomePage() {
     () => PESAN_TAYO[Math.floor(Math.random() * PESAN_TAYO.length)]
   );
   const [salam] = useState(() => salamWaktu());
+  /* beruntun Tantangan Harian (Kuis) untuk badge motivasi — hanya ditampilkan
+     bila masih "hidup" (main hari ini / kemarin), supaya tak menyesatkan */
+  const [beruntun, setBeruntun] = useState<{
+    jumlah: number;
+    sudahHariIni: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (loading) return;
     if (!user || !profil) router.replace("/");
     else if (rutePofil(profil) !== "/home") router.replace(rutePofil(profil));
   }, [loading, user, profil, router]);
+
+  /* ambil status beruntun harian sekali profil siap (gagal/offline = tak tampil) */
+  useEffect(() => {
+    if (loading || !profil || rutePofil(profil) !== "/home") return;
+    let aktif = true;
+    ambilStatusHarian(profil.userId)
+      .then((s) => {
+        if (!aktif || !s || s.beruntun <= 0) return;
+        const hariIni = tanggalHariIni();
+        if (!beruntunMasihHidup(s.tanggalTerakhir, hariIni)) return; // sudah putus
+        setBeruntun({
+          jumlah: s.beruntun,
+          sudahHariIni: s.tanggalTerakhir === hariIni,
+        });
+      })
+      .catch(() => {});
+    return () => {
+      aktif = false;
+    };
+  }, [loading, profil]);
 
   /* pemain baru (per perangkat, seperti riwayat) langsung disambut panduan;
      setelah ditutup tak muncul lagi — sisanya lewat tombol ? */
@@ -304,6 +332,24 @@ export default function HomePage() {
               {salam}, <GarisMarker>{profil.nama}</GarisMarker>!
             </h1>
             <p className="text-muted font-bold">{pesan}</p>
+            {/* badge beruntun harian — kebanggaan bila sudah main hari ini,
+                ajakan lembut bila beruntun masih hidup tapi belum main */}
+            {beruntun && (
+              <Link
+                href="/game/kuis"
+                aria-label={
+                  beruntun.sudahHariIni
+                    ? `Kamu sudah ${beruntun.jumlah} hari beruntun bermain Tantangan Harian`
+                    : `Beruntun ${beruntun.jumlah} hari — main Tantangan Harian hari ini biar tidak putus`
+                }
+                className="inline-flex items-center gap-1.5 mt-1.5 rounded-full bg-accent/20 border-2 border-accent px-3 py-1 text-sm font-extrabold text-fg no-underline hover:-translate-y-0.5 active:scale-95 transition-transform duration-150"
+              >
+                <span aria-hidden="true">🔥</span>
+                {beruntun.sudahHariIni
+                  ? `${beruntun.jumlah} hari beruntun!`
+                  : `${beruntun.jumlah} hari · main hari ini!`}
+              </Link>
+            )}
             {/* kemajuan level sebagai bar (glanceable), bukan kalimat panjang */}
             <div className="mt-2 flex items-center gap-3 max-w-md">
               <ProgressBar
