@@ -11,6 +11,8 @@ import Card from "@/components/ui/Card";
 import GambarEmoji from "@/components/ui/GambarEmoji";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
+import Konfetti from "@/components/ui/Konfetti";
+import { umpanBenar, umpanSalah, umpanRaya } from "@/lib/umpan-balik";
 import PapanRekorEndless from "@/features/games/endless/PapanRekorEndless";
 import { simpanHasilEndless } from "@/features/games/endless/api";
 import {
@@ -204,6 +206,8 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   function kunciJawaban(idxOpsi: number | null) {
     if (terkunci || !soal) return;
     const benar = idxOpsi === soal.kunciIndex;
+    if (benar) umpanBenar();
+    else umpanSalah(); // termasuk waktu habis (idxOpsi null) — bunyi lembut
     setTerkunci(true);
     setPilihan(idxOpsi);
     setWaktuHabis(idxOpsi === null);
@@ -226,6 +230,10 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   ) => {
     const benar = riwayatAkhir.filter((r) => r === "benar").length;
     const lulus = benar >= ATURAN[level].syaratLulus.minBenar;
+    const naik =
+      hitungLevel(poinAwalRef.current + benar * POIN_PER_BENAR) >
+      hitungLevel(poinAwalRef.current);
+    if (lulus || naik) umpanRaya(); // rayakan lulus / naik level
     setFase("hasil");
     setStatusSimpan("proses");
 
@@ -270,6 +278,10 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
         benar * ENDLESS_KUIS.poinPerBenar
       );
       setRekor(hasil);
+      const naik =
+        hitungLevel(poinAwalRef.current + benar * ENDLESS_KUIS.poinPerBenar) >
+        hitungLevel(poinAwalRef.current);
+      if (hasil.pecahRekor || naik) umpanRaya();
       await refreshProfil();
       setStatusSimpan("ok");
     } catch {
@@ -289,6 +301,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
     try {
       const hasil = await simpanHasilHarian(profil, benar, hariIni);
       setHasilHarian(hasil);
+      if (!hasil.sudahHariIni) umpanRaya(); // rayakan tantangan hari ini selesai
       // segarkan kartu "sudah selesai" bila nanti kembali ke layar pilih
       setStatusHarian((s) => ({
         userId: profil.userId,
@@ -544,6 +557,7 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
       hitungLevel(poinAwalRef.current + poinDapat) > hitungLevel(poinAwalRef.current);
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        {!hasilHarian?.sudahHariIni && <Konfetti />}
         <span className="relative inline-block mb-4" aria-hidden="true">
           <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
           <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
@@ -607,8 +621,12 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
   /* ---------- layar hasil: Mode Tanpa Batas ---------- */
   if (fase === "hasil" && endless) {
     const poinDapat = benarTotal * ENDLESS_KUIS.poinPerBenar;
+    const rayakanEndless =
+      (rekor?.pecahRekor ?? false) ||
+      hitungLevel(poinAwalRef.current + poinDapat) > hitungLevel(poinAwalRef.current);
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        {rayakanEndless && <Konfetti />}
         <span className="relative inline-block mb-4" aria-hidden="true">
           <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
           <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
@@ -675,8 +693,12 @@ export default function GameKuis({ profil }: { profil: UserProfile }) {
     const bintang = hitungBintangKuis(level, benarTotal);
     const bukaLevelBaru =
       lulus && level === profil.progress.kuis.levelTerbuka && level < LEVEL_ENDLESS;
+    const naikLevelBiasa =
+      hitungLevel(poinAwalRef.current + benarTotal * POIN_PER_BENAR) >
+      hitungLevel(poinAwalRef.current);
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        {(lulus || naikLevelBiasa) && <Konfetti />}
         <span className="relative inline-block mb-4" aria-hidden="true">
           {/* blob "teman-teman" ikut merayakan (restyle THYNK §B) */}
           <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />

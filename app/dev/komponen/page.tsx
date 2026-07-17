@@ -21,6 +21,9 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ProgressBar from "@/components/ui/ProgressBar";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import TombolKembali from "@/components/ui/TombolKembali";
+import Konfetti from "@/components/ui/Konfetti";
+import PengaturanUmpanBalik from "@/components/ui/PengaturanUmpanBalik";
+import { umpanBenar, umpanSalah, umpanRaya, umpanKetuk } from "@/lib/umpan-balik";
 import GameCard from "@/features/home/GameCard";
 import { MENU_GAME } from "@/features/home/menu";
 import PiringGizi from "@/features/games/isi-piringku/PiringGizi";
@@ -47,6 +50,8 @@ export default function KomponenPage() {
   const [dialogKeluarOpen, setDialogKeluarOpen] = useState(false);
   const [dialogUlangOpen, setDialogUlangOpen] = useState(false);
   const [progress, setProgress] = useState(60);
+  /* key naik tiap klik → remount Konfetti supaya bisa dipicu ulang */
+  const [konfKey, setKonfKey] = useState(0);
 
   // ?tema=light|dark memaksa tema — untuk screenshot headless (tema OS tak bisa
   // dipaksa dari CLI Edge; galeri ini dev-only jadi override di sini aman)
@@ -306,6 +311,39 @@ export default function KomponenPage() {
               pensil, dan buku tulis bergaris berjilid spiral.
             </p>
           </div>
+        </section>
+
+        <section aria-labelledby="h-umpan" className="flex flex-col gap-4">
+          <h2 id="h-umpan" className="text-xl">
+            Umpan balik — Konfeti, Suara &amp; Getar
+          </h2>
+          <p className="text-muted">
+            Konfeti dipakai di layar hasil (lulus / naik level / rekor). Suara
+            disintesis Web Audio (tanpa file), default MATI (ramah kelas); getar
+            default NYALA. Keduanya menghormati preferensi &quot;kurangi gerak&quot;
+            &amp; diatur anak di Profil. Nyalakan Suara dulu untuk mendengar.
+          </p>
+          {konfKey > 0 && <Konfetti key={konfKey} />}
+          <Card className="flex flex-col gap-5">
+            <div className="flex flex-wrap items-center gap-4">
+              <Button variant="accent" onClick={() => setKonfKey((k) => k + 1)}>
+                🎉 Picu Konfeti
+              </Button>
+              <Button variant="success" onClick={() => umpanBenar()}>
+                🔊 Benar
+              </Button>
+              <Button variant="ghost" onClick={() => umpanSalah()}>
+                🔊 Salah
+              </Button>
+              <Button onClick={() => umpanRaya()}>🔊 Perayaan</Button>
+              <Button variant="ghost" onClick={() => umpanKetuk()}>
+                🔊 Ketuk
+              </Button>
+            </div>
+            <div className="border-t-2 border-border pt-4">
+              <PengaturanUmpanBalik />
+            </div>
+          </Card>
         </section>
 
         <section aria-labelledby="h-skeleton" className="flex flex-col gap-4">

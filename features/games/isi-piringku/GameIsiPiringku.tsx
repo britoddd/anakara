@@ -21,6 +21,8 @@ import GambarEmoji from "@/components/ui/GambarEmoji";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { hitungLevel, type UserProfile } from "@/features/auth/types";
+import Konfetti from "@/components/ui/Konfetti";
+import { umpanBenar, umpanSalah, umpanRaya } from "@/lib/umpan-balik";
 import PapanRekorEndless from "@/features/games/endless/PapanRekorEndless";
 import { simpanHasilEndless } from "@/features/games/endless/api";
 import {
@@ -165,6 +167,9 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
         c.level === profil.progress.isiPiringku.levelTerbuka &&
         c.level < ENDLESS_IP.level;
 
+      const naik =
+        hitungLevel(poinAwalRef.current + poin) > hitungLevel(poinAwalRef.current);
+      if (lulus || naik) umpanRaya(); // rayakan lulus / naik level
       setHasil({ persen, bintang, lulus, poin, bukaLevelBaru });
       setFase("hasil");
 
@@ -193,6 +198,9 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
       try {
         const r = await simpanHasilEndless(profil, "isi-piringku", benar, poin);
         setRekor(r);
+        const naik =
+          hitungLevel(poinAwalRef.current + poin) > hitungLevel(poinAwalRef.current);
+        if (r.pecahRekor || naik) umpanRaya();
         await refreshProfil();
         setStatusSimpan("ok");
       } catch {
@@ -260,6 +268,7 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
     setPilihanTap(null);
 
     if (food.kelompok === target) {
+      umpanBenar();
       const trayBaru = tray.filter((f) => f.id !== foodId);
       const benarBaru = benarTotal + 1;
       const poinBaru =
@@ -276,6 +285,7 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
         setTimeout(() => lanjutkanSetelahRondeRef.current([], salahAkhir), 900);
       }
     } else {
+      umpanSalah();
       setSalahTotal((s) => s + 1);
       setSalahRonde((s) => s + 1);
 
@@ -348,6 +358,9 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
   if (fase === "hasil" && modeEndless && hasilEndless) {
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        {(rekor?.pecahRekor ||
+          hitungLevel(poinAwalRef.current + hasilEndless.poin) >
+            hitungLevel(poinAwalRef.current)) && <Konfetti />}
         <span className="relative inline-block mb-4" aria-hidden="true">
           <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />
           <BlobMata bentuk="cipratan" className="absolute -right-14 bottom-2 w-12 text-primary rotate-6" />
@@ -414,6 +427,9 @@ export default function GameIsiPiringku({ profil }: { profil: UserProfile }) {
   if (fase === "hasil" && hasil && cfg) {
     return (
       <main id="konten-utama" className="max-w-xl mx-auto px-6 py-12 text-center">
+        {(hasil.lulus ||
+          hitungLevel(poinAwalRef.current + hasil.poin) >
+            hitungLevel(poinAwalRef.current)) && <Konfetti />}
         <span className="relative inline-block mb-4" aria-hidden="true">
           {/* blob "teman-teman" ikut merayakan (restyle THYNK §B) */}
           <BlobMata bentuk="bunga" className="absolute -left-14 bottom-1 w-12 text-accent -rotate-6" />

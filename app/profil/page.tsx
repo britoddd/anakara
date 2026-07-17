@@ -9,6 +9,7 @@ import Card from "@/components/ui/Card";
 import KonfirmasiKeluar from "@/components/ui/KonfirmasiKeluar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import PengaturanUmpanBalik from "@/components/ui/PengaturanUmpanBalik";
 import TombolKembali from "@/components/ui/TombolKembali";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { logout, perbaruiProfil, rutePofil } from "@/features/auth/api";
@@ -195,6 +196,11 @@ export default function ProfilPage() {
           <p className="text-muted text-sm font-bold">Mode terang atau gelap</p>
         </div>
         <ThemeToggle />
+      </Card>
+
+      {/* pengaturan suara & getar — bunyi default mati (ramah kelas) */}
+      <Card className="mt-6">
+        <PengaturanUmpanBalik />
       </Card>
 
       {/* keluar akun — konvensi sama dengan Home (🚪) */}
